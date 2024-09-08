@@ -1,6 +1,6 @@
 # ScreenSage - Television and movie platform
 
-**ScreenMage** is an all-in-one platform for TV and movie enthusiasts. It offers a variety of features to enhance your entertainment experience, including:
+**ScreenSage** is an all-in-one platform for TV and movie enthusiasts. It offers a variety of features to enhance your entertainment experience, including:
 
 - **Personalized Watchlists**: Track your favorite TV shows and movies.
 - **Rating System**: Share your reviews and rate content.
