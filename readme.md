@@ -26,3 +26,23 @@
 2. Navigate to the project directory:
    ```bash
    cd ScreenSage
+
+3. Create an .env file in screensage-web-server containing the following variables
+   ```bash
+   DB_URL=jdbc:postgresql://<your_postgres_path>
+   DB_USER=<your_postgres_username>
+   DB_PASSWORD=<your_postgres_password>
+   JWT_EXPIRATION=<expiration_time_of_jwt_tokens>
+   JWT_AUDIENCE=<variable_name_for_your_user_audience>
+   JWT_ISSUER=<Variable_name_representing_you>
+   ```
+4. Run web server
+   In the terminal navigate to **screensage-web-server**
+   ```bash
+   cd ScreenSage
+   ```
+   and run 
+   ```bash
+   mvn spring-boot:run
+   ```
+   or, if using VS Code, open **screensage-web-server** and then press the *Run Java* button while in the **ScreensageWebServerApplication** file.
