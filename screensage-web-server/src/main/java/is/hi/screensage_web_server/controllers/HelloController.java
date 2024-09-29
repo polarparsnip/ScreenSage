@@ -1,4 +1,4 @@
-package is.hi.screensage_web_server;
+package is.hi.screensage_web_server.controllers;
 
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
