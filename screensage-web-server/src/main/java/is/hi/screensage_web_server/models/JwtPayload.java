@@ -7,8 +7,8 @@ package is.hi.screensage_web_server.models;
  * including the user's ID, username, and the token itself.
  */
 public class JwtPayload {
-  private int id;
-  private String username;
+  // private int id;
+  private Users user;
   private String token;
 
   /**
@@ -18,46 +18,18 @@ public class JwtPayload {
    * @param username the username of the user
    * @param token the JWT token string
    */
-  public JwtPayload(int id, String username, String token) {
-    this.id = id;
-    this.username = username;
+  public JwtPayload(Users user, String token) {
+    // this.id = id;
+    this.user = user;
     this.token = token;
   }
 
-  /**
-   * Returns the ID of the user.
-   *
-   * @return the user's ID
-   */
-  public int getId() {
-    return id;
+  public Users getUser() {
+    return user;
   }
 
-  /**
-   * Sets the ID of the user.
-   *
-   * @param id the ID to set for the user
-   */
-  public void setId(int id) {
-    this.id = id;
-  }
-
-  /**
-   * Returns the username of the user.
-   *
-   * @return the username of the user
-   */
-  public String getUsername() {
-    return username;
-  }
-
-  /**
-   * Sets the username of the user.
-   *
-   * @param username the username to set for the user
-   */
-  public void setUsername(String username) {
-    this.username = username;
+  public void setUser(Users user) {
+    this.user = user;
   }
 
   /**

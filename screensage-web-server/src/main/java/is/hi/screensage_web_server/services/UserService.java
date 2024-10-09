@@ -52,20 +52,25 @@ public class UserService implements UserServiceInterface {
   public ResponseEntity<?> register(String username, String password) {
 
     if (username == null || username.trim().isEmpty() || username.matches(".*\\s.*")) {
+      System.out.println("Username can't be empty");
       return ResponseEntity.badRequest().body("Username cannot be empty and must not contain whitespace characters.");
     }
     if (password == null || password.trim().isEmpty() || password.matches(".*\\s.*")) {
+      System.out.println("Password can't be empty");
       return ResponseEntity.badRequest().body("Password cannot be empty and must not contain whitespace characters.");
     }
 
     if (username.length() < MIN_USERNAME_LENGTH || username.length() > MAX_USERNAME_LENGTH) {
+      System.out.println("Username must be between");
       return ResponseEntity.badRequest().body("Username must be between " + MIN_USERNAME_LENGTH + " and " + MAX_USERNAME_LENGTH + " characters.");
     }
     if (password.length() < MIN_PASSWORD_LENGTH || password.length() > MAX_PASSWORD_LENGTH) {
+      System.out.println("Password must be between");
       return ResponseEntity.badRequest().body("Password must be between " + MIN_PASSWORD_LENGTH + " and " + MAX_PASSWORD_LENGTH + " characters.");
     }
 
     if (userRepository.findByUsername(username) != null) {
+      System.out.println("Username already exists");
       return ResponseEntity.badRequest().body("Username already exists.");
     }
 
@@ -95,9 +100,11 @@ public class UserService implements UserServiceInterface {
   @Override
   public ResponseEntity<?> login(String username, String password) { 
     if (username == null || username.trim().isEmpty() || username.matches(".*\\s.*")) {
+      System.out.println("Username cannot be empty");
       return ResponseEntity.badRequest().body("Username cannot be empty and must not contain whitespace characters.");
     }
     if (password == null || password.trim().isEmpty() || password.matches(".*\\s.*")) {
+      System.out.println("Password cannot be empty");
       return ResponseEntity.badRequest().body("Password cannot be empty and must not contain whitespace characters.");
     }
     
@@ -108,7 +115,9 @@ public class UserService implements UserServiceInterface {
 
       String token = jwtService.generateToken(username);
       UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
-      JwtPayload jwtPayload = new JwtPayload(authenticatedUser.getId(), authenticatedUser.getUsername(), token);
+      System.out.println(authenticatedUser.getUser());
+      
+      JwtPayload jwtPayload = new JwtPayload(authenticatedUser.getUser(), token);
 
       return ResponseEntity.ok(jwtPayload);
 
