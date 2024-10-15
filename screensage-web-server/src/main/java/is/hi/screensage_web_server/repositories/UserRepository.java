@@ -1,10 +1,11 @@
 package is.hi.screensage_web_server.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import is.hi.screensage_web_server.models.Users;
+
+import is.hi.screensage_web_server.entities.Users;
 
 /**
- * Repository interface for accessing user data in the database.
+ * Repository interface for accessing {@link Users} data in the database.
  */
 public interface UserRepository extends JpaRepository<Users, Integer> {
 

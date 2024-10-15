@@ -4,11 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import is.hi.screensage_web_server.interfaces.UserServiceInterface;
 import is.hi.screensage_web_server.models.UserRequest;
-import is.hi.screensage_web_server.services.UserService;
 
 /**
- * UserController is a REST controller that handles user-related operations.
+ * REST controller for managing user-related operations.
  *
  * The controller relies on the UserService to manage the business 
  * logic for all operations.
@@ -17,7 +17,7 @@ import is.hi.screensage_web_server.services.UserService;
 public class UserController {
 
   @Autowired
-  private UserService userService;
+  private UserServiceInterface userService;
 
   /**
    * Registers a new user with the provided username and password.

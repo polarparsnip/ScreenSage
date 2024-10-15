@@ -3,6 +3,7 @@ package is.hi.screensage_web_server.interfaces;
 import org.springframework.http.ResponseEntity;
 
 import io.micrometer.core.instrument.config.validate.ValidationException;
+import is.hi.screensage_web_server.entities.Users;
 
 /**
  * UserServiceInterface defines the contract for user-related services,
@@ -37,5 +38,15 @@ public interface UserServiceInterface {
    * @throws AuthenticationException if the authentication fails due to invalid credentials
    */
   ResponseEntity<?> login(String username, String password);
+
+  public boolean userExists(String username);
+
+  public boolean userExists(int userId);
+
+  public Users findUser(String username);
+
+  public Users findUser(int userId);
+
+  public Users getUserReferenceById(int userId);
 
 }

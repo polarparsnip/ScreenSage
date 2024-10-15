@@ -6,8 +6,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import is.hi.screensage_web_server.entities.Users;
 import is.hi.screensage_web_server.models.UserPrincipal;
-import is.hi.screensage_web_server.models.Users;
 import is.hi.screensage_web_server.repositories.UserRepository;
 
 

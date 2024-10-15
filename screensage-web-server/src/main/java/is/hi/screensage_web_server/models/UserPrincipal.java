@@ -1,6 +1,9 @@
 package is.hi.screensage_web_server.models;
 
 import org.springframework.security.core.userdetails.UserDetails;
+
+import is.hi.screensage_web_server.entities.Users;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 

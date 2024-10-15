@@ -1,5 +1,7 @@
 package is.hi.screensage_web_server.services;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import is.hi.screensage_web_server.interfaces.UserServiceInterface;
 import is.hi.screensage_web_server.models.JwtPayload;
 import is.hi.screensage_web_server.models.UserPrincipal;
-import is.hi.screensage_web_server.models.Users;
+import is.hi.screensage_web_server.entities.Users;
 import is.hi.screensage_web_server.repositories.UserRepository;
 
 /**
@@ -25,7 +27,7 @@ public class UserService implements UserServiceInterface {
   private UserRepository userRepository;
 
   @Autowired
-  AuthenticationManager authManager;
+  private AuthenticationManager authManager;
 
   @Autowired
   private JWTService jwtService;
@@ -127,5 +129,33 @@ public class UserService implements UserServiceInterface {
         System.out.println("Error during login: " + e.getMessage());
         return new ResponseEntity<>("An error occurred during login", HttpStatus.INTERNAL_SERVER_ERROR);
     }
+  }
+
+
+  public boolean userExists(String username) {
+    return userRepository.existsByUsername(username);
+  }
+
+  public boolean userExists(int userId) {
+    return userRepository.existsById(userId);
+  }
+
+  public Users findUser(String username) {
+    Users user = userRepository.findByUsername(username);
+    return user;
+  }
+
+  public Users findUser(int userId) {
+    Optional<Users> user = userRepository.findById(userId);
+    if (user.isPresent()) {
+      return user.get();
+    }
+
+    return null;
+  }
+
+  public Users getUserReferenceById(int userId) {
+    Users user = userRepository.getReferenceById(userId);
+    return user;
   }
 }

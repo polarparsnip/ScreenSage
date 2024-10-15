@@ -1,6 +1,9 @@
-package is.hi.screensage_web_server.models;
+package is.hi.screensage_web_server.entities;
 
 import jakarta.persistence.*;
+
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
@@ -25,6 +28,16 @@ public class Users {
    */
   @JsonIgnore
   private String password;
+
+
+  private String profileImg;
+
+  @JsonIgnore
+  private String profileImgId;
+
+  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+  @OrderBy("created_at DESC")
+  List<Review> reviews;
 
   /**
    * Constructs a new user with the specified username and password.
@@ -86,5 +99,41 @@ public class Users {
    */
   public void setPassword(String password) {
     this.password = password;
+  }
+
+  /**
+   * Sets the profile image of the user.
+   *
+   * @param profileImg the image url to set for the user
+   */
+  public void setProfileImg(String profileImg) {
+    this.profileImg = profileImg;
+  }
+
+  /**
+   * Returns the profile image of the user.
+   *
+   * @return the profile image of the user
+   */
+  public String getProfileImg() {
+    return profileImg;
+  }
+
+  /**
+   * Sets the ID of the user's profile image url.
+   *
+   * @param profileImgId the ID of the user's profile image url to be set
+   */
+  public void setProfileImgId(String profileImgId) {
+    this.profileImgId = profileImgId;
+  }
+
+  /**
+   * Returns the ID of the user's profile image url.
+   *
+   * @return the ID of the user's profile image url
+   */
+  public String getProfileImgId() {
+    return profileImgId;
   }
 }
