@@ -44,10 +44,9 @@ public class MediaController {
   public ResponseEntity<?> getMovies(
     @RequestParam(required = false) String genreId,
     @RequestParam(defaultValue = "1") int page,
-    @RequestParam(required = false) String searchQuery,
-    @RequestParam(required = true) int userId
+    @RequestParam(required = false) String searchQuery
   ) throws Exception {
-    List<Media> movies = mediaService.getMedia(userId, "movie", genreId, page, searchQuery);
+    List<Media> movies = mediaService.getMedia("movie", genreId, page, searchQuery);
     return ResponseEntity.ok(movies);
   }
 
@@ -65,10 +64,9 @@ public class MediaController {
   public ResponseEntity<?> getShows(
     @RequestParam(required = false) String genreId,
     @RequestParam(defaultValue = "1") int page,
-    @RequestParam(required = false) String searchQuery,
-    @RequestParam(required = true) int userId
+    @RequestParam(required = false) String searchQuery
   ) throws Exception {
-    List<Media> shows = mediaService.getMedia(userId, "tv", genreId, page, searchQuery);
+    List<Media> shows = mediaService.getMedia("tv", genreId, page, searchQuery);
     return ResponseEntity.ok(shows);
   }
 
@@ -86,10 +84,9 @@ public class MediaController {
   public ResponseEntity<?> getAnime(
     @RequestParam(required = false) String genreId,
     @RequestParam(defaultValue = "1") int page,
-    @RequestParam(required = false) String searchQuery,
-    @RequestParam(required = true) int userId
+    @RequestParam(required = false) String searchQuery
   ) throws Exception {
-    List<Media> animeList = mediaService.getMedia(userId, "anime", genreId, page, searchQuery);
+    List<Media> animeList = mediaService.getMedia("anime", genreId, page, searchQuery);
     return ResponseEntity.ok(animeList);
   }
 
@@ -102,10 +99,9 @@ public class MediaController {
    */
   @GetMapping("/movies/{movieId}")
   public ResponseEntity<?> getMovie(
-    @PathVariable int movieId,
-    @RequestParam(value = "user_id", required = true) int userId
+    @PathVariable int movieId
   ) {
-    MediaDetailed movie = mediaService.getSingleMedia(userId, "movie", movieId);
+    MediaDetailed movie = mediaService.getSingleMedia("movie", movieId);
     return ResponseEntity.ok(movie);
   }
 
@@ -118,10 +114,9 @@ public class MediaController {
    */
   @GetMapping("/shows/{showId}")
   public ResponseEntity<?> getShow(
-    @PathVariable int showId,
-    @RequestParam(value = "user_id", required = true) int userId
+    @PathVariable int showId
   ) {
-    MediaDetailed show = mediaService.getSingleMedia(userId, "tv", showId);
+    MediaDetailed show = mediaService.getSingleMedia("tv", showId);
     return ResponseEntity.ok(show);
   }
 
@@ -134,10 +129,9 @@ public class MediaController {
    */
   @GetMapping("/anime/{animeId}")
   public ResponseEntity<?> getSingleAnime(
-    @PathVariable int animeId,
-    @RequestParam(value = "user_id", required = true) int userId
+    @PathVariable int animeId
   ) {
-    MediaDetailed anime = mediaService.getSingleMedia(userId, "tv", animeId);
+    MediaDetailed anime = mediaService.getSingleMedia("tv", animeId);
     return ResponseEntity.ok(anime);
   }
 
@@ -212,8 +206,8 @@ public class MediaController {
     @PathVariable int movieId,
     @RequestParam(defaultValue = "1") int page
   ) throws Exception {
-    Page<Review> newReview = mediaService.getMediaReviews("movie", movieId, page);
-    return ResponseEntity.ok(newReview);
+    Page<Review> reviewList = mediaService.getMediaReviews("movie", movieId, page);
+    return ResponseEntity.ok(reviewList);
   }
 
   /**
@@ -229,8 +223,8 @@ public class MediaController {
     @PathVariable int showId,
     @RequestParam(defaultValue = "1") int page
   ) throws Exception {
-    Page<Review> newReview = mediaService.getMediaReviews("tv", showId, page);
-    return ResponseEntity.ok(newReview);
+    Page<Review> reviewList = mediaService.getMediaReviews("tv", showId, page);
+    return ResponseEntity.ok(reviewList);
   }
 
   /**
@@ -246,8 +240,8 @@ public class MediaController {
     @PathVariable int animeId,
     @RequestParam(defaultValue = "1") int page
   ) throws Exception {
-    Page<Review> newReview = mediaService.getMediaReviews("tv", animeId, page);
-    return ResponseEntity.ok(newReview);
+    Page<Review> reviewList = mediaService.getMediaReviews("tv", animeId, page);
+    return ResponseEntity.ok(reviewList);
   }
 
   /**

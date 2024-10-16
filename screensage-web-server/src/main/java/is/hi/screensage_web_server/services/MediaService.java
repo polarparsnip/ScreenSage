@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -18,6 +20,7 @@ import is.hi.screensage_web_server.interfaces.UserServiceInterface;
 import is.hi.screensage_web_server.models.Media;
 import is.hi.screensage_web_server.models.MediaDetailed;
 import is.hi.screensage_web_server.models.ReviewRequest;
+import is.hi.screensage_web_server.models.UserPrincipal;
 import is.hi.screensage_web_server.repositories.ReviewRepository;
 
 
@@ -34,12 +37,15 @@ public class MediaService implements MediaServiceInterface {
 
   @Override
   public List<Media> getMedia(
-    int userId, 
     String type, 
     String genreId, 
     int page, 
     String searchQuery
   ) throws JsonMappingException, JsonProcessingException {
+
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
+    int userId = authenticatedUser.getId();
 
     List<Media> mediaList = tmdbService.getMedia(type, genreId, page, searchQuery);
 
@@ -52,16 +58,17 @@ public class MediaService implements MediaServiceInterface {
       if (userRating != null) {
         media.setUser_rating(userRating.doubleValue());
       }
-      System.out.println("Title: " + media.getTitle());
-      System.out.println("Average Score: " + media.getAverage_rating());
-      System.out.println("User Score: " + media.getUser_rating());
     }
 
     return mediaList;
   }
 
   @Override
-  public MediaDetailed getSingleMedia(int userId, String type, int mediaId) {
+  public MediaDetailed getSingleMedia(String type, int mediaId) {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
+    int userId = authenticatedUser.getId();
+
     MediaDetailed media = tmdbService.getSingleMedia(type, mediaId);
 
     Double averageRating = reviewRepository.getAverageRatingForMedia(type, media.getId());
@@ -72,9 +79,6 @@ public class MediaService implements MediaServiceInterface {
     if (userRating != null) {
       media.setUser_rating(userRating.doubleValue());
     }
-    System.out.println("Title: " + media.getTitle());
-    System.out.println("Average Score: " + media.getAverage_rating());
-    System.out.println("User Score: " + media.getUser_rating());
 
     Pageable pageable = PageRequest.of(0, 10);
     List<Review> recentReviews = reviewRepository.getRecentReviewsForMedia(type, mediaId, pageable);
