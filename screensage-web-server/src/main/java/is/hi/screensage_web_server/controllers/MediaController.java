@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +19,7 @@ import is.hi.screensage_web_server.interfaces.MediaServiceInterface;
 import is.hi.screensage_web_server.models.Media;
 import is.hi.screensage_web_server.models.MediaDetailed;
 import is.hi.screensage_web_server.models.ReviewRequest;
+import is.hi.screensage_web_server.models.UserPrincipal;
 
 
 /**
@@ -46,7 +49,12 @@ public class MediaController {
     @RequestParam(defaultValue = "1") int page,
     @RequestParam(required = false) String searchQuery
   ) throws Exception {
-    List<Media> movies = mediaService.getMedia("movie", genreId, page, searchQuery);
+    
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
+    int userId = authenticatedUser.getId();
+
+    List<Media> movies = mediaService.getMedia(userId, "movie", genreId, page, searchQuery);
     return ResponseEntity.ok(movies);
   }
 
@@ -66,7 +74,11 @@ public class MediaController {
     @RequestParam(defaultValue = "1") int page,
     @RequestParam(required = false) String searchQuery
   ) throws Exception {
-    List<Media> shows = mediaService.getMedia("tv", genreId, page, searchQuery);
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
+    int userId = authenticatedUser.getId();
+
+    List<Media> shows = mediaService.getMedia(userId, "tv", genreId, page, searchQuery);
     return ResponseEntity.ok(shows);
   }
 
@@ -86,7 +98,11 @@ public class MediaController {
     @RequestParam(defaultValue = "1") int page,
     @RequestParam(required = false) String searchQuery
   ) throws Exception {
-    List<Media> animeList = mediaService.getMedia("anime", genreId, page, searchQuery);
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
+    int userId = authenticatedUser.getId();
+
+    List<Media> animeList = mediaService.getMedia(userId, "anime", genreId, page, searchQuery);
     return ResponseEntity.ok(animeList);
   }
 
@@ -101,7 +117,11 @@ public class MediaController {
   public ResponseEntity<?> getMovie(
     @PathVariable int movieId
   ) {
-    MediaDetailed movie = mediaService.getSingleMedia("movie", movieId);
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
+    int userId = authenticatedUser.getId();
+
+    MediaDetailed movie = mediaService.getSingleMedia(userId, "movie", movieId);
     return ResponseEntity.ok(movie);
   }
 
@@ -116,7 +136,11 @@ public class MediaController {
   public ResponseEntity<?> getShow(
     @PathVariable int showId
   ) {
-    MediaDetailed show = mediaService.getSingleMedia("tv", showId);
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
+    int userId = authenticatedUser.getId();
+
+    MediaDetailed show = mediaService.getSingleMedia(userId, "tv", showId);
     return ResponseEntity.ok(show);
   }
 
@@ -131,7 +155,11 @@ public class MediaController {
   public ResponseEntity<?> getSingleAnime(
     @PathVariable int animeId
   ) {
-    MediaDetailed anime = mediaService.getSingleMedia("tv", animeId);
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
+    int userId = authenticatedUser.getId();
+    
+    MediaDetailed anime = mediaService.getSingleMedia(userId, "tv", animeId);
     return ResponseEntity.ok(anime);
   }
 

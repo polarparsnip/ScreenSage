@@ -21,6 +21,7 @@ public interface MediaServiceInterface {
   /**
    * Retrieves a list of media items based on user preferences and search criteria.
    *
+   * @param userId the ID of the user requesting the media.
    * @param type the type of media (e.g., "movie" or "tv").
    * @param genreId the ID of the genre to filter media (optional).
    * @param page the page number for pagination.
@@ -28,16 +29,17 @@ public interface MediaServiceInterface {
    * @return a list of media items matching the specified criteria.
    * @throws Exception if an error occurs while retrieving the media.
    */
-  public List<Media> getMedia(String type, String genreId, int page, String searchQuery) throws Exception;
+  public List<Media> getMedia(int userId, String type, String genreId, int page, String searchQuery) throws Exception;
 
   /**
    * Retrieves detailed information about a specific media item.
    *
+   * @param userId the ID of the user requesting the media details.
    * @param type the type of media (e.g., "movie" or "tv").
    * @param mediaId the ID of the media item.
    * @return detailed information about the specified media item.
    */
-  public MediaDetailed getSingleMedia(String type, int mediaId);
+  public MediaDetailed getSingleMedia(int userId, String type, int mediaId);
 
   /**
    * Retrieves a list of genres available for a specific type of media.
