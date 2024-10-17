@@ -66,4 +66,8 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
   @Transactional
   @Query("DELETE FROM Review r WHERE r.user.id = :userId AND r.mediaId = :mediaId AND r.type = :type")
   int deleteReviewByUserIdAndMediaIdAndType(int userId, String type, int mediaId);
+
+
+  @Query("SELECT r FROM Review r WHERE r.user.id = :userId ORDER BY r.createdAt DESC")
+  Page<Review> getUserReviews(int userId, Pageable pageable);
 }

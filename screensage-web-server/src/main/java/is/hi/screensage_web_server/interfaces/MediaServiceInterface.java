@@ -80,4 +80,6 @@ public interface MediaServiceInterface {
    */
   public Review postMediaReview(String type, int mediaId, ReviewRequest reviewRequest) throws Exception;
 
+
+  public Page<Review> getUserReviews(int userId, int page, int pageSize);
 }
