@@ -1,12 +1,14 @@
 package is.hi.screensage_web_server.models;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class MediaResponse {
+public class MediaListResponse {
   int page;
 
   @JsonProperty("results")
-  private Media[] results;
+  private List<Media> results;
 
   int total_pages;
 
@@ -16,11 +18,11 @@ public class MediaResponse {
     return page;
   };
 
-  public Media[] getResults() {
+  public List<Media> getResults() {
     return results;
   }
 
-  public void setResults(Media[] results) {
+  public void setResults(List<Media> results) {
     this.results = results;
   }
 

@@ -8,12 +8,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import is.hi.screensage_web_server.models.Media;
 import is.hi.screensage_web_server.models.MediaDetailed;
-import is.hi.screensage_web_server.models.MediaResponse;
+import is.hi.screensage_web_server.models.MediaListResponse;
 
-import java.util.Arrays;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
 
@@ -25,7 +22,7 @@ public class TmdbService {
   @Value("${tmdb.api.key}")
   private String tmdbApiKey;
 
-  public List<Media> getMedia(String type, String genreId, int page, String searchQuery) throws JsonMappingException, JsonProcessingException {
+  public MediaListResponse getMedia(String type, String genreId, int page, String searchQuery) throws JsonMappingException, JsonProcessingException {
     String url;
 
     if (searchQuery != null && !searchQuery.isEmpty()) {
@@ -75,11 +72,9 @@ public class TmdbService {
     String response = restTemplate.getForObject(url, String.class);
   
     ObjectMapper objectMapper = new ObjectMapper();
-    MediaResponse mediaResponse = objectMapper.readValue(response, MediaResponse.class);
-
-    List<Media> mediaList = Arrays.asList(mediaResponse.getResults());
+    MediaListResponse mediaResponse = objectMapper.readValue(response, MediaListResponse.class);
     
-    return mediaList;
+    return mediaResponse;
   }
 
   public MediaDetailed getSingleMedia(String type, int id) {
