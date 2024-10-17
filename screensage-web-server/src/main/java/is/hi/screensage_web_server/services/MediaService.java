@@ -1,4 +1,4 @@
- package is.hi.screensage_web_server.services;
+package is.hi.screensage_web_server.services;
 
 import java.util.List;
 
@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
+import is.hi.screensage_web_server.config.CustomExceptions.ResourceNotFoundException;
 import is.hi.screensage_web_server.entities.Review;
 import is.hi.screensage_web_server.entities.Users;
 import is.hi.screensage_web_server.interfaces.MediaServiceInterface;
@@ -96,7 +97,7 @@ public class MediaService implements MediaServiceInterface {
 
   @Override
   public Page<Review> getMediaReviews(String type, int mediaId, int page) throws Exception {
-    int pageSize = 2;
+    int pageSize = 20;
     PageRequest pageRequest = PageRequest.of(page - 1, pageSize);
     // return reviewRepository.findByMediaIdAndType(type, mediaId, pageRequest);
     
@@ -144,6 +145,20 @@ public class MediaService implements MediaServiceInterface {
     }
 
     return review;
+  }
+
+  @Override
+  public Page<Review> getUserReviews(int userId, int page, int pageSize) {
+    PageRequest pageRequest = PageRequest.of(page - 1, pageSize);
+
+    Page<Review> userReviews;
+    try {
+      userReviews = reviewRepository.getUserReviews(userId, pageRequest);
+    } catch (Exception e) {
+      System.out.println("Could not find user reviews: " + e.getMessage());
+      throw new ResourceNotFoundException("Could not find user reviews.");
+    }
+    return userReviews;
   }
 
 }
