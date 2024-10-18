@@ -120,9 +120,8 @@ public class MediaService implements MediaServiceInterface {
 
     if (!userService.userExists(userId)) {
       System.out.println("Error: User not found");
-      throw new Exception("Error: User not found.");
+      throw new ResourceNotFoundException("User not found");
     }
-
     try {
       Double userRating = reviewRepository.getRatingByUserIdAndMediaIdAndType(userId, type, mediaId);
       if (userRating != null) {
@@ -133,7 +132,11 @@ public class MediaService implements MediaServiceInterface {
       throw new Exception("Error occurred while getting previous review data.");
     }
 
-    Users user = userService.getUserReferenceById(userId);
+    Users user = userService.findUser(userId);
+    if (user == null) {
+      System.out.println("Error: User not found");
+      throw new ResourceNotFoundException("User not found");
+    }
 
     double rating = reviewRequest.getRating();
     String content = reviewRequest.getContent();
