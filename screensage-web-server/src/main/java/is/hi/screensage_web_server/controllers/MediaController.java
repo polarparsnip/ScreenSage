@@ -283,7 +283,10 @@ public class MediaController {
     @PathVariable int movieId, 
     @RequestBody ReviewRequest reviewRequest
   ) throws Exception {
-    Review newReview = mediaService.postMediaReview("movie", movieId, reviewRequest);
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
+    int userId = authenticatedUser.getId();
+    Review newReview = mediaService.postMediaReview(userId, "movie", movieId, reviewRequest);
     return ResponseEntity.ok(newReview);
   }
 
@@ -300,7 +303,10 @@ public class MediaController {
     @PathVariable int showId, 
     @RequestBody ReviewRequest reviewRequest
   ) throws Exception {
-    Review newReview = mediaService.postMediaReview("tv", showId, reviewRequest);
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
+    int userId = authenticatedUser.getId();
+    Review newReview = mediaService.postMediaReview(userId, "tv", showId, reviewRequest);
     return ResponseEntity.ok(newReview);
   }
 
@@ -317,7 +323,10 @@ public class MediaController {
     @PathVariable int animeId, 
     @RequestBody ReviewRequest reviewRequest
   ) throws Exception {
-    Review newReview = mediaService.postMediaReview("tv", animeId, reviewRequest);
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
+    int userId = authenticatedUser.getId();
+    Review newReview = mediaService.postMediaReview(userId, "tv", animeId, reviewRequest);
     return ResponseEntity.ok(newReview);
   }
 

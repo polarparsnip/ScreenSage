@@ -76,7 +76,7 @@ public interface MediaServiceInterface {
    * @return the posted review.
    * @throws Exception if an error occurs while posting the review.
    */
-  public Review postMediaReview(String type, int mediaId, ReviewRequest reviewRequest) throws Exception;
+  public Review postMediaReview(int userId, String type, int mediaId, ReviewRequest reviewRequest) throws Exception;
 
 
   public Page<Review> getUserReviews(int userId, int page, int pageSize);

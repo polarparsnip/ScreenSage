@@ -116,8 +116,7 @@ public class MediaService implements MediaServiceInterface {
   }
 
   @Override
-  public Review postMediaReview(String type, int mediaId, ReviewRequest reviewRequest) throws Exception {
-    int userId = reviewRequest.getUserId();
+  public Review postMediaReview(int userId, String type, int mediaId, ReviewRequest reviewRequest) throws Exception {
 
     if (!userService.userExists(userId)) {
       System.out.println("Error: User not found");

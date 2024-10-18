@@ -4,27 +4,8 @@ package is.hi.screensage_web_server.models;
  * Request body for a user submitted review for a piece of media.
  */
 public class ReviewRequest {
-  private int userId;
   private double rating;
   private String content;
-
-  /**
-   * Gets the user ID.
-   *
-   * @return the ID of the user submitting the review.
-   */
-  public int getUserId() {
-    return userId;
-  }
-
-  /**
-   * Sets the user ID.
-   *
-   * @param userId the ID of the user submitting the review.
-   */
-  public void setUserId(int userId) {
-    this.userId = userId;
-  }
 
   /**
    * Gets the rating.
