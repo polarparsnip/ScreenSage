@@ -25,7 +25,6 @@ public class Review {
   @JsonIgnore
   private int mediaId;
 
-  @JsonIgnore
   @ManyToOne
   private Users user;
 

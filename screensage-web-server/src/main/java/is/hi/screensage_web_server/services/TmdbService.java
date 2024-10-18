@@ -43,6 +43,7 @@ public class TmdbService {
       url = UriComponentsBuilder.fromHttpUrl(String.format("https://api.themoviedb.org/3/discover/tv"))
         .queryParam("with_genres", genreIds)
         .queryParam("origin_country", "JP")
+        .queryParam("with_original_language", "ja")
         .queryParam("page", page)
         .queryParam("api_key", tmdbApiKey)
         .toUriString();

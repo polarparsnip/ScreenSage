@@ -2,10 +2,12 @@ package is.hi.screensage_web_server.models;
 
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import is.hi.screensage_web_server.entities.Review;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
+// @JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class MediaDetailed {
   private double average_rating;
   private double user_rating;
@@ -39,6 +41,13 @@ public class MediaDetailed {
 
   // private double vote_average;
   // private int vote_count;
+
+  // tv variables
+  private String name;
+  private String original_name;
+  private String first_air_date;
+  private int number_of_episodes;
+  private int number_of_seasons;
   
   // Getters and Setters
   
@@ -282,6 +291,48 @@ public class MediaDetailed {
 
   public void setVideos(Videos videos) {
     this.videos = videos;
+  }
+
+  // tv getters and setters
+  
+  public String getName() {
+    return name;
+  }
+  
+  public void setName(String name) {
+    this.name = name;
+  }
+  
+  public String getOriginal_name() {
+    return original_name;
+  }
+  
+  public void setOriginal_name(String original_name) {
+    this.original_name = original_name;
+  }
+  
+  public String getFirst_air_date() {
+    return first_air_date;
+  }
+  
+  public void setFirst_air_date(String first_air_date) {
+    this.first_air_date = first_air_date;
+  }
+
+  public int getNumber_of_episodes() {
+    return number_of_episodes;
+  }
+  
+  public void setNumber_of_episodes(int number_of_episodes) {
+    this.number_of_episodes = number_of_episodes;
+  }
+
+  public int getNumber_of_seasons() {
+    return number_of_seasons;
+  }
+  
+  public void setNumber_of_seasons(int number_of_seasons) {
+    this.number_of_seasons = number_of_seasons;
   }
 }
 
