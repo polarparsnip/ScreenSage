@@ -37,7 +37,7 @@ public class Users {
 
   @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
   @OrderBy("created_at DESC")
-  List<Review> reviews;
+  private List<Review> reviews;
 
   /**
    * Constructs a new user with the specified username and password.
