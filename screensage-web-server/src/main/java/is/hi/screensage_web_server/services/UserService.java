@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Optional;
 
+import org.hibernate.annotations.DialectOverride.OverridesAnnotation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
@@ -23,6 +24,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import is.hi.screensage_web_server.config.CustomExceptions.InvalidInputException;
 import is.hi.screensage_web_server.config.CustomExceptions.ResourceNotFoundException;
 import is.hi.screensage_web_server.entities.Review;
 import is.hi.screensage_web_server.entities.Users;
@@ -32,6 +34,7 @@ import is.hi.screensage_web_server.models.JwtPayload;
 import is.hi.screensage_web_server.models.UserPrincipal;
 import is.hi.screensage_web_server.models.UserProfile;
 import is.hi.screensage_web_server.repositories.UserRepository;
+import jakarta.transaction.Transactional;
 
 /**
  * Service for user-related services, including user registration and authentication.
@@ -250,6 +253,74 @@ public class UserService implements UserServiceInterface {
 
     return userProfile;
   }
+
+  @Transactional
+  @Override
+  public Users updateUsername(int userId, String newUsername) {
+    if (newUsername == null || newUsername.trim().isEmpty() || newUsername.matches(".*\\s.*")) {
+      throw new InvalidInputException(
+        "Username cannot be empty and must not contain whitespace characters."
+      );
+    }
+    if (newUsername.length() < MIN_USERNAME_LENGTH || newUsername.length() > MAX_USERNAME_LENGTH) {
+      throw new InvalidInputException(
+        "Username must be between " + MIN_USERNAME_LENGTH + " and " + MAX_USERNAME_LENGTH + " characters."
+      );
+    }
+    if (userRepository.findByUsername(newUsername) != null) {
+      throw new InvalidInputException("Username already exists.");
+    }
+
+    Users user = findUser(userId);
+
+    if (user == null) {
+      throw new ResourceNotFoundException("User not found");
+    }
+
+    user.setUsername(newUsername);
+
+    try {
+      userRepository.save(user);
+    } catch (Exception e) {
+      System.out.println("Error occured while saving user: " + e.getMessage());
+      throw new RuntimeException("Error occurred while saving user.");
+    }
+    return user;
+  }
+
+
+  @Transactional
+  @Override
+  public Users updatePassword(int userId, String newPassword){
+    if (newPassword == null || newPassword.trim().isEmpty() || newPassword.matches(".*\\s.*")) {
+      throw new InvalidInputException(
+        "Password cannot be empty and must not contain whitespace characters."
+      );
+    }
+    if (newPassword.length() < MIN_PASSWORD_LENGTH || newPassword.length() > MAX_PASSWORD_LENGTH){
+      throw new InvalidInputException(
+        "Password must be between " + MIN_PASSWORD_LENGTH + " and " + MAX_PASSWORD_LENGTH + "characters."
+      );
+    }
+
+    Users user = findUser(userId);
+
+    if (user == null) {
+      throw new ResourceNotFoundException("User not found");
+    }
+
+    user.setPassword(encoder.encode(newPassword));
+
+    try{
+      userRepository.save(user);
+    } catch (Exception e) {
+      System.out.println("Error occured while saving user: " + e.getMessage());
+      throw new RuntimeException("Error occurred while saving user.");
+    }
+
+    return user;
+  }
+
 
   @Override
   public boolean userExists(String username) {
