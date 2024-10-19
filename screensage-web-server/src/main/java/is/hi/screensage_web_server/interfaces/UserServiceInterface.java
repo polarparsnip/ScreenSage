@@ -51,6 +51,10 @@ public interface UserServiceInterface {
 
   public UserProfile getUserProfile();
 
+  public Users updateUsername(int userId, String newUsername);
+
+  public Users updatePassword(int userId, String newPassword);
+
   public boolean userExists(String username);
 
   public boolean userExists(int userId);
