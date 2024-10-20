@@ -1,9 +1,9 @@
 package is.hi.screensage_web_server.interfaces;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import is.hi.screensage_web_server.entities.Users;
+import is.hi.screensage_web_server.models.JwtPayload;
 import is.hi.screensage_web_server.models.UserProfile;
 
 /**
@@ -22,9 +22,9 @@ public interface UserServiceInterface {
    *
    * @param username the username of the new user
    * @param password the password of the new user
-   * @return ResponseEntity<?> containing the newly created user object, or an error message if registration fails
+   * @return The newly created user object
    */
-  ResponseEntity<?> register(String username, String password);
+  Users register(String username, String password);
 
   /**
    * Registers a new user with the provided username, password and profile image file.
@@ -34,9 +34,9 @@ public interface UserServiceInterface {
    * @param username the username of the new user
    * @param password the password of the new user
    * @param imageFile the file corresponding to the profile picture of the new user
-   * @return ResponseEntity<?> containing the newly created user object, or an error message if registration fails
+   * @return The newly created user object
    */
-  ResponseEntity<?> register(String username, String password, MultipartFile imageFile);
+  Users register(String username, String password, MultipartFile imageFile);
 
   /**
    * Authenticates a user using the provided username and password.
@@ -45,13 +45,13 @@ public interface UserServiceInterface {
    *
    * @param username the username of the user attempting to log in
    * @param password the password of the user attempting to log in
-   * @return ResponseEntity<?> containing the authentication result, which may include a JWT token or an error message
+   * @return JwtPayload containing the authorized user and a JWT token
    */
-  ResponseEntity<?> login(String username, String password);
+  JwtPayload login(String username, String password);
 
   public UserProfile getUserProfile();
 
-  public Users updateUsername(int userId, String newUsername);
+  public JwtPayload updateUsername(int userId, String newUsername);
 
   public Users updatePassword(int userId, String newPassword);
 

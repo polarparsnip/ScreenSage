@@ -101,7 +101,7 @@ public class MediaService implements MediaServiceInterface {
 
   @Override
   public Page<Review> getMediaReviews(String type, int mediaId, int page) throws Exception {
-    int pageSize = 20;
+    int pageSize = 10;
     PageRequest pageRequest = PageRequest.of(page - 1, pageSize);
     // return reviewRepository.findByMediaIdAndType(type, mediaId, pageRequest);
     

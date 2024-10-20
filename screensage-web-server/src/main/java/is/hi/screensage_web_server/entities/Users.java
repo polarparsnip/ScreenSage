@@ -29,6 +29,8 @@ public class Users {
   @JsonIgnore
   private String password;
 
+  @JsonIgnore
+  private int passwordLength;
 
   private String profileImg;
 
@@ -45,9 +47,32 @@ public class Users {
    * @param username the username of the new user
    * @param password the password of the new user
    */
-  public Users(String username, String password) {
+  public Users(String username, String password, int passwordLength) {
     this.username = username;
     this.password = password;
+    this.passwordLength = passwordLength;
+  }
+
+  /**
+   * Constructs a new user with the specified username and password.
+   *
+   * @param username the username of the new user
+   * @param password the password of the new user
+   * @param profileImg the profile image of the new user
+   * @param profileImgId the ID of the profile image
+   */
+  public Users(
+    String username, 
+    String password, 
+    int passwordLength, 
+    String profileImg, 
+    String profileImgId
+  ) {
+    this.username = username;
+    this.password = password;
+    this.passwordLength = passwordLength;
+    this.profileImg = profileImg;
+    this.profileImgId = profileImgId;
   }
 
   /**
@@ -99,6 +124,33 @@ public class Users {
    */
   public void setPassword(String password) {
     this.password = password;
+  }
+
+  /**
+   * Returns the password length of the user.
+   *
+   * @return the password length of the user
+   */
+  public int getPasswordLength() {
+    return passwordLength;
+  }
+
+  /**
+   * Sets the password length of the user.
+   *
+   * @param password the password length to set for the user
+   */
+  public void setPasswordLength(int passwordLength) {
+    this.passwordLength = passwordLength;
+  }
+
+  /**
+   * Returns a password placeholder for the password of the user.
+   *
+   * @return a password placeholder for the password of the user
+   */
+  public String getPasswordPlaceholder() {
+    return "*".repeat(passwordLength);
   }
 
   /**

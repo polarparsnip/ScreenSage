@@ -4,8 +4,6 @@ import java.util.Date;
 
 import org.hibernate.annotations.CreationTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,7 +20,6 @@ public class Review {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
 
-  @JsonIgnore
   private int mediaId;
 
   @ManyToOne

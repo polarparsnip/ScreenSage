@@ -1,7 +1,6 @@
 package is.hi.screensage_web_server.models;
 
 import java.util.List;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import is.hi.screensage_web_server.entities.Review;

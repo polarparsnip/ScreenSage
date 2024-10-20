@@ -35,7 +35,7 @@ public class JWTService {
   @Value("${jwt.expected.audience}")
   private String expectedAudience;
 
-  @Value("${jwt.expiration:3600000}")
+  @Value("${jwt.expiration:86400000}")
   private int validity;
 
   /**

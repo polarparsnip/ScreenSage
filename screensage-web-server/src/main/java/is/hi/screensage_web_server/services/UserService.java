@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Optional;
 
-import org.hibernate.annotations.DialectOverride.OverridesAnnotation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
@@ -26,6 +25,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import is.hi.screensage_web_server.config.CustomExceptions.InvalidInputException;
 import is.hi.screensage_web_server.config.CustomExceptions.ResourceNotFoundException;
+import is.hi.screensage_web_server.config.CustomExceptions.UnauthorizedException;
 import is.hi.screensage_web_server.entities.Review;
 import is.hi.screensage_web_server.entities.Users;
 import is.hi.screensage_web_server.interfaces.MediaServiceInterface;
@@ -77,37 +77,37 @@ public class UserService implements UserServiceInterface {
    * 
    * @param username the username of the new user
    * @param password the password of the new user
-   * @return ResponseEntity<?> containing the newly created user object, or an error message
+   * @return The newly created user object
    * @throws IOException 
    */
   @Override
-  public ResponseEntity<?> register(String username, String password) {
+  public Users register(String username, String password) {
 
     if (username == null || username.trim().isEmpty() || username.matches(".*\\s.*")) {
       System.out.println("Username can't be empty");
-      return ResponseEntity.badRequest().body("Username cannot be empty and must not contain whitespace characters.");
+      throw new InvalidInputException("Username cannot be empty and must not contain whitespace characters.");
     }
     if (password == null || password.trim().isEmpty() || password.matches(".*\\s.*")) {
       System.out.println("Password can't be empty");
-      return ResponseEntity.badRequest().body("Password cannot be empty and must not contain whitespace characters.");
+      throw new InvalidInputException("Password cannot be empty and must not contain whitespace characters.");
     }
 
     if (username.length() < MIN_USERNAME_LENGTH || username.length() > MAX_USERNAME_LENGTH) {
       System.out.println("Username must be between");
-      return ResponseEntity.badRequest().body("Username must be between " + MIN_USERNAME_LENGTH + " and " + MAX_USERNAME_LENGTH + " characters.");
+      throw new InvalidInputException("Username must be between " + MIN_USERNAME_LENGTH + " and " + MAX_USERNAME_LENGTH + " characters.");
     }
     if (password.length() < MIN_PASSWORD_LENGTH || password.length() > MAX_PASSWORD_LENGTH) {
       System.out.println("Password must be between");
-      return ResponseEntity.badRequest().body("Password must be between " + MIN_PASSWORD_LENGTH + " and " + MAX_PASSWORD_LENGTH + " characters.");
+      throw new InvalidInputException("Password must be between " + MIN_PASSWORD_LENGTH + " and " + MAX_PASSWORD_LENGTH + " characters.");
     }
 
     if (userRepository.findByUsername(username) != null) {
       System.out.println("Username already exists");
-      return ResponseEntity.badRequest().body("Username already exists.");
+      throw new InvalidInputException("Username already exists.");
     }
 
-    Users newUser = new Users(username, "");
-    newUser.setPassword(encoder.encode(password));
+    Users newUser = new Users(username, encoder.encode(password), password.length());
+
     if (defaultProfileImg != null) {
       newUser.setProfileImg(defaultProfileImg);
     }
@@ -116,10 +116,10 @@ public class UserService implements UserServiceInterface {
       userRepository.save(newUser);
     } catch (Exception e) {
       System.out.println("Error occured while saving user: " + e.getMessage());
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while saving user.");
+      throw new RuntimeException("Error occurred while saving user.");
     }
 
-    return ResponseEntity.ok(newUser);
+    return newUser;
   }
 
   /**
@@ -134,36 +134,35 @@ public class UserService implements UserServiceInterface {
    * @param username the username of the new user
    * @param password the password of the new user
    * @param imageFile the profile image file of the new user
-   * @return ResponseEntity<?> containing the newly created user object, or an error message
+   * @return The newly created user object
    */
   @Override
-  public ResponseEntity<?> register(String username, String password, MultipartFile imageFile) {
+  public Users register(String username, String password, MultipartFile imageFile) {
 
     if (username == null || username.trim().isEmpty() || username.matches(".*\\s.*")) {
       System.out.println("Username can't be empty");
-      return ResponseEntity.badRequest().body("Username cannot be empty and must not contain whitespace characters.");
+      throw new InvalidInputException("Username cannot be empty and must not contain whitespace characters.");
     }
     if (password == null || password.trim().isEmpty() || password.matches(".*\\s.*")) {
       System.out.println("Password can't be empty");
-      return ResponseEntity.badRequest().body("Password cannot be empty and must not contain whitespace characters.");
+      throw new InvalidInputException("Password cannot be empty and must not contain whitespace characters.");
     }
 
     if (username.length() < MIN_USERNAME_LENGTH || username.length() > MAX_USERNAME_LENGTH) {
       System.out.println("Username must be between");
-      return ResponseEntity.badRequest().body("Username must be between " + MIN_USERNAME_LENGTH + " and " + MAX_USERNAME_LENGTH + " characters.");
+      throw new InvalidInputException("Username must be between " + MIN_USERNAME_LENGTH + " and " + MAX_USERNAME_LENGTH + " characters.");
     }
     if (password.length() < MIN_PASSWORD_LENGTH || password.length() > MAX_PASSWORD_LENGTH) {
       System.out.println("Password must be between");
-      return ResponseEntity.badRequest().body("Password must be between " + MIN_PASSWORD_LENGTH + " and " + MAX_PASSWORD_LENGTH + " characters.");
+      throw new InvalidInputException("Password must be between " + MIN_PASSWORD_LENGTH + " and " + MAX_PASSWORD_LENGTH + " characters.");
     }
 
     if (userRepository.findByUsername(username) != null) {
       System.out.println("Username already exists");
-      return ResponseEntity.badRequest().body("Username already exists.");
+      throw new InvalidInputException("Username already exists.");
     }
 
-    Users newUser = new Users(username, "");
-    newUser.setPassword(encoder.encode(password));
+    Users newUser = new Users(username, encoder.encode(password), password.length());
 
     try {
       @SuppressWarnings("rawtypes")
@@ -180,10 +179,10 @@ public class UserService implements UserServiceInterface {
       userRepository.save(newUser);
     } catch (Exception e) {
       System.out.println("Error occured while saving user: " + e.getMessage());
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while saving user.");
+      throw new RuntimeException("Error occurred while saving user.");
     }
 
-    return ResponseEntity.ok(newUser);
+    return newUser;
   }
 
   /**
@@ -194,17 +193,17 @@ public class UserService implements UserServiceInterface {
    * 
    * @param username the username of the user attempting to log in
    * @param password the password of the user attempting to log in
-   * @return ResponseEntity<?> containing the JWT token, or an error message in case of failed authentication
+   * @return JwtPayload containing the authorized user and a JWT token
    */
   @Override
-  public ResponseEntity<?> login(String username, String password) { 
+  public JwtPayload login(String username, String password) { 
     if (username == null || username.trim().isEmpty() || username.matches(".*\\s.*")) {
       System.out.println("Username cannot be empty");
-      return ResponseEntity.badRequest().body("Username cannot be empty and must not contain whitespace characters.");
+      throw new InvalidInputException("Username cannot be empty and must not contain whitespace characters.");
     }
     if (password == null || password.trim().isEmpty() || password.matches(".*\\s.*")) {
       System.out.println("Password cannot be empty");
-      return ResponseEntity.badRequest().body("Password cannot be empty and must not contain whitespace characters.");
+      throw new InvalidInputException(("Password cannot be empty and must not contain whitespace characters."));
     }
     
     try {
@@ -218,14 +217,12 @@ public class UserService implements UserServiceInterface {
       
       JwtPayload jwtPayload = new JwtPayload(authenticatedUser.getUser(), token);
 
-      return ResponseEntity.ok(jwtPayload);
+      return jwtPayload;
 
     } catch (BadCredentialsException e) {
-        return new ResponseEntity<>("Invalid username or password", HttpStatus.UNAUTHORIZED);
-    } catch (Exception e) {
-        System.out.println("Error during login: " + e.getMessage());
-        return new ResponseEntity<>("An error occurred during login", HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new UnauthorizedException("Invalid username or password");
     }
+
   }
 
   
@@ -256,7 +253,7 @@ public class UserService implements UserServiceInterface {
 
   @Transactional
   @Override
-  public Users updateUsername(int userId, String newUsername) {
+  public JwtPayload updateUsername(int userId, String newUsername) {
     if (newUsername == null || newUsername.trim().isEmpty() || newUsername.matches(".*\\s.*")) {
       throw new InvalidInputException(
         "Username cannot be empty and must not contain whitespace characters."
@@ -285,7 +282,11 @@ public class UserService implements UserServiceInterface {
       System.out.println("Error occured while saving user: " + e.getMessage());
       throw new RuntimeException("Error occurred while saving user.");
     }
-    return user;
+
+    String token = jwtService.generateToken(user.getUsername());
+    JwtPayload jwtPayload = new JwtPayload(user, token);
+
+    return jwtPayload;
   }
 
 
@@ -309,6 +310,7 @@ public class UserService implements UserServiceInterface {
       throw new ResourceNotFoundException("User not found");
     }
 
+    user.setPasswordLength(newPassword.length());
     user.setPassword(encoder.encode(newPassword));
 
     try{

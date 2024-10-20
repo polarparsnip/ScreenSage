@@ -45,7 +45,7 @@ public class MediaController {
   public ResponseEntity<?> getMovies(
     @RequestParam(required = false) String genreId,
     @RequestParam(defaultValue = "1") int page,
-    @RequestParam(required = false) String searchQuery
+    @RequestParam(name = "search", required = false) String searchQuery
   ) throws Exception {
     
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -53,6 +53,7 @@ public class MediaController {
     int userId = authenticatedUser.getId();
 
     MediaListResponse movies = mediaService.getMedia(userId, "movie", genreId, page, searchQuery);
+    System.out.println(movies);
     return ResponseEntity.ok(movies);
   }
 
@@ -70,7 +71,7 @@ public class MediaController {
   public ResponseEntity<?> getShows(
     @RequestParam(required = false) String genreId,
     @RequestParam(defaultValue = "1") int page,
-    @RequestParam(required = false) String searchQuery
+    @RequestParam(name = "search", required = false) String searchQuery
   ) throws Exception {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
@@ -94,7 +95,7 @@ public class MediaController {
   public ResponseEntity<?> getAnime(
     @RequestParam(required = false) String genreId,
     @RequestParam(defaultValue = "1") int page,
-    @RequestParam(required = false) String searchQuery
+    @RequestParam(name = "search", required = false) String searchQuery
   ) throws Exception {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();

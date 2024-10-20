@@ -14,6 +14,7 @@ import is.hi.screensage_web_server.entities.Review;
 import is.hi.screensage_web_server.entities.Users;
 import is.hi.screensage_web_server.interfaces.MediaServiceInterface;
 import is.hi.screensage_web_server.interfaces.UserServiceInterface;
+import is.hi.screensage_web_server.models.JwtPayload;
 import is.hi.screensage_web_server.models.UserPrincipal;
 import is.hi.screensage_web_server.models.UserRequest;
 
@@ -48,12 +49,15 @@ public class UserController {
     @RequestParam("password") String password,
     @RequestParam(value = "image", required = false) MultipartFile imageFile
   ) {
+    Users newUser;
 
     if (imageFile == null || imageFile.isEmpty()) {
-      return userService.register(username, password);
+      newUser = userService.register(username, password);
+    } else {
+      newUser = userService.register(username, password, imageFile);
     }
 
-    return userService.register(username, password, imageFile);
+    return ResponseEntity.ok(newUser);
   }
 
   /**
@@ -67,7 +71,8 @@ public class UserController {
   public ResponseEntity<?> login(@RequestBody UserRequest userRequest) {
     String username = userRequest.getUsername();
     String password = userRequest.getPassword();
-    return userService.login(username, password); 
+    JwtPayload jwtPayload = userService.login(username, password);
+    return ResponseEntity.ok(jwtPayload);
   }
 
 
@@ -79,13 +84,13 @@ public class UserController {
 
   @GetMapping("/users/profile/reviews")
   public ResponseEntity<?> getUserReviews(
-    @RequestParam(defaultValue = "1") int Page
+    @RequestParam(defaultValue = "1") int page
   ) {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
     int userId = authenticatedUser.getId();
-    int pageSize = 20;
-    Page<Review> userReviews = mediaService.getUserReviews(userId, Page, pageSize);
+    int pageSize = 10;
+    Page<Review> userReviews = mediaService.getUserReviews(userId, page, pageSize);
     return ResponseEntity.ok(userReviews);
   }
   
@@ -94,14 +99,15 @@ public class UserController {
   public ResponseEntity<?> updateUsername(
     @RequestBody Map<String, String> update
   ) {
+    System.out.println(update);
     if (update.containsKey("username")) {
       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
       UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
       int userId = authenticatedUser.getId();
 
       String newUsername = update.get("username");
-      Users updatedUser = userService.updateUsername(userId, newUsername);
-      return ResponseEntity.ok(updatedUser);
+      JwtPayload jwtPayload = userService.updateUsername(userId, newUsername);
+      return ResponseEntity.ok(jwtPayload);
     }
     return ResponseEntity.badRequest().body("New Username required");
   }
