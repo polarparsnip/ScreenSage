@@ -1,0 +1,41 @@
+.paging {
+  color: var(--color-text-primary);
+  margin: 0 calc(var(--spacing) * 3);
+
+  &__button {
+    cursor: pointer;
+    color: var(--color-text-primary);
+
+    &:hover {
+      text-decoration: underline;
+      color: var(--color-text-secondary);
+      text-shadow: var(--text-shadow-primary-extra-large);
+    }
+  }
+
+  &__menuLine {
+    border: 1px solid white;
+    width: 100%;
+    margin-bottom: var(--spacing);
+    margin-top: calc(var(--spacing) * 5);
+  }
+
+  &__pages {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: calc(var(--spacing) / 2);
+  }
+
+  &__change {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    overflow: hidden;
+    margin-bottom: 3rem;
+    //width: 100px;
+    text-align: center;
+    gap: var(--spacing);
+  }
+}

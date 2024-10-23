@@ -1,0 +1,124 @@
+.challengePage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing);
+  padding-top: var(--spacing);
+  padding-bottom: calc(var(--spacing) * 2);
+  width: 100%;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  background-color: transparent;
+  border: 1px solid var(--color-text-primary);
+  padding: 30px;
+  border-radius: 12px;
+  // box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--box-shadow-primary-large);
+  max-width: 500px;
+  margin: auto;
+
+  @media screen and (width > 600px) {
+    min-width: 30rem;
+  }
+}
+
+.question {
+  font-size: 22px;
+  font-weight: bold;
+  text-align: center;
+  color: var(--color-text-primary);
+  text-shadow: var(--text-shadow-primary);
+}
+
+.optionsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  width: 100%;
+}
+
+.option {
+  color: var(--color-text-primary);
+  // color: #000;
+  // background-color: #f0f0f0;
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid white;
+
+  &:hover {
+    // background-color: var(--color-text-secondary);
+    // background-color: #1976d2;
+
+    // background-color: transparent;
+    border: 1px solid rgba(25, 118, 210, 0.5);
+
+    box-shadow: var(--box-shadow-primary);
+  }
+
+  &.selected {
+    // background-color: #007bff;
+    // background-color: #1976d2;
+    background-color: var(--color-text-secondary);
+
+    // border: 1px solid rgba(25, 118, 210, 0.5);
+    
+    color: #ffffff;
+
+    box-shadow: var(--box-shadow-primary);
+  }
+}
+
+.radioInput {
+  display: none;
+}
+
+.optionLabel {
+  font-size: 16px;
+}
+
+.submitButton {
+  padding: 12px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+
+  &:hover:not(:disabled) {
+    background-color: #0056b3;
+  }
+}
+
+.form__image {
+  align-self: center;
+}
+
+.challenge_img {
+  border-radius: 20px;
+  width: 100%;
+  max-height: 15rem;
+
+  @media screen and (min-width: 600px) {
+    max-height: 20rem;
+  }
+}

@@ -1,0 +1,49 @@
+.mediaCard {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  
+  &__title {
+    color: var(--color-text-primary);;
+    text-overflow: ellipsis;
+    width: 230px;
+    overflow: hidden;
+    white-space: nowrap;
+    margin-top: 10px;
+    margin-bottom: 0;
+    text-align: center;
+  }
+
+  &__rating {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__image {
+    border-radius: 20px;
+    height: 300px;
+    margin-bottom: 10px;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+
+  a:hover {
+    color: var(--color-text-primary);
+    text-shadow: none;
+  }
+
+  .links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-weight: bolder;
+    text-decoration: none;
+
+    &:hover {
+      text-shadow: none;
+      cursor: pointer;
+    }
+  }
+}

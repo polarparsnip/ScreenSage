@@ -1,0 +1,177 @@
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --font-size-base: 16px;
+  --font-size-headings: 1.5rem;
+  --spacing: 1rem;
+  --max-width: 1200px;
+
+  --box-shadow-primary: 
+  0 0 5px rgba(0, 191, 255, 0.7),
+  0 0 10px rgba(0, 191, 255, 0.5),
+  0 0 15px rgba(0, 191, 255, 0.3);
+  --box-shadow-primary-large: 
+  0 0 5px 2px rgba(0, 191, 255, 0.7),
+  0 0 10px 6px rgba(0, 191, 255, 0.5),
+  0 0 15px 8px rgba(0, 191, 255, 0.3);
+  
+  --text-shadow-primary: 
+  0 0 5px rgba(0, 191, 255, 0.7),
+  0 0 10px rgba(0, 191, 255, 0.5),
+  0 0 15px rgba(0, 191, 255, 0.3);
+  --text-shadow-primary-large: 
+  0 0 10px rgba(0, 191, 255, 0.7),
+  0 0 15px rgba(0, 191, 255, 0.5),
+  0 0 20px rgba(0, 191, 255, 0.3);
+  --text-shadow-primary-extra-large: 
+  0 0 10px rgba(0, 191, 255, 1),
+  0 0 20px rgba(0, 191, 255, 0.8), 
+  0 0 30px rgba(0, 191, 255, 0.6);
+  
+  --color-text-primary: #d8e0e8;
+  /* --color-text-secondary: #00bfff; */
+  --color-text-secondary: #2BFEFF;
+  --color-background-primary: linear-gradient(to top, #000000, #222121);
+  --color-background-secondary: #2c3440;
+  /* --color-background-button: #00bfff; */
+  --color-background-button: #2BFEFF;
+  --color-background-button-secondary: #5b6eae;;
+  
+  --color-rating-normal: #faaf00;
+  /* --color-rating-reviewed: #00bfff; */
+  --color-rating-reviewed: #2BFEFF;
+  
+  --font-base-size: 1rem;
+}
+
+html {
+  font-size: var(--font-size-base);
+  box-sizing: border-box;
+  background-color: black;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  min-width: 320px;
+  background: var(--color-background-primary);
+  color: var(--color-text-primary);
+}
+
+@font-face {
+  font-family: 'Graphik Semibold';
+  font-style: normal;
+  font-weight: 600;
+  src: url('/fonts/Graphik-Semibold-Trial.otf') format('openType');
+}
+
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 600;
+  src: url('/fonts/Roboto-Regular.ttf') format('truetype');
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+main {
+  /* padding: 6em 2em 2em; */
+  padding-top: calc(var(--spacing) * 2);
+  margin: 6em auto 2em auto;
+  max-width: var(--max-width);
+  min-height: 100vh;
+  animation: 600ms ease-in-out fade-in;
+}
+
+html,
+input,
+select,
+button {
+  font-family: 'Graphik Semibold', 'Open Sans';
+}
+
+textarea {
+  font-family: 'Roboto', 'Helvetica', 'Arial', 'sans-serif';
+  resize: none;
+  width: 500px;
+  height: 200px;
+  padding: 8px;
+}
+
+input:focus, textarea:focus {
+  outline: none;
+  box-shadow: var(--box-shadow-primary-large);
+}
+
+nav {
+  font-family: 'Graphik Semibold', 'Open Sans';
+}
+
+h3, h4, h5, h6, p, button {
+  font-family: 'Roboto', 'Helvetica', 'Arial', 'sans-serif';
+  color: var(--color-text-primary);
+}
+
+h3 {
+  font-size: calc(var(--font-base-size) * 3);
+}
+
+h5 {
+  font-size: calc(var(--font-base-size) * 1.5);
+}
+
+a {
+  text-decoration: none;
+  color: var(--color-text-primary);
+}
+
+a:hover {
+  color: var(--color-text-secondary);
+  text-shadow: var(--text-shadow-primary-extra-large);
+}
+
+button {
+  cursor: pointer;
+
+}
+
+button:hover {
+  color: var(--color-text-secondary);
+  text-shadow: var(--text-shadow-primary-extra-large);
+}
+
+li a.active{
+  color: var(--color-text-secondary);
+  text-shadow: var(--text-shadow-primary);
+}
+
+ul {
+  list-style: none;
+}
+
+.fade-in {
+  opacity: 1;
+  animation: 1s ease-in-out fade-in;
+}
+
+.fade-in-slow {
+  opacity: 1;
+  animation: 2s ease-in-out fade-in;
+}
+
+.hidden {
+  opacity: 0;
+}

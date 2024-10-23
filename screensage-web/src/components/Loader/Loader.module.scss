@@ -1,0 +1,14 @@
+.loading {
+  margin-top: calc(var(--spacing) * 6);
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center ;
+  // Fix for FadeLoader not being centered
+  padding-right: calc(var(--spacing) * 1.5);
+  // position: fixed;
+  // top: 30%; 
+  // left: 49%;
+  // transform: translate(-50%, -50%); 
+}

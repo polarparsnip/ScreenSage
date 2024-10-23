@@ -1,0 +1,48 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+.popup {
+  font-size: large;
+  color: var(--color-text-primary);
+  text-shadow: var(--text-shadow-primary);
+  // background: var(--color-background-secondary);
+  background: #000;
+  box-shadow: var(--box-shadow-primary);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing);
+  justify-content: center;
+  align-items: center;
+
+  padding: 20px;
+  border-radius: 8px;
+  // box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  white-space: pre-line;
+
+  min-height: 15rem;
+  min-width: 20rem;
+
+
+  @media screen and (min-width: 600px) {
+    min-width: 35rem;
+  }
+  
+  @media screen and (min-width: 800px) {
+    min-width: 40rem;
+  }
+  button {
+    margin-top: var(--spacing);
+  }
+}

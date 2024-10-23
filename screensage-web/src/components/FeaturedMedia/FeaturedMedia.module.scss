@@ -1,0 +1,49 @@
+.featuredMedia {
+  display: flex;
+  justify-content: center;
+  height: 490px;
+  text-decoration: none;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+
+  &__card {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: column;
+
+    &__media {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+      width: 100%;
+      background-color: rgba(0, 0, 0, 0.575);
+      background-blend-mode: darken;
+
+      transition: transform 0.3s ease;
+
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+
+    &__content {
+      color: #fff;
+      width: 100%;
+
+      @media screen and (width > 600px) {
+        width: 40%;
+      }
+    }
+  }
+}
+
+.cardRoot {
+  position: relative;
+}
+
+.cardContentRoot {
+  position: relative;
+  background-color: transparent;
+}

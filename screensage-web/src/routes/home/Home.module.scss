@@ -1,0 +1,36 @@
+.home {
+  padding-top: var(--spacing);
+  padding-bottom: calc(var(--spacing) * 2);
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: var(--spacing);
+  
+    &__buttons {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+    }
+
+    img {
+      width: 20rem;
+      height: auto;
+
+      @media screen and (width > 600px) {
+        width: 30rem;
+      }
+    }
+  }
+
+  a {
+    text-shadow: var(--text-shadow-primary-large);
+    font-size: calc(var(--font-base-size) * 1.5);
+
+    @media screen and (width > 600px) {
+      font-size: calc(var(--font-base-size) * 2);
+    }
+  }
+}
