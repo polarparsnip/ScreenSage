@@ -32,6 +32,15 @@ public class DataLoader {
   @Value("${user.default_profile_img}")
   private String defaultProfileImg;
 
+  @Value("${media.test_img_one}")
+  private String testImgOne;
+
+  @Value("${media.test_img_two}")
+  private String testImgTwo;
+
+  @Value("${media.test_img_three}")
+  private String testImgThree;
+
   private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
 
@@ -129,7 +138,7 @@ public class DataLoader {
     reviewRepository.save(new Review(1184907, testuser1, 4, "Very good movie", "movie"));
 
 
-    Challenge challenge1 = new Challenge("When did Inception come out?", ChallengeType.TRIVIA);
+    Challenge challenge1 = new Challenge("When did Inception come out?", ChallengeType.TRIVIA, testImgOne);
     challenge1.setOptions(
       Arrays.asList(
         new ChallengeOption(challenge1, "2010", true),
@@ -138,16 +147,16 @@ public class DataLoader {
         new ChallengeOption(challenge1, "2011")
     ));
 
-    Challenge challenge2 = new Challenge("When did The Dark Knight come out?", ChallengeType.TRIVIA);
+    Challenge challenge2 = new Challenge("When did The Dark Knight come out?", ChallengeType.TRIVIA, testImgTwo);
     challenge2.setOptions(
       Arrays.asList(
         new ChallengeOption(challenge2, "2012"),
         new ChallengeOption(challenge2, "2009", true),
         new ChallengeOption(challenge2, "2005"),
-        new ChallengeOption(challenge2, "2012")
+        new ChallengeOption(challenge2, "2010")
     ));
 
-    Challenge challenge3 = new Challenge("When did Interstellar come out?", ChallengeType.TRIVIA);
+    Challenge challenge3 = new Challenge("When did Interstellar come out?", ChallengeType.TRIVIA, testImgThree);
     challenge3.setOptions(
       Arrays.asList(
         new ChallengeOption(challenge3, "2012"),

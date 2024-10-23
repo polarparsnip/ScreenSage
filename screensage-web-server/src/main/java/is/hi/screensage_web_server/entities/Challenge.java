@@ -38,10 +38,24 @@ public class Challenge {
    * Constructs a new daily challenge.
    *
    * @param question the question for the challenge
+   * @param type the question type of the challenge
    */
   public Challenge(String question, ChallengeType type)  {
     this.question = question;
     this.type = type;
+  }
+
+    /**
+   * Constructs a new daily challenge with image.
+   *
+   * @param question the question for the challenge
+   * @param type the question type of the challenge
+   * @param image the image for the challenge
+   */
+  public Challenge(String question, ChallengeType type, String image)  {
+    this.question = question;
+    this.type = type;
+    this.image = image;
   }
 
   /**
