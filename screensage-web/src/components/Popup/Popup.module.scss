@@ -17,7 +17,6 @@
   text-shadow: var(--text-shadow-primary);
   // background: var(--color-background-secondary);
   background: #000;
-  box-shadow: var(--box-shadow-primary);
 
   display: flex;
   flex-direction: column;
@@ -45,4 +44,16 @@
   button {
     margin-top: var(--spacing);
   }
+}
+
+.default {
+    box-shadow: var(--box-shadow-primary);
+}
+
+.green {
+  box-shadow: var(--box-shadow-green);
+}
+
+.red {
+  box-shadow: var(--box-shadow-red);
 }

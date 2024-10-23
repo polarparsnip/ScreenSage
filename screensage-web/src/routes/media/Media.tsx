@@ -9,6 +9,7 @@ import { Media as MediaType, MediaList } from '../../types';
 import { useUserContext } from '../../context';
 import { Loader } from '../../components/Loader/Loader';
 import { ErrorDisplay } from '../../components/ErrorDisplay/ErrorDisplay';
+import MediaFilter from '../../components/MediaFilter/MediaFilter';
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -19,23 +20,12 @@ export default function Media({ type }: { type: string }) {
 
   const [searchParams, setSearchParams] = useSearchParams();
   const pageNr = searchParams.get('page') || 1;
-
-  // const [searchParams, setSearchParams] = useSearchParams();
-  // const pageNr = searchParams.get('page') || 1;
-  // const searchTerm = searchParams.get('search') || '';
-  // const setSearchTerm = (val: any) => {
-  //   if (val && val.length > 0) {
-  //     searchParams.set('search', val);
-  //     searchParams.delete('page');
-  //     setSearchParams(searchParams);
-  //   } else {
-  //     searchParams.delete('search');
-  //     searchParams.delete('page');
-  //     setSearchParams(searchParams);
-  //   }
-  // }
+  const genreId = searchParams.get('genre');
+  const search = searchParams.get('search');
 
   const [data, setData] = useState<MediaList>();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [genres, setGenres] = useState<any>();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [cookies] = useCookies(['token']);
@@ -45,7 +35,7 @@ export default function Media({ type }: { type: string }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch(`${apiUrl}/${type}?page=${pageNr}`, {
+        const res = await fetch(`${apiUrl}/${type}?page=${pageNr}&search=${search || ''}${genreId ? `&genreId=${genreId}` : ''}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -65,8 +55,8 @@ export default function Media({ type }: { type: string }) {
             throw new Error(message || 'Unknown error');
           }
         }
-        
         const result = await res.json();
+        setData(result);
 
         if (result && result.results && result.results.length > 0 && result.page) {
           const start = ((result.page - 1) * 20) + 1 ;
@@ -75,7 +65,33 @@ export default function Media({ type }: { type: string }) {
           result.end = end;
         }
 
-        setData(result);
+        const genreType = type == 'shows' ? 'shows' : type == 'anime' ? 'shows' : 'movies';
+
+        const genRes = await fetch(`${apiUrl}/${genreType}/genres`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${cookies.token}`,
+          }
+        });
+
+        if (genRes && !genRes.ok) {
+          if (genRes.headers.get('content-type')?.includes('application/json')) {
+            console.error('Error:', genRes.status, genRes.statusText);
+            const message = await genRes.json();
+            console.error(message.error);
+            throw new Error(message.error || 'Unknown error');
+          } else {
+            const message = await genRes.text();  // Plain text response
+            console.error(message);
+            throw new Error(message || 'Unknown error');
+          }
+        }
+        const genresResult = await genRes.json();
+        if (genresResult.genres) {
+          setGenres(genresResult.genres);
+        }
+
         setLoading(false);
 
       } catch (error: unknown) {
@@ -90,7 +106,7 @@ export default function Media({ type }: { type: string }) {
     };
 
     fetchData();
-  }, [cookies.token, pageNr, type]); // Empty dependency array means this useEffect runs once, when the component mounts
+  }, [cookies.token, genreId, pageNr, search, type]);
 
   if (!login) {
     navigate('/', { replace: true });
@@ -112,8 +128,8 @@ export default function Media({ type }: { type: string }) {
   return (
     <div className={`${s.mediaPage} ${loading ? 'hidden' : 'fade-in-slow'}`}>
       {data && pageNr == 1 && <FeaturedMedia media={data.results[0]} type={type}></FeaturedMedia>}
+      <MediaFilter genres={genres} />
       <div className={s.media}>
-
         {data && data.results.map((media: MediaType) => {
           return (
             <div key={i++}>

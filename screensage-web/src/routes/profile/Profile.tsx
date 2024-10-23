@@ -258,7 +258,7 @@ export default function Profile() {
   }
 
   return (
-    <div className={`${s.profile} ${loading ? 'hidden' : 'fade-in'}`}>
+    <div className={`${s.profile} ${loading ? 'hidden' : 'fade-in-fast'}`}>
       <div className={s.profile_container}>
         <div className={s.profile_header}>
           <label htmlFor='profilePicture'>

@@ -5,6 +5,7 @@
   text-decoration: none;
   width: 100vw;
   margin-left: calc(-50vw + 50%);
+  margin-top: calc(var(--spacing) * -2);
 
   &__card {
     width: 100%;

@@ -316,7 +316,7 @@ export default function MediaInfo({ type }: { type: string }) {
               <div className={s.buttonContainer}>
                 <ButtonGroup size='small' variant='outlined'>
                   <Button endIcon={<ArrowBack />} >
-                    <Typography variant='subtitle2' component={Link} to='/' color='inherit' sx={{ textDecoration: 'none' }}>
+                    <Typography variant='subtitle2' component={Link} to={`/${type}`} color='inherit' sx={{ textDecoration: 'none' }}>
                       Back
                     </Typography>
                   </Button>

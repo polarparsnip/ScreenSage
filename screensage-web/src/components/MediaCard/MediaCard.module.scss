@@ -26,6 +26,8 @@
 
     &:hover {
       transform: scale(1.05);
+      outline: solid 1px var(--color-text-secondary);
+      box-shadow: var(--box-shadow-primary);
     }
   }
 

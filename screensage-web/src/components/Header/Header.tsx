@@ -16,7 +16,32 @@ export default function Header() {
   const [isMediaOpen, setIsMediaOpen] = useState(false);
   const [isAccountOpen, setIsAccountOpen] = useState(false);
 
-    useEffect(() => {
+  const [scrollPosition, setScrollPosition] = useState<number>(0);
+  const [showHeader, setShowHeader] = useState<boolean>(true);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollPos = window.scrollY;
+
+      if (scrollPosition > currentScrollPos) {
+        // Scrolling up, show header
+        setShowHeader(true);
+      } else {
+        // Scrolling down, hide header
+        setShowHeader(false);
+      }
+
+      setScrollPosition(currentScrollPos);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [scrollPosition]);
+
+  useEffect(() => {
     if (isOpen) {
       document.body.classList.add('no-scroll'); 
     } else {
@@ -150,7 +175,6 @@ export default function Header() {
       setIsMediaOpen(false);
     }
 
-
     if (accountRef.current && accountRef.current.contains(event.target as Node)) {
       setTimeout(() => setIsAccountOpen(false), 200);
     }
@@ -161,17 +185,15 @@ export default function Header() {
   };
 
   useEffect(() => {
-      // Add event listener to handle clicks outside
-      document.addEventListener('mousedown', handleClickOutside);
-      return () => {
-          // Clean up the event listener on component unmount
-          document.removeEventListener('mousedown', handleClickOutside);
-      };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
   }, []);
 
 
   return (
-    <div className={s.header}>
+    <div className={`${s.header}  ${!showHeader ? s.hidden : ""}`}>
       <div className={s.header__title}>
         <Link to={'/'} className={s.header__title}>
           <img src='/img/icon.png' alt='screensage-logo' width='60px' height='60px' />

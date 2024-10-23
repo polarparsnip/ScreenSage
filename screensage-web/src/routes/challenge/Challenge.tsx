@@ -19,7 +19,8 @@ export default function Challenge() {
 
   const [challenge, setChallenge] = useState<ChallengeType | null>(null);
   const [selectedOption, setSelectedOption] = useState<ChallengeOption | null>(null);
-  const [result, setResult] = useState<string | null>(null);
+  const [resultString, setResultString] = useState<string>('');
+  const [result, setResult] = useState<boolean | null>(null);
 
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -81,7 +82,6 @@ export default function Challenge() {
 
   const submitAnswer = async (event: React.FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
-    console.log(selectedOption)
     
     if (!selectedOption || !challenge?.id) {
       return;
@@ -111,9 +111,11 @@ export default function Challenge() {
       }
       const result = await res.json();
 
+      setResult(result.answeredCorrectly);
+
       const resultString = `The correct answer was ${result.correctOption.option}. \n
                             Your answer was ${result.answeredCorrectly ? 'correct' : 'incorrect'}`;
-      setResult(resultString)
+      setResultString(resultString)
       handleResult();
 
       // return result;
@@ -187,10 +189,11 @@ export default function Challenge() {
           Submit Answer
         </Button>
       </form>
-      {isPopupVisible && result && (
+      {isPopupVisible && resultString && (
         <Popup
-          message={result }
+          message={resultString}
           onClose={handleClosePopup}
+          shadowColor={result ? 'green' : 'red'}
         />
       )}
     </div>

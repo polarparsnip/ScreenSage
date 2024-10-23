@@ -2,13 +2,12 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  margin-top: calc(var(--spacing) * -2);
 }
 
 .media {
   display: grid;
   gap: var(--spacing);
-  margin-top: calc(var(--spacing) * 4);
+  // margin-top: calc(var(--spacing) * 3);
   color: var(--color-text-primary);
 
   @media screen and (width > 600px) {
