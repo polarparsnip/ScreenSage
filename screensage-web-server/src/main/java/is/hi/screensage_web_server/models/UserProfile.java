@@ -5,11 +5,11 @@ import java.util.List;
 import is.hi.screensage_web_server.entities.Review;
 import is.hi.screensage_web_server.entities.Users;
 
-  /**
-   * UserProfile payload.
-   *
-   * Contains information such as user information and recent reviews
-   */
+/**
+ * UserProfile payload.
+ *
+ * Contains information such as user information and recent reviews
+ */
 public class UserProfile {
   private Users user;
   private List<Review> recentReviews;
@@ -42,9 +42,9 @@ public class UserProfile {
   }
 
   /**
-   * Returns the most recent reviews left by the user.
+   * Returns the list of most recent reviews left by the user.
    *
-   * @return the list of recent reviews
+   * @return {@link List} of recent {@link Review} made by the user
    */
   public List<Review> getRecentReviews() {
     return recentReviews;
@@ -53,7 +53,8 @@ public class UserProfile {
   /**
    * Sets the list of recent reviews.
    *
-   * @param recentReviews the list of reviews to set
+   * @param recentReviews the {@link List} of {@link Review} to set as 
+   *        recent reviews for the user
    */
   public void setRecentReviews(List<Review> recentReviews) {
     this.recentReviews = recentReviews;

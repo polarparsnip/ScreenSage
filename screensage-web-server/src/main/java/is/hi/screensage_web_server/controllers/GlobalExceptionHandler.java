@@ -10,6 +10,11 @@ import is.hi.screensage_web_server.config.CustomExceptions.InvalidInputException
 import is.hi.screensage_web_server.config.CustomExceptions.ResourceNotFoundException;
 import is.hi.screensage_web_server.config.CustomExceptions.UnauthorizedException;
 
+/**
+ * Global exception handler to handle exceptions across the entire application.
+ * This class uses {@link ControllerAdvice} to intercept exceptions thrown by controllers
+ * and provides custom error responses.
+ */
 @ControllerAdvice
 public class GlobalExceptionHandler {
 

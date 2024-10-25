@@ -26,7 +26,7 @@ public class JwtPayload {
   /**
    * Returns the user.
    *
-   * @return the user
+   * @return the {@link Users} who is encooded in the token
    */
   public Users getUser() {
     return user;

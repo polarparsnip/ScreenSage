@@ -38,7 +38,7 @@ public class MediaController {
    * @param page the page number for pagination (default is 1).
    * @param searchQuery the search query to filter movies (optional).
    * @param userId the ID of the user requesting the movies (required).
-   * @return a ResponseEntity containing a list of movies.
+   * @return {@link ResponseEntity} containing a list of movies.
    * @throws Exception if an error occurs while retrieving the movies.
    */
   @GetMapping("/movies")
@@ -64,7 +64,7 @@ public class MediaController {
    * @param page the page number for pagination (default is 1).
    * @param searchQuery the search query to filter shows (optional).
    * @param userId the ID of the user requesting the shows (required).
-   * @return a ResponseEntity containing a list of shows.
+   * @return {@link ResponseEntity} containing a list of shows.
    * @throws Exception if an error occurs while retrieving the shows.
    */
   @GetMapping("/shows")
@@ -88,7 +88,7 @@ public class MediaController {
    * @param page the page number for pagination (default is 1).
    * @param searchQuery the search query to filter anime (optional).
    * @param userId the ID of the user requesting the anime (required).
-   * @return a ResponseEntity containing a list of anime.
+   * @return {@link ResponseEntity} containing a list of anime.
    * @throws Exception if an error occurs while retrieving the list of anime.
    */
   @GetMapping("/anime")
@@ -110,7 +110,7 @@ public class MediaController {
    *
    * @param movieId the ID of the movie being requested (required).
    * @param userId the ID of the user requesting the movie details (required).
-   * @return a ResponseEntity containing the detailed information of the movie.
+   * @return {@link ResponseEntity} containing the detailed information of the movie.
    */
   @GetMapping("/movies/{movieId}")
   public ResponseEntity<?> getMovie(
@@ -129,7 +129,7 @@ public class MediaController {
    *
    * @param showId the ID of the show being requested (required).
    * @param userId the ID of the user requesting the show details (required).
-   * @return a ResponseEntity containing the detailed information of the show.
+   * @return {@link ResponseEntity} containing the detailed information of the show.
    */
   @GetMapping("/shows/{showId}")
   public ResponseEntity<?> getShow(
@@ -148,7 +148,7 @@ public class MediaController {
    *
    * @param animeId the ID of the anime being requested (required).
    * @param userId the ID of the user requesting the anime details (required).
-   * @return a ResponseEntity containing the detailed information of the anime.
+   * @return {@link ResponseEntity} containing the detailed information of the anime.
    */
   @GetMapping("/anime/{animeId}")
   public ResponseEntity<?> getSingleAnime(
@@ -165,7 +165,7 @@ public class MediaController {
   /**
    * Retrieves a list of genres available for movies.
    *
-   * @return a ResponseEntity containing the available genres for movies.
+   * @return {@link ResponseEntity} containing the available genres for movies.
    */
   @GetMapping("/movies/genres")
   public ResponseEntity<?> getMovieGenres() {
@@ -176,7 +176,7 @@ public class MediaController {
   /**
    * Retrieves a list of genres available for shows.
    *
-   * @return a ResponseEntity containing the available genres for shows.
+   * @return {@link ResponseEntity} containing the available genres for shows.
    */
   @GetMapping("/shows/genres")
   public ResponseEntity<?> getShowGenres() {
@@ -188,7 +188,7 @@ public class MediaController {
    * Retrieves recommendations for a specific movie based on its ID.
    *
    * @param movieId the ID of the movie for which recommendations are requested (required).
-   * @return a ResponseEntity containing the recommendations for the specified movie.
+   * @return {@link ResponseEntity} containing the recommendations for the specified movie.
    */
   @GetMapping("/movies/{movieId}/recommendations")
   public ResponseEntity<?> getMovieRecommendations(@PathVariable int movieId) {
@@ -200,7 +200,7 @@ public class MediaController {
    * Retrieves recommendations for a specific show based on its ID.
    *
    * @param showId the ID of the show for which recommendations are requested (required).
-   * @return a ResponseEntity containing the recommendations for the specified show.
+   * @return {@link ResponseEntity} containing the recommendations for the specified show.
    */
   @GetMapping("/shows/{showId}/recommendations")
   public ResponseEntity<?> getShowRecommendations(@PathVariable int showId) {
@@ -212,7 +212,7 @@ public class MediaController {
    * Retrieves recommendations for a specific anime based on its ID.
    *
    * @param animeId the ID of the anime for which recommendations are requested (required).
-   * @return a ResponseEntity containing the recommendations for the specified anime.
+   * @return {@link ResponseEntity} containing the recommendations for the specified anime.
    */
   @GetMapping("/anime/{animeId}/recommendations")
   public ResponseEntity<?> getAnimeRecommendations(@PathVariable int animeId) {
@@ -225,7 +225,7 @@ public class MediaController {
    *
    * @param movieId the ID of the movie for which reviews are requested (required).
    * @param page the page number for pagination (default is 1).
-   * @return a ResponseEntity containing a paginated list of reviews for the specified movie.
+   * @return {@link ResponseEntity} containing a paginated list of reviews for the specified movie.
    * @throws Exception if an error occurs while retrieving the movie reviews.
    */
   @GetMapping("/movies/{movieId}/reviews")
@@ -242,7 +242,7 @@ public class MediaController {
    *
    * @param showId the ID of the show for which reviews are requested (required).
    * @param page the page number for pagination (default is 1).
-   * @return a ResponseEntity containing a paginated list of reviews for the specified show.
+   * @return {@link ResponseEntity} containing a paginated list of reviews for the specified show.
    * @throws Exception if an error occurs while retrieving the show reviews.
    */
   @GetMapping("/shows/{showId}/reviews")
@@ -259,7 +259,7 @@ public class MediaController {
    *
    * @param animeId the ID of the anime for which reviews are requested (required).
    * @param page the page number for pagination (default is 1).
-   * @return a ResponseEntity containing a paginated list of reviews for the specified anime.
+   * @return {@link ResponseEntity} containing a paginated list of reviews for the specified anime.
    * @throws Exception if an error occurs while retrieving the anime reviews.
    */
   @GetMapping("/anime/{animeId}/reviews")
@@ -276,7 +276,7 @@ public class MediaController {
    *
    * @param movieId the ID of the movie being reviewed (required).
    * @param reviewRequest the request body containing review details (required).
-   * @return a ResponseEntity containing the posted review.
+   * @return {@link ResponseEntity} containing the posted review.
    * @throws Exception if an error occurs while saving the movie review.
    */
   @PostMapping("/movies/{movieId}/reviews")
@@ -296,7 +296,7 @@ public class MediaController {
    *
    * @param showId the ID of the show being reviewed (required).
    * @param reviewRequest the request body containing review details (required).
-   * @return a ResponseEntity containing the posted review.
+   * @return {@link ResponseEntity} containing the posted review.
    * @throws Exception if an error occurs while saving the show review.
    */
   @PostMapping("/shows/{showId}/reviews")
@@ -316,7 +316,7 @@ public class MediaController {
    *
    * @param animeId the ID of the anime being reviewed (required).
    * @param reviewRequest the request body containing review details (required).
-   * @return a ResponseEntity containing the posted review.
+   * @return {@link ResponseEntity} containing the posted review.
    * @throws Exception if an error occurs while saving the anime review.
    */
   @PostMapping("/anime/{animeId}/reviews")

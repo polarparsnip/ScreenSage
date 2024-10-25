@@ -75,13 +75,22 @@ public class UserController {
     return ResponseEntity.ok(jwtPayload);
   }
 
-
+  /**
+   * Retrieves the profile information for the currently authenticated user.
+   *
+   * @return a {@link ResponseEntity} containing the user's profile information
+   */
   @GetMapping("/users/profile")
   public ResponseEntity<?> getUserProfile() {
     return ResponseEntity.ok(userService.getUserProfile()); 
   }
 
-
+  /**
+   * Retrieves a paginated list of reviews created by the currently authenticated user.
+   *
+   * @param page the page number to retrieve (default is 1)
+   * @return a {@link ResponseEntity} containing a paginated list of the user's reviews
+   */
   @GetMapping("/users/profile/reviews")
   public ResponseEntity<?> getUserReviews(
     @RequestParam(defaultValue = "1") int page
@@ -94,7 +103,12 @@ public class UserController {
     return ResponseEntity.ok(userReviews);
   }
   
-
+  /**
+   * Updates the username of the currently authenticated user.
+   *
+   * @param update a {@link Map} containing the new username under the key "username"
+   * @return a {@link ResponseEntity} indicating the result of the update operation
+   */
   @PatchMapping("/users/profile/username")
   public ResponseEntity<?> updateUsername(
     @RequestBody Map<String, String> update
@@ -112,7 +126,12 @@ public class UserController {
     return ResponseEntity.badRequest().body("New Username required");
   }
 
-
+  /**
+   * Updates the password of the currently authenticated user.
+   *
+   * @param update a {@link Map} containing the new password under the key "password"
+   * @return a {@link ResponseEntity} indicating the result of the update operation
+   */
   @PatchMapping("/users/profile/password")
   public ResponseEntity<?> updatePassword(
     @RequestBody Map<String, String> update

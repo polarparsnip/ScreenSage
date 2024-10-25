@@ -13,7 +13,7 @@ public interface UserRepository extends JpaRepository<Users, Integer> {
    * Checks if a user with the given username exists in the database.
    *
    * @param username the username to check for existence
-   * @return true if a user with the given username exists, false otherwise
+   * @return {@code true} if a user with the given username exists, {@code false} otherwise
    */
   boolean existsByUsername(String username);
 

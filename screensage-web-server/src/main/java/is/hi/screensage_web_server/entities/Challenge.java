@@ -148,7 +148,7 @@ public class Challenge {
   /**
    * Returns the answer options of the challenge.
    *
-   * @return the options of the challenge
+   * @return the {@link List} of {@link ChallengeOption} of the challenge
    */
   public List<ChallengeOption> getOptions() {
     return options;
@@ -157,7 +157,7 @@ public class Challenge {
   /**
    * Sets the answer options of the challenge.
    *
-   * @param options the options to set for the challenge
+   * @param options the {@link List} of {@link ChallengeOption} to set for the challenge
    */
   public void setOptions(List<ChallengeOption> options) {
     this.options = options;

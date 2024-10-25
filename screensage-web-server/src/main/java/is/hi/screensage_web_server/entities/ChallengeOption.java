@@ -41,8 +41,8 @@ public class ChallengeOption {
    *
    * @param challenge the challenge this options belongs to
    * @param option the option that can be picked
-   * @param correct boolean stating whether this option is the correct answer 
-   *                for the challenge, true if such, otherwise false
+   * @param correct {@code true} if this option is the correct answer 
+   *                for the challenge, otherwise {@code false}
    */
   public ChallengeOption(Challenge challenge, String option, boolean correct)  {
     this.challenge = challenge;
@@ -105,7 +105,7 @@ public class ChallengeOption {
    * Returns whether this options is the correct answer 
    * for the corresponding challenge.
    *
-   * @return true is option is correct, otherwise false
+   * @return {@code true} is option is correct, otherwise {@code false}
    */
   public boolean getCorrect() {
     return correct;
@@ -115,7 +115,7 @@ public class ChallengeOption {
    * Sets the whether this options is the correct answer 
    * for the corresponding challenge.
    * 
-   * @param correct true is option is correct, otherwise false
+   * @param correct {@code true} is option is correct, otherwise {@code false}
    */
   public void setCorrect(boolean correct) {
     this.correct = correct;

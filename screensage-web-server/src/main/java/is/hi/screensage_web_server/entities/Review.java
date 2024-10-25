@@ -91,7 +91,7 @@ public class Review {
   /**
    * Returns the user who made the review.
    *
-   * @return the user
+   * @return the {@link Users} who made the review
    */
   public Users getUser() {
     return user;
@@ -100,7 +100,7 @@ public class Review {
   /**
    * Sets the user who made the review.
    * 
-   * @param user the user to be set
+   * @param user the {@link Users} to be set
    */
   public void setUser(Users user) {
     this.user = user;

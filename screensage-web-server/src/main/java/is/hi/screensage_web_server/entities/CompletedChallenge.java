@@ -30,7 +30,12 @@ public class CompletedChallenge {
   @CreationTimestamp
   private Date createdAt;
 
-
+  /**
+   * Constructs a new {@link CompletedChallenge} with the specified user and challenge.
+   *
+   * @param user the {@link Users} object representing the user who completed the challenge
+   * @param challenge the {@link Challenge} object representing the challenge that was completed
+   */
   public CompletedChallenge(Users user, Challenge challenge)  {
     this.user = user;
     this.challenge = challenge;
@@ -51,22 +56,47 @@ public class CompletedChallenge {
     return id;
   }
 
+  /**
+   * Retrieves the user who completed the challenge.
+   *
+   * @return the {@link Users} object representing the user
+   */
   public Users getUser() {
     return user;
   }
 
+  /**
+   * Sets the user who completed the challenge.
+   *
+   * @param user the {@link Users} object representing the user to be set
+   */
   public void setUser(Users user) {
     this.user = user;
   }
 
+  /**
+   * Retrieves the challenge that was completed.
+   *
+   * @return the {@link Challenge} object representing the completed challenge
+   */
   public Challenge getChallenge() {
     return challenge;
   }
 
+  /**
+   * Sets the challenge that was completed.
+   *
+   * @param challenge the {@link Challenge} object to be set as the completed challenge
+   */
   public void setChallenge(Challenge challenge) {
     this.challenge = challenge;
   }
 
+  /**
+   * Retrieves the date and time when the challenge was completed.
+   *
+   * @return the {@link Date} object representing the completion timestamp
+   */
   public Date getCreatedAt() {
     return createdAt;
   }

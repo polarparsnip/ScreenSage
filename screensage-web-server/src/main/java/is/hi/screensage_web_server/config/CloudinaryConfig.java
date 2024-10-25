@@ -6,6 +6,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Configuration class for setting up Cloudinary integration.
+ * This class configures the Cloudinary service, including any necessary credentials and settings,
+ * to enable image upload and management functionalities within the application.
+ */
 @Configuration
 public class CloudinaryConfig {
 
@@ -18,12 +23,12 @@ public class CloudinaryConfig {
   @Value("${cloudinary.api_secret}")
   private String apiSecret;
 
-@Bean
-Cloudinary cloudinary() {
+  @Bean
+  Cloudinary cloudinary() {
     return new Cloudinary(ObjectUtils.asMap(
-        "cloud_name", cloudName,
-        "api_key", apiKey,
-        "api_secret", apiSecret
+      "cloud_name", cloudName,
+      "api_key", apiKey,
+      "api_secret", apiSecret
     ));
-}
+  }
 }

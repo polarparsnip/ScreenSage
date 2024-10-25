@@ -78,6 +78,13 @@ public interface MediaServiceInterface {
    */
   public Review postMediaReview(int userId, String type, int mediaId, ReviewRequest reviewRequest) throws Exception;
 
-
+  /**
+   * Retrieves a paginated list of reviews submitted by a specific user.
+   *
+   * @param userId the ID of the user whose reviews are to be retrieved
+   * @param page the page number to retrieve
+   * @param pageSize the number of reviews per page
+   * @return a {@link Page} of {@link Review} objects for the specified user, containing the reviews for the requested page
+   */
   public Page<Review> getUserReviews(int userId, int page, int pageSize);
 }

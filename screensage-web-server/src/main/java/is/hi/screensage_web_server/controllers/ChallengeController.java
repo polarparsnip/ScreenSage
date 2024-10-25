@@ -22,9 +22,9 @@ public class ChallengeController {
   private ChallengeServiceInterface challengeService;
 
   /**
-   * Retrieves a random challenge to be the daily challenge.
+   * Retrieves the daily challenge for the user.
    *
-   * @return a ResponseEntity containing a random challenge.
+   * @return a {@link ResponseEntity} containing the daily challenge details
    */
   @GetMapping("/challenge")
   public ResponseEntity<?> getDailyChallenge() { 
@@ -33,9 +33,12 @@ public class ChallengeController {
   }
 
   /**
-   * Submits a user's answer for a daily challenge.
+   * Submits an answer for the daily challenge.
    *
-   * @return a ResponseEntity containing the result of whether the user answered correctly or not.
+   * @param challengeId the ID of the challenge to be answered
+   * @param optionId the ID of the option selected as the answer (required)
+   * @param userId the ID of the user submitting the answer (optional, defaults to 0 if not provided)
+   * @return a {@link ResponseEntity} indicating the result of the answer submission
    */
   @PostMapping("/challenge/{id}")
   public ResponseEntity<?> postDailyChallengeAnswer(

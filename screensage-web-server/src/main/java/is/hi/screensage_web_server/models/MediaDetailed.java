@@ -5,6 +5,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import is.hi.screensage_web_server.entities.Review;
 
+/**
+ * The payload for detailed media.
+ */
 // @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class MediaDetailed {

@@ -1,5 +1,9 @@
 package is.hi.screensage_web_server.config;
 
+/**
+ * A utility class for defining custom exceptions used across the application, 
+ * enabling more descriptive error handling and control over different error cases.
+ */
 public class CustomExceptions {
 
   public static class ResourceNotFoundException extends RuntimeException {
