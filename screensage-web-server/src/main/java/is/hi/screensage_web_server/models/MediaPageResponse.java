@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * Represents the response for a media list, including pagination information and the list of media items.
  */
-public class MediaListResponse {
+public class MediaPageResponse {
   int page;
 
   @JsonProperty("results")

@@ -46,7 +46,7 @@ public class Review {
    * @param rating the rating for the media
    */
   public Review(int mediaId, Users user, double rating, String content, String type)  {
-    if (type == "tv" || type == "movie") {
+    if (type.equals("tv") || type.equals("movie")) {
       this.type = type;
     }
     this.mediaId = mediaId;
@@ -159,7 +159,7 @@ public class Review {
    * @param type the media type to be set
    */
   public void setType(String type) {
-    if (type != "tv" || type != "movie") {
+    if (!type.equals("tv") && !type.equals("movie")) {
       return;
     }
 

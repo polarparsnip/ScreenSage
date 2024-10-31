@@ -4,7 +4,7 @@ import org.springframework.data.domain.Page;
 
 import is.hi.screensage_web_server.entities.Review;
 import is.hi.screensage_web_server.models.MediaDetailed;
-import is.hi.screensage_web_server.models.MediaListResponse;
+import is.hi.screensage_web_server.models.MediaPageResponse;
 import is.hi.screensage_web_server.models.ReviewRequest;
 
 /**
@@ -27,7 +27,7 @@ public interface MediaServiceInterface {
    * @return a list of media items matching the specified criteria.
    * @throws Exception if an error occurs while retrieving the media.
    */
-  public MediaListResponse getMedia(int userId, String type, String genreId, int page, String searchQuery) throws Exception;
+  public MediaPageResponse getMedia(int userId, String type, String genreId, int page, String searchQuery) throws Exception;
 
   /**
    * Retrieves detailed information about a specific media item.

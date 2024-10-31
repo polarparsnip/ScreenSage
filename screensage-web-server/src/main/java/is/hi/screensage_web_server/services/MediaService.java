@@ -19,7 +19,7 @@ import is.hi.screensage_web_server.interfaces.MediaServiceInterface;
 import is.hi.screensage_web_server.interfaces.UserServiceInterface;
 import is.hi.screensage_web_server.models.Media;
 import is.hi.screensage_web_server.models.MediaDetailed;
-import is.hi.screensage_web_server.models.MediaListResponse;
+import is.hi.screensage_web_server.models.MediaPageResponse;
 import is.hi.screensage_web_server.models.ReviewRequest;
 import is.hi.screensage_web_server.repositories.ReviewRepository;
 
@@ -37,7 +37,7 @@ public class MediaService implements MediaServiceInterface {
   private UserServiceInterface userService;
 
   @Override
-  public MediaListResponse getMedia(
+  public MediaPageResponse getMedia(
     int userId,
     String type, 
     String genreId, 
@@ -45,7 +45,7 @@ public class MediaService implements MediaServiceInterface {
     String searchQuery
   ) throws JsonMappingException, JsonProcessingException {
 
-    MediaListResponse mediaListResponse = tmdbService.getMedia(type, genreId, page, searchQuery);
+    MediaPageResponse mediaListResponse = tmdbService.getMedia(type, genreId, page, searchQuery);
     List<Media> mediaList = mediaListResponse.getResults();
 
     for (Media media : mediaList) {

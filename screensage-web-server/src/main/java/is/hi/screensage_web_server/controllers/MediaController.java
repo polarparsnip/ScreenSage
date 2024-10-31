@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import is.hi.screensage_web_server.entities.Review;
 import is.hi.screensage_web_server.interfaces.MediaServiceInterface;
 import is.hi.screensage_web_server.models.MediaDetailed;
-import is.hi.screensage_web_server.models.MediaListResponse;
+import is.hi.screensage_web_server.models.MediaPageResponse;
 import is.hi.screensage_web_server.models.ReviewRequest;
 import is.hi.screensage_web_server.models.UserPrincipal;
 
@@ -52,7 +52,7 @@ public class MediaController {
     UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
     int userId = authenticatedUser.getId();
 
-    MediaListResponse movies = mediaService.getMedia(userId, "movie", genreId, page, searchQuery);
+    MediaPageResponse movies = mediaService.getMedia(userId, "movie", genreId, page, searchQuery);
     System.out.println(movies);
     return ResponseEntity.ok(movies);
   }
@@ -77,7 +77,7 @@ public class MediaController {
     UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
     int userId = authenticatedUser.getId();
 
-    MediaListResponse shows = mediaService.getMedia(userId, "tv", genreId, page, searchQuery);
+    MediaPageResponse shows = mediaService.getMedia(userId, "tv", genreId, page, searchQuery);
     return ResponseEntity.ok(shows);
   }
 
@@ -101,7 +101,7 @@ public class MediaController {
     UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
     int userId = authenticatedUser.getId();
 
-    MediaListResponse animeList = mediaService.getMedia(userId, "anime", genreId, page, searchQuery);
+    MediaPageResponse animeList = mediaService.getMedia(userId, "anime", genreId, page, searchQuery);
     return ResponseEntity.ok(animeList);
   }
 
