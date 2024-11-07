@@ -10,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import is.hi.screensage_web_server.entities.MediaList;
 import is.hi.screensage_web_server.entities.Review;
 import is.hi.screensage_web_server.entities.Users;
 import is.hi.screensage_web_server.interfaces.MediaServiceInterface;
@@ -17,6 +18,7 @@ import is.hi.screensage_web_server.interfaces.UserServiceInterface;
 import is.hi.screensage_web_server.models.JwtPayload;
 import is.hi.screensage_web_server.models.UserPrincipal;
 import is.hi.screensage_web_server.models.UserRequest;
+import is.hi.screensage_web_server.services.MediaListService;
 
 
 /**
@@ -33,6 +35,9 @@ public class UserController {
 
   @Autowired
   private MediaServiceInterface mediaService;
+
+  @Autowired
+  private MediaListService mediaListService;
 
   /**
    * Registers a new user with the provided username and password.
@@ -147,4 +152,24 @@ public class UserController {
     }
     return ResponseEntity.badRequest().body("New password required");
   }
+
+  /**
+   * Retrieves a paginated list of media lists for the authenticated user.
+   *
+   * @param page the page number to retrieve (default is 1)
+   * @return a ResponseEntity containing the paginated list of media lists for the user
+   */
+  @GetMapping("users/profile/lists")
+  public ResponseEntity<?> getUserLists(
+    @RequestParam(defaultValue = "1") int page
+  ) { 
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
+    int userId = authenticatedUser.getId();
+    int pageSize = 20;
+    
+    Page<MediaList> userMediaLists = mediaListService.getUserMediaLists(userId, page, pageSize);
+    return ResponseEntity.ok(userMediaLists);
+  }
+
 }
