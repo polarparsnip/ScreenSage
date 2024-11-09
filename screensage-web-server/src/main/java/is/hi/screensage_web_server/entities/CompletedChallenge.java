@@ -26,6 +26,8 @@ public class CompletedChallenge {
   @ManyToOne
   private Challenge challenge;
 
+  private int points;
+
   @Column(nullable = false, updatable = false)
   @CreationTimestamp
   private Date createdAt;
@@ -33,12 +35,14 @@ public class CompletedChallenge {
   /**
    * Constructs a new {@link CompletedChallenge} with the specified user and challenge.
    *
-   * @param user the {@link Users} object representing the user who completed the challenge
+   * @param user      the {@link Users} object representing the user who completed the challenge
    * @param challenge the {@link Challenge} object representing the challenge that was completed
+   * @param points    the points awarded for answering the challege correctly, 0 points if answered incorrectly
    */
-  public CompletedChallenge(Users user, Challenge challenge)  {
+  public CompletedChallenge(Users user, Challenge challenge, int points)  {
     this.user = user;
     this.challenge = challenge;
+    this.points = points;
   }
 
   /**
@@ -90,6 +94,24 @@ public class CompletedChallenge {
    */
   public void setChallenge(Challenge challenge) {
     this.challenge = challenge;
+  }
+
+  /**
+   * Gets the points awarded for the completed challenge.
+   *
+   * @return the points awarded
+   */
+  public int getPoints() {
+    return points;
+  }
+
+  /**
+   * Sets the points awarded for the completed challenge.
+   *
+   * @param points the points to set
+   */
+  public void setPoints(int points) {
+    this.points = points;
   }
 
   /**

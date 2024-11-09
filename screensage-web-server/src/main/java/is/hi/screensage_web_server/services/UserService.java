@@ -1,6 +1,7 @@
 package is.hi.screensage_web_server.services;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -33,6 +35,7 @@ import is.hi.screensage_web_server.interfaces.UserServiceInterface;
 import is.hi.screensage_web_server.models.JwtPayload;
 import is.hi.screensage_web_server.models.UserPrincipal;
 import is.hi.screensage_web_server.models.UserProfile;
+import is.hi.screensage_web_server.models.UserScore;
 import is.hi.screensage_web_server.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 
@@ -323,25 +326,66 @@ public class UserService implements UserServiceInterface {
     return user;
   }
 
+  @Transactional
+  @Override
+  public Users updateProfileImage(int userId, MultipartFile imageFile) {
+    Users user = findUser(userId);
+    if (user == null) {
+      throw new ResourceNotFoundException("User not found");
+    }
+
+    String publicId = user.getProfileImgId();
+    Map<String, Object> uploadOptions = new HashMap<>();
+    
+    if (publicId != null) {
+      uploadOptions.put("public_id", publicId);
+      uploadOptions.put("overwrite", true);
+      uploadOptions.put("invalidate", true);
+    }
+
+    try {
+      @SuppressWarnings("rawtypes")
+      Map uploadResult = cloudinary.uploader().upload(imageFile.getBytes(), uploadOptions);
+      String url = (String) uploadResult.get("secure_url");
+      publicId = (String) uploadResult.get("public_id");
+      user.setProfileImgId(publicId);
+      user.setProfileImg(url);
+    } catch (IOException e) {
+      System.out.println("Error occurred while saving profile image: " + e.getMessage());
+      ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while saving profile image.");
+    }
+
+    try{
+      userRepository.save(user);
+    } catch (Exception e) {
+      System.out.println("Error occured while saving user: " + e.getMessage());
+      throw new RuntimeException("Error occurred while saving user.");
+    }
+
+    return user;
+  }
+
+  @Override
+  public Page<UserScore> getUserScoreboard(int page, int pageSize) {
+    PageRequest pageRequest = PageRequest.of(page - 1, pageSize);
+    return userRepository.findUsersOrderedByTotalPoints(pageRequest);
+  }
 
   @Override
   public boolean userExists(String username) {
     return userRepository.existsByUsername(username);
   }
 
-
   @Override
   public boolean userExists(int userId) {
     return userRepository.existsById(userId);
   }
-
 
   @Override
   public Users findUser(String username) {
     Users user = userRepository.findByUsername(username);
     return user;
   }
-
 
   @Override
   public Users findUser(int userId) {
@@ -352,7 +396,6 @@ public class UserService implements UserServiceInterface {
 
     return null;
   }
-
 
   @Override
   public Users getUserReferenceById(int userId) {

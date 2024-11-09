@@ -1,10 +1,12 @@
 package is.hi.screensage_web_server.interfaces;
 
+import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
 import is.hi.screensage_web_server.entities.Users;
 import is.hi.screensage_web_server.models.JwtPayload;
 import is.hi.screensage_web_server.models.UserProfile;
+import is.hi.screensage_web_server.models.UserScore;
 
 /**
  * UserServiceInterface defines the contract for user-related services,
@@ -33,7 +35,7 @@ public interface UserServiceInterface {
    *
    * @param username the username of the new user
    * @param password the password of the new user
-   * @param imageFile the file corresponding to the profile picture of the new user
+   * @param imageFile the file corresponding to the profile image of the new user
    * @return The newly created user object
    */
   Users register(String username, String password, MultipartFile imageFile);
@@ -73,6 +75,25 @@ public interface UserServiceInterface {
    * @return the updated {@link Users} object after the password change
    */
   public Users updatePassword(int userId, String newPassword);
+
+  /**
+   * Updates the profile image for a specific user.
+   *
+   * @param userId the ID of the user whose profile image is to be updated
+   * @param imageFile the file corresponding to the new profile image
+   * @return the updated {@link Users} object after the profile image change
+   */
+  public Users updateProfileImage(int userId, MultipartFile imageFile);
+
+  /**
+   * Retrieves a paginated list of users ordered by their total points
+   * accumulated from completed challenges.
+   *
+   * @param page the page number for pagination.
+   * @param pageSize the number of entries per page
+   * @return a page of {@link UserScore} ordered by total points in descending order
+   */
+  Page<UserScore> getUserScoreboard(int page, int pageSize);
 
   /**
    * Checks if a user exists with the specified username.
