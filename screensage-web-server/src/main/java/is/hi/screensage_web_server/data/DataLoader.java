@@ -138,7 +138,7 @@ public class DataLoader {
     reviewRepository.save(new Review(1184907, testuser1, 4, "Very good movie", "movie"));
 
 
-    Challenge challenge1 = new Challenge("When did Inception come out?", ChallengeType.TRIVIA, testImgOne);
+    Challenge challenge1 = new Challenge("When did Inception come out?", ChallengeType.TRIVIA, testImgOne, 500);
     challenge1.setOptions(
       Arrays.asList(
         new ChallengeOption(challenge1, "2010", true),
@@ -147,7 +147,7 @@ public class DataLoader {
         new ChallengeOption(challenge1, "2011")
     ));
 
-    Challenge challenge2 = new Challenge("When did The Dark Knight come out?", ChallengeType.TRIVIA, testImgTwo);
+    Challenge challenge2 = new Challenge("When did The Dark Knight come out?", ChallengeType.TRIVIA, testImgTwo, 500);
     challenge2.setOptions(
       Arrays.asList(
         new ChallengeOption(challenge2, "2012"),
@@ -156,7 +156,7 @@ public class DataLoader {
         new ChallengeOption(challenge2, "2010")
     ));
 
-    Challenge challenge3 = new Challenge("When did Interstellar come out?", ChallengeType.TRIVIA, testImgThree);
+    Challenge challenge3 = new Challenge("When did Interstellar come out?", ChallengeType.TRIVIA, testImgThree, 500);
     challenge3.setOptions(
       Arrays.asList(
         new ChallengeOption(challenge3, "2012"),
