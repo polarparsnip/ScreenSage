@@ -10,10 +10,12 @@ import org.springframework.stereotype.Component;
 import is.hi.screensage_web_server.entities.Review;
 import is.hi.screensage_web_server.entities.Challenge;
 import is.hi.screensage_web_server.entities.ChallengeOption;
+import is.hi.screensage_web_server.entities.CompletedChallenge;
 import is.hi.screensage_web_server.entities.Users;
 import is.hi.screensage_web_server.repositories.ReviewRepository;
 import is.hi.screensage_web_server.models.ChallengeType;
 import is.hi.screensage_web_server.repositories.ChallengeRepository;
+import is.hi.screensage_web_server.repositories.CompletedChallengeRepository;
 import is.hi.screensage_web_server.repositories.UserRepository;
 import jakarta.annotation.PostConstruct;
 
@@ -28,6 +30,9 @@ public class DataLoader {
   
   @Autowired
   private ChallengeRepository challengeRepository;
+
+  @Autowired
+  private CompletedChallengeRepository completedChallengeRepository;
 
   @Value("${user.default_profile_img}")
   private String defaultProfileImg;
@@ -138,7 +143,7 @@ public class DataLoader {
     reviewRepository.save(new Review(1184907, testuser1, 4, "Very good movie", "movie"));
 
 
-    Challenge challenge1 = new Challenge("When did Inception come out?", ChallengeType.TRIVIA, testImgOne);
+    Challenge challenge1 = new Challenge("When did Inception come out?", ChallengeType.TRIVIA, testImgOne, 500);
     challenge1.setOptions(
       Arrays.asList(
         new ChallengeOption(challenge1, "2010", true),
@@ -147,7 +152,7 @@ public class DataLoader {
         new ChallengeOption(challenge1, "2011")
     ));
 
-    Challenge challenge2 = new Challenge("When did The Dark Knight come out?", ChallengeType.TRIVIA, testImgTwo);
+    Challenge challenge2 = new Challenge("When did The Dark Knight come out?", ChallengeType.TRIVIA, testImgTwo, 500);
     challenge2.setOptions(
       Arrays.asList(
         new ChallengeOption(challenge2, "2012"),
@@ -156,7 +161,7 @@ public class DataLoader {
         new ChallengeOption(challenge2, "2010")
     ));
 
-    Challenge challenge3 = new Challenge("When did Interstellar come out?", ChallengeType.TRIVIA, testImgThree);
+    Challenge challenge3 = new Challenge("When did Interstellar come out?", ChallengeType.TRIVIA, testImgThree, 500);
     challenge3.setOptions(
       Arrays.asList(
         new ChallengeOption(challenge3, "2012"),
@@ -168,5 +173,32 @@ public class DataLoader {
     challengeRepository.save(challenge1);
     challengeRepository.save(challenge2);
     challengeRepository.save(challenge3);
+
+    completedChallengeRepository.save(new CompletedChallenge(testuser1, challenge1, 500));
+    completedChallengeRepository.save(new CompletedChallenge(testuser1, challenge2, 500));
+    completedChallengeRepository.save(new CompletedChallenge(testuser2, challenge1, 500));
+    completedChallengeRepository.save(new CompletedChallenge(testuser3, challenge1, 500));
+    completedChallengeRepository.save(new CompletedChallenge(testuser4, challenge1, 500));
+    completedChallengeRepository.save(new CompletedChallenge(testuser5, challenge1, 500));
+    completedChallengeRepository.save(new CompletedChallenge(testuser6, challenge1, 500));
+    completedChallengeRepository.save(new CompletedChallenge(testuser7, challenge1, 500));
+    completedChallengeRepository.save(new CompletedChallenge(testuser8, challenge1, 500));
+    completedChallengeRepository.save(new CompletedChallenge(testuser9, challenge1, 500));
+    completedChallengeRepository.save(new CompletedChallenge(testuser10, challenge1, 500));
+    completedChallengeRepository.save(new CompletedChallenge(testuser11, challenge1, 500));
+    completedChallengeRepository.save(new CompletedChallenge(testuser12, challenge1, 500));
+    completedChallengeRepository.save(new CompletedChallenge(testuser13, challenge1, 500));
+    completedChallengeRepository.save(new CompletedChallenge(testuser14, challenge1, 500));
+    completedChallengeRepository.save(new CompletedChallenge(testuser15, challenge1, 500));
+    completedChallengeRepository.save(new CompletedChallenge(testuser16, challenge1, 500));
+    completedChallengeRepository.save(new CompletedChallenge(testuser17, challenge1, 500));
+    completedChallengeRepository.save(new CompletedChallenge(testuser18, challenge1, 500));
+    completedChallengeRepository.save(new CompletedChallenge(testuser19, challenge1, 500));
+    completedChallengeRepository.save(new CompletedChallenge(testuser20, challenge1, 500));
+    completedChallengeRepository.save(new CompletedChallenge(testuser21, challenge1, 500));
+    completedChallengeRepository.save(new CompletedChallenge(testuser22, challenge1, 500));
+    completedChallengeRepository.save(new CompletedChallenge(testuser23, challenge1, 500));
+    completedChallengeRepository.save(new CompletedChallenge(testuser24, challenge1, 500));
+    completedChallengeRepository.save(new CompletedChallenge(testuser25, challenge1, 500));
   }
 }
