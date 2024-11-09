@@ -191,7 +191,7 @@ public class UserController {
     return ResponseEntity.ok(userMediaLists);
   }
 
-  /**
+   /**
    * Retrieves a paginated scoreboard of users, ordered by their scores from daily challenges.
    *
    * @param page the page number to retrieve (default is 1)

@@ -79,6 +79,11 @@ public class MediaListService implements MediaListServiceInterface {
       newMediaList.setWatchlist(isWatchlist);
     }
 
+    List<Integer> sharedWith = mediaListRequest.getSharedWith(); 
+    if (sharedWith != null && !sharedWith.isEmpty()) {
+      newMediaList.setSharedWith(sharedWith);
+    }
+
     List<MediaListItem> newMediaListItems = new ArrayList<>();
 
     List<MediaListItemRequest> mediaListItems = mediaListRequest.getMediaListItems();
@@ -187,6 +192,93 @@ public class MediaListService implements MediaListServiceInterface {
     }
   
     return userMediaLists;
+  }
+
+
+  @Override
+  public MediaList getWatchlist(int watchlistId, int userId) throws Exception {
+    MediaList watchlist;
+    try {
+      watchlist = findMediaList(watchlistId);
+    } catch (Exception e) {
+      System.out.println("Could not find watchlist: " + e.getMessage());
+      throw new ResourceNotFoundException("Could not find watchlist.");
+    }
+
+    if (!watchlist.isWatchlist()) {
+      throw new Exception("Cannot fetch list because it is not a watchlist");
+    }
+
+    Users listAuthor = watchlist.getUser();
+    List<Integer> sharedWith = watchlist.getSharedWith();
+
+    if (userId == listAuthor.getId()) {
+      return watchlist;
+    }
+
+    if (sharedWith == null || sharedWith.isEmpty()) {
+      throw new UnauthorizedException("You dont have access to this watchlist");
+    }
+    
+    if (!sharedWith.contains(userId)) {
+      throw new UnauthorizedException("You dont have access to this watchlist");
+    }
+    
+    return watchlist;
+  }
+
+  @Override
+  public Page<MediaList> getUserWatchlists(int userId, int page, int pageSize) {
+    PageRequest pageRequest = PageRequest.of(page - 1, pageSize);
+  
+    Page<MediaList> userWatchlists;
+    try {
+      userWatchlists = mediaListRepository.getUserWatchlists(userId, pageRequest);
+    } catch (Exception e) {
+      System.out.println("Could not find user watchlists: " + e.getMessage());
+      throw new ResourceNotFoundException("Could not find user watchlists.");
+    }
+  
+    return userWatchlists;
+  }
+
+  @Transactional
+  @Override
+  public List<Integer> updateWatchlistSharedWith(
+    int watchlistId, 
+    int userId, 
+    List<Integer> userIds
+    ) throws Exception {
+
+    Users user = userService.findUser(userId);
+    if (user == null) {
+      System.out.println("Error: User not found");
+      throw new ResourceNotFoundException("User not found");
+    }
+
+    MediaList mediaList = findMediaList(watchlistId);
+    if (mediaList == null) {
+      System.out.println("Error: Media list not found");
+      throw new ResourceNotFoundException("Media list not found");
+    }
+
+    if (
+      mediaList.isWatchlist() && 
+      userIds != null
+    ) {
+      mediaList.setSharedWith(userIds);
+    } else {
+      throw new Exception("Cannot update user access. List is not watchlist.");
+    }
+
+    try {
+      mediaListRepository.save(mediaList);
+    } catch (Exception e) {
+      System.out.println("Error occured while updating media list: " + e.getMessage());
+      throw new Exception("Error occurred while updating media list.");
+    }
+
+    return userIds;
   }
 
 }
