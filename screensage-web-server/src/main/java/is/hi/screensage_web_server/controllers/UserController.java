@@ -18,6 +18,7 @@ import is.hi.screensage_web_server.interfaces.UserServiceInterface;
 import is.hi.screensage_web_server.models.JwtPayload;
 import is.hi.screensage_web_server.models.UserPrincipal;
 import is.hi.screensage_web_server.models.UserRequest;
+import is.hi.screensage_web_server.models.UserScore;
 import is.hi.screensage_web_server.services.MediaListService;
 
 
@@ -154,12 +155,30 @@ public class UserController {
   }
 
   /**
+   * Updates the profile image of the currently authenticated user.
+   *
+   * @param image the new profile image file to be set for the user
+   * @return a {@link ResponseEntity} indicating the result of the update operation
+   */
+  @PatchMapping("/users/profile/image")
+  public ResponseEntity<?> updateProfileImage(
+    @RequestParam(value = "image") MultipartFile imageFile
+  ) {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
+    int userId = authenticatedUser.getId();
+
+    Users updatedUser = userService.updateProfileImage(userId, imageFile);
+    return ResponseEntity.ok(updatedUser);
+  }
+
+  /**
    * Retrieves a paginated list of media lists for the authenticated user.
    *
    * @param page the page number to retrieve (default is 1)
    * @return a ResponseEntity containing the paginated list of media lists for the user
    */
-  @GetMapping("users/profile/lists")
+  @GetMapping("/users/profile/lists")
   public ResponseEntity<?> getUserLists(
     @RequestParam(defaultValue = "1") int page
   ) { 
@@ -172,4 +191,18 @@ public class UserController {
     return ResponseEntity.ok(userMediaLists);
   }
 
+  /**
+   * Retrieves a paginated scoreboard of users, ordered by their scores from daily challenges.
+   *
+   * @param page the page number to retrieve (default is 1)
+   * @return a ResponseEntity containing the paginated scoreboard of users
+   */
+  @GetMapping("/users/scoreboard")
+  public ResponseEntity<?> getUserScoreboard(
+    @RequestParam(defaultValue = "1") int page
+  ) { 
+    int pageSize = 20;
+    Page<UserScore> scoreboard = userService.getUserScoreboard(page, pageSize);
+    return ResponseEntity.ok(scoreboard);
+  }
 }

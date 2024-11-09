@@ -30,31 +30,36 @@ public class Challenge {
   @Enumerated(EnumType.STRING)
   private ChallengeType type;
 
+  private int points;
+
   @OneToMany(mappedBy = "challenge", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   private List<ChallengeOption> options;
-
 
   /**
    * Constructs a new daily challenge.
    *
    * @param question the question for the challenge
-   * @param type the question type of the challenge
+   * @param type     the question type of the challenge
+   * @param points   the points awarded for answering the challege correctly
    */
-  public Challenge(String question, ChallengeType type)  {
+  public Challenge(String question, ChallengeType type, int points)  {
     this.question = question;
     this.type = type;
+    this.points = points;
   }
 
     /**
    * Constructs a new daily challenge with image.
    *
    * @param question the question for the challenge
-   * @param type the question type of the challenge
-   * @param image the image for the challenge
+   * @param type     the question type of the challenge
+   * @param points   the points awarded for answering the challege correctly
+   * @param image    the image for the challenge
    */
-  public Challenge(String question, ChallengeType type, String image)  {
+  public Challenge(String question, ChallengeType type, String image, int points)  {
     this.question = question;
     this.type = type;
+    this.points = points;
     this.image = image;
   }
 
@@ -143,6 +148,24 @@ public class Challenge {
    */
   public void setType(ChallengeType type) {
     this.type = type;
+  }
+
+  /**
+   * Gets the award points for the challenge.
+   *
+   * @return the award points
+   */
+  public int getPoints() {
+    return points;
+  }
+
+  /**
+   * Sets the award points awarded for the challenge.
+   *
+   * @param points the award points to set
+   */
+  public void setPoints(int points) {
+    this.points = points;
   }
 
   /**

@@ -49,14 +49,15 @@ public class ChallengeService implements ChallengeServiceInterface {
       throw new ResourceNotFoundException("The chosen option could not be found");
     }
 
+    boolean isCorrect = chosenOption.getCorrect();
+
     if (userId != 0) {
       Users user = userService.findUser(userId);
       Challenge challenge = findChallenge(challengeId);
-      completedChallengeRepository.save(new CompletedChallenge(user, challenge));
+      int points = isCorrect ? challenge.getPoints() : 0;
+      completedChallengeRepository.save(new CompletedChallenge(user, challenge, points));
     }
-
-    boolean isCorrect = chosenOption.getCorrect();
-
+    
     if (!isCorrect) {
       Optional<ChallengeOption> correctOption = challengeOptionRepository.getCorrectOptionForChallenge(challengeId);
       if (!correctOption.isPresent()) {
