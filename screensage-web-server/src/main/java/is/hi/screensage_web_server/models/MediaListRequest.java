@@ -9,6 +9,7 @@ public class MediaListRequest {
   private String type;
   private List<MediaListItemRequest> mediaListItems;
   private boolean watchlist;
+  private List<Integer> sharedWith;
 
   /**
    * Gets the type of media the list is for (e.g., "movie" or "tv").
@@ -67,4 +68,21 @@ public class MediaListRequest {
     this.watchlist = watchlist;
   }
 
+  /**
+   * Gets the list of user IDs that this media list is shared with.
+   * 
+   * @return the list of shared user IDs
+   */
+  public List<Integer> getSharedWith() {
+    return sharedWith;
+  }
+
+  /**
+   * Sets the list of user IDs that this media list is shared with.
+   * 
+   * @param sharedWith the list of shared user IDs to set
+   */
+  public void serSharedWith(List<Integer> sharedWith) {
+    this.sharedWith = sharedWith;
+  }
 }
