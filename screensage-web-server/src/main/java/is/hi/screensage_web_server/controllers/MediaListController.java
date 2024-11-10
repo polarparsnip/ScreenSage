@@ -1,5 +1,8 @@
 package is.hi.screensage_web_server.controllers;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -97,4 +100,88 @@ public class MediaListController {
     return ResponseEntity.ok(updatedMediaList);
   }
 
+  /**
+   * Creates a new wathlist for the authenticated user. 
+   * 
+   * @param mediaListRequest  the request payload containing watchlist details
+   * @return                  a ResponseEntity containging the newly created watchlist
+   * @throws Exception        if an error occurs during watchlist creation
+   */
+  @PostMapping("/watchlists")
+  public ResponseEntity<?> postWatchlist(
+    @RequestBody MediaListRequest mediaListRequest
+  ) throws Exception {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
+    int userId = authenticatedUser.getId();
+
+    MediaList newWatchlist = mediaListService.createMediaList(userId, mediaListRequest);
+    return ResponseEntity.ok(newWatchlist);
+  }
+  
+  /**
+   * Retrieves a specific watchlist by its ID.
+   *
+   * @param watchlistId the ID of the watchlist to retrieve
+   * @return            a ResponseEntity containing the requested watchlist
+   * @throws Exception  if an error occurs while retrieving the watchlist
+   */
+  @GetMapping("/watchlists/{watchlistId}")
+  public ResponseEntity<?> getWatchlist(
+    @PathVariable int watchlistId
+  ) throws Exception {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
+    int userId = authenticatedUser.getId();
+
+    MediaList watchlist = mediaListService.getWatchlist(watchlistId, userId);
+    return ResponseEntity.ok(watchlist);
+  }
+
+/**
+   * Updates an existing watchlist.
+   *
+   * @param watchlistId      the ID of the watchlist to update
+   * @param mediaListRequest the request payload containing updated watchlist details
+   * @return                 a ResponseEntity containing the updated watchlist
+   * @throws Exception       if an error occurs during watchlist update
+   */
+  @PatchMapping("/watchlists/{watchlistId}")
+  public ResponseEntity<?> updateWatchlist(
+    @PathVariable int watchlistId,
+    @RequestBody MediaListRequest mediaListRequest
+  ) throws Exception {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
+    int userId = authenticatedUser.getId();
+
+    MediaList updatedWatchlist = mediaListService.updateMediaList(watchlistId, userId, mediaListRequest);
+    return ResponseEntity.ok(updatedWatchlist);
+  }
+
+ /**
+   * Updates the list of users with whom the watchlist is shared.
+   *
+   * @param watchlistId the ID of the watchlist to update
+   * @param update      a map containing the user IDs to share the watchlist with
+   * @return            a ResponseEntity containing the updated list of shared user IDs
+   * @throws Exception  if an error occurs during the update
+   */
+  @PatchMapping("/watchlists/{watchlistId}/shared_with")
+  public ResponseEntity<?> updateSharedWith(
+    @PathVariable int watchlistId,
+    @RequestBody Map<String, List<Integer>> update
+  ) throws Exception {
+    if (update.containsKey("sharedWith")) {
+      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+      UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
+      int userId = authenticatedUser.getId();
+
+      List<Integer> userIds = update.get("sharedWith");
+      List<Integer> updatedSharedWith = mediaListService.updateWatchlistSharedWith(watchlistId, userId, userIds);
+      return ResponseEntity.ok(updatedSharedWith);
+    }
+    return ResponseEntity.badRequest().body("Bad request");
+  }
+  
 }

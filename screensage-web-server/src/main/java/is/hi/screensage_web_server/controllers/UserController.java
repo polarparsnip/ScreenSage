@@ -209,6 +209,7 @@ public class UserController {
     Page<MediaList> userWatchlists = mediaListService.getUserWatchlists(userId, page, pageSize);
     return ResponseEntity.ok(userWatchlists);
   }
+  
   /**
    * Retrieves a paginated scoreboard of users, ordered by their scores from daily challenges.
    *
