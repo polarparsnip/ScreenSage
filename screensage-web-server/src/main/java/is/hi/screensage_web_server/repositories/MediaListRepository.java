@@ -35,13 +35,13 @@ public interface MediaListRepository extends JpaRepository<MediaList, Integer> {
   
   /**
    * Retrieves a paginated list of watchlists associated with a specific user,
-   * where the watchlist flag is true, ordered by teh creation date in descending order.
-   * 
-   * @param userId  the ID of the user whose watchlists are to be retrieved
+   * where the watchlist flag is true, ordered by the creation date in descending order.
+   *
+   * @param userId   the ID of the user whose watchlists are to be retrieved
    * @param pageable the pagination information including page number and size
-   * @return    a page of MediaLists objects for the specified user's watchlists
+   * @return         a Page of MediaList objects for the specified user's watchlists
    */
-  @Query("SELECT ml FROM MEdiaList ml WHERE ml.user.id = :userID AND ml.watchlist = TRUE ORDER BY ml.createdAT DESC")
+  @Query("SELECT ml FROM MediaList ml WHERE ml.user.id = :userId AND ml.watchlist = TRUE ORDER BY ml.createdAt DESC")
   Page<MediaList> getUserWatchlists(int userId, Pageable pageable);
   
 }
