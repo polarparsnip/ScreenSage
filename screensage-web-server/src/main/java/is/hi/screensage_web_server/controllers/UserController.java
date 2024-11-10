@@ -190,7 +190,26 @@ public class UserController {
     Page<MediaList> userMediaLists = mediaListService.getUserMediaLists(userId, page, pageSize);
     return ResponseEntity.ok(userMediaLists);
   }
-
+  
+/**
+   * Retrieves a paginated list of watchlists for the authenticated user.
+   *
+   * @param page the page number to retrieve (default is 1)
+   * @return a ResponseEntity containing the paginated list of watchlists for the user
+   */
+  @GetMapping("/users/profile/watchlists")
+  public ResponseEntity<?> getUserWatchlists(
+    @RequestParam(defaultValue = "1") int page
+  ) { 
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
+    int userId = authenticatedUser.getId();
+    int pageSize = 20;
+    
+    Page<MediaList> userWatchlists = mediaListService.getUserWatchlists(userId, page, pageSize);
+    return ResponseEntity.ok(userWatchlists);
+  }
+  
   /**
    * Retrieves a paginated scoreboard of users, ordered by their scores from daily challenges.
    *

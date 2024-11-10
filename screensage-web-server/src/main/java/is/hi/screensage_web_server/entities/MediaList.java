@@ -39,6 +39,7 @@ public class MediaList {
   private List<MediaListItem> mediaListItems;
 
   private boolean watchlist = false;
+  private List<Integer> sharedWith;
 
   @Column(nullable = false, updatable = false)
   @CreationTimestamp
@@ -98,6 +99,33 @@ public class MediaList {
     this.title = title;
     this.description = description;
     this.mediaListItems = mediaListItems;
+  }
+
+  /**
+   * Constructs a new MediaList as a watchlist with the specified user, media IDs,
+   * watchlist status and users to share with.
+   * 
+   * @param user            the user associated with the watchlist
+   * @param type            the type of media the list if for (e.g., "movie" or "tv").
+   * @param title           the title of the watchlist
+   * @param mediaListItems  a list of {@link MediaListItem} objects to set as the media items of the list.
+   * @param watchlist       the watchlist status of the media list
+   * @param sharedWith      the list of users the watchlis is shared with
+   */
+  public MediaList(
+    Users user,
+    String type,
+    String title,
+    List<MediaListItem> mediaListItems,
+    boolean watchlist,
+    List<Integer> sharedWith
+  ) {
+    this.user = user;
+    this.title = title;
+    this.type = type;
+    this.mediaListItems = mediaListItems;
+    this.watchlist = watchlist;
+    this.sharedWith = sharedWith;
   }
 
   /**
@@ -227,6 +255,24 @@ public class MediaList {
   public void setWatchlist(boolean watchlist) {
     this.watchlist = watchlist;
   }
+
+  /**
+   * Gets the IDs of the users the media list is shared with.
+   * 
+   * @return the IDs of the users the media list is shared with.
+   */
+  public List<Integer> getSharedWith() {
+    return sharedWith;
+  }
+
+/**
+ * Sets the list of user IDs to share the media list with.
+ * 
+ * @param sharedWith the list of user IDs to share the media list with.
+ */
+  public void setSharedWith(List<Integer> sharedWith) {
+  this.sharedWith = sharedWith;
+}
 
   /**
    * Gets the creation timestamp of the media list.
