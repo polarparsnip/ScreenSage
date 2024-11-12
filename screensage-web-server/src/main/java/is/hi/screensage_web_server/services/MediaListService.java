@@ -17,7 +17,9 @@ import is.hi.screensage_web_server.entities.MediaListItem;
 import is.hi.screensage_web_server.entities.Users;
 import is.hi.screensage_web_server.interfaces.MediaListServiceInterface;
 import is.hi.screensage_web_server.interfaces.UserServiceInterface;
+import is.hi.screensage_web_server.models.MediaListConcise;
 import is.hi.screensage_web_server.models.MediaListItemRequest;
+import is.hi.screensage_web_server.models.MediaListPostRequest;
 import is.hi.screensage_web_server.models.MediaListRequest;
 import is.hi.screensage_web_server.repositories.MediaListRepository;
 import jakarta.transaction.Transactional;
@@ -58,7 +60,7 @@ public class MediaListService implements MediaListServiceInterface {
   }
 
   @Override
-  public MediaList createMediaList(int userId, MediaListRequest mediaListRequest) throws Exception {
+  public MediaList createMediaList(int userId, MediaListPostRequest mediaListRequest) throws Exception {
     Users user = userService.findUser(userId);
     if (user == null) {
       System.out.println("Error: User not found");
@@ -67,12 +69,15 @@ public class MediaListService implements MediaListServiceInterface {
 
     String type = mediaListRequest.getType();
 
-    if (!type.equals("tv") && !type.equals("movie")) {
+    if (!type.equals("shows") && !type.equals("movies")) {
       System.out.println("Media type is missing or incorrect.");
       throw new Exception("Media type is missing or incorrect.");
     }
 
-    MediaList newMediaList = new MediaList(user, type);
+    String title = mediaListRequest.getTitle();
+    String description = mediaListRequest.getDescription();
+
+    MediaList newMediaList = new MediaList(user, type, title, description);
 
     boolean isWatchlist = mediaListRequest.isWatchlist();
     if (isWatchlist) {
@@ -84,21 +89,21 @@ public class MediaListService implements MediaListServiceInterface {
       newMediaList.setSharedWith(sharedWith);
     }
 
-    List<MediaListItem> newMediaListItems = new ArrayList<>();
+    // List<MediaListItem> newMediaListItems = new ArrayList<>();
 
-    List<MediaListItemRequest> mediaListItems = mediaListRequest.getMediaListItems();
-    for (MediaListItemRequest item : mediaListItems) {
-      MediaListItem newMediaListItem = new MediaListItem(
-        newMediaList, 
-        item.getMediaId(), 
-        item.getMediaTitle(), 
-        item.getMediaSummary(),
-        item.getMediaImg()
-      );
-      newMediaListItems.add(newMediaListItem);
-    }
+    // List<MediaListItemRequest> mediaListItems = mediaListRequest.getMediaListItems();
+    // for (MediaListItemRequest item : mediaListItems) {
+    //   MediaListItem newMediaListItem = new MediaListItem(
+    //     newMediaList, 
+    //     item.getMediaId(), 
+    //     item.getMediaTitle(), 
+    //     item.getMediaSummary(),
+    //     item.getMediaImg()
+    //   );
+    //   newMediaListItems.add(newMediaListItem);
+    // }
 
-    newMediaList.setMediaListItems(newMediaListItems);
+    // newMediaList.setMediaListItems(newMediaListItems);
 
     try {
       mediaListRepository.save(newMediaList);
@@ -132,7 +137,8 @@ public class MediaListService implements MediaListServiceInterface {
   public MediaList updateMediaList(
     int listId, 
     int userId, 
-    MediaListRequest mediaListRequest
+    MediaListRequest mediaListRequest,
+    boolean replace
   ) throws Exception {
 
     Users user = userService.findUser(userId);
@@ -164,10 +170,19 @@ public class MediaListService implements MediaListServiceInterface {
         item.getMediaSummary(),
         item.getMediaImg()
       );
-      newMediaListItems.add(newMediaListItem);
+      if (!(mediaList.getMediaListItems().stream().anyMatch(obj -> obj.getMediaId() == item.getMediaId()))) {
+        newMediaListItems.add(newMediaListItem);
+      }
     }
 
-    mediaList.setMediaListItems(newMediaListItems);
+    for (MediaListItem item : newMediaListItems) {
+      System.out.println(item.getMediaId());
+    }
+
+    if (replace) {
+      mediaList.getMediaListItems().clear();
+    }
+    mediaList.getMediaListItems().addAll(newMediaListItems);
 
     try {
       mediaListRepository.save(mediaList);
@@ -281,4 +296,16 @@ public class MediaListService implements MediaListServiceInterface {
     return userIds;
   }
 
+  @Override
+  public List<MediaListConcise> getAllUserMediaListsConcise(int userId, boolean watchlist) {
+    List<MediaListConcise> userLists;
+    try {
+      userLists = mediaListRepository.findAllByUserIdAndWatchlist(userId, watchlist);
+    } catch (Exception e) {
+      System.out.println("Could not find user media lists: " + e.getMessage());
+      throw new ResourceNotFoundException("Could not find user media lists.");
+    }
+  
+    return userLists;
+  }
 }

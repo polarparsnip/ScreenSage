@@ -6,6 +6,8 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import is.hi.screensage_web_server.models.MediaListConcise;
+
 /**
  * Represents a user in the system.
  */
@@ -40,6 +42,11 @@ public class Users {
   @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
   @OrderBy("created_at DESC")
   private List<Review> reviews;
+
+  @Transient
+  private List<MediaListConcise> lists;
+  @Transient
+  private List<MediaListConcise> watchlists;
 
   /**
    * Constructs a new user with the specified username and password.
@@ -187,5 +194,41 @@ public class Users {
    */
   public String getProfileImgId() {
     return profileImgId;
+  }
+
+  /**
+   * Retrieves the list of media lists in concise format made by the user.
+   *
+   * @return a list of {@link MediaListConcise} objects representing media lists.
+   */
+  public List<MediaListConcise> getLists() {
+    return lists;
+  }
+
+  /**
+  * Sets the list of media lists made by the user.
+  *
+  * @param lists a list of {@link MediaListConcise} objects to set as media lists.
+  */
+  public void setLists(List<MediaListConcise> lists) {
+    this.lists = lists;
+  }
+
+  /**
+  * Retrieves the list of media watchlists in concise format made by the user.
+  *
+  * @return a list of {@link MediaListConcise} objects representing media watchlists.
+  */
+  public List<MediaListConcise> getWatchlists() {
+    return watchlists;
+  }
+
+  /**
+  * Sets the list of media watchlists made by the user.
+  *
+  * @param watchlists a list of {@link MediaListConcise} objects to set as media watchlists.
+  */
+  public void setWatchlists(List<MediaListConcise> watchlists) {
+    this.watchlists = watchlists;
   }
 }

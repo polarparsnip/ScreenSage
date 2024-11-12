@@ -185,7 +185,7 @@ public class UserController {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
     int userId = authenticatedUser.getId();
-    int pageSize = 20;
+    int pageSize = 10;
     
     Page<MediaList> userMediaLists = mediaListService.getUserMediaLists(userId, page, pageSize);
     return ResponseEntity.ok(userMediaLists);
@@ -204,7 +204,7 @@ public class UserController {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
     int userId = authenticatedUser.getId();
-    int pageSize = 20;
+    int pageSize = 10;
     
     Page<MediaList> userWatchlists = mediaListService.getUserWatchlists(userId, page, pageSize);
     return ResponseEntity.ok(userWatchlists);

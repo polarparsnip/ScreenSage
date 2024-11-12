@@ -1,4 +1,4 @@
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import s from './MediaInfo.module.scss'
 import { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
@@ -12,13 +12,15 @@ import { Genre, Media, MediaDetailed, Page, Review } from '../../types';
 import { useUserContext } from '../../context';
 import { Loader } from '../../components/Loader/Loader';
 import { ErrorDisplay } from '../../components/ErrorDisplay/ErrorDisplay';
+import Dropdown from '../../components/Dropdown/Dropdown';
+import Snackbar from '../../components/Snackbar/Snackbar';
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
 export default function MediaInfo({ type }: { type: string }) {
   const navigate = useNavigate();
   const loginContext = useUserContext();
-  const { login } = loginContext.userLoggedIn;
+  const { login, user } = loginContext.userLoggedIn;
 
   const { id } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -29,6 +31,9 @@ export default function MediaInfo({ type }: { type: string }) {
   const [recommendations, setRecommendations] = useState<Media[] | null>(null); 
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [fail, setFail] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
+
   const [cookies] = useCookies(['token']);
 
   const [reviews, setReviews] = useState<Page | null>(null);
@@ -39,6 +44,9 @@ export default function MediaInfo({ type }: { type: string }) {
   const [userHasRated, setUserHasRated] = useState<boolean>(false);
 
   const [open, setOpen] = useState(false);
+
+  const [selectedList, setSelectedList] = useState<any | null>(null);
+  const [selectedWatchlist, setSelectedWatchlist] = useState<any | null>(null);
 
   document.title = data ? (type == 'shows' || type == 'anime') ? data?.name : data?.title : 'Media info';
 
@@ -222,6 +230,64 @@ export default function MediaInfo({ type }: { type: string }) {
     }
   }
 
+  const addToList = async (listId: number, listType: string): Promise<void> => {
+    const listBody = {
+        mediaListItems: [
+          {
+            mediaId: id,
+            mediaTitle: (type == 'shows' || type == 'anime') ? data?.name : data?.title,
+            mediaSummary: data?.overview,
+            mediaImg: `https://image.tmdb.org/t/p/w500/${data?.poster_path}`
+          }
+        ]
+      }
+    try {
+      const res = await fetch(`${apiUrl}/${listType}/${listId}?replace=false`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${cookies.token}`,
+        },
+        body: JSON.stringify(listBody)
+      });
+
+      if (res && !res.ok) {
+        if (res.headers.get('content-type')?.includes('application/json')) {
+          console.error('Error:', res.status, res.statusText);
+          const message = await res.json();
+          console.error(message.error);
+          throw new Error(message.error || 'Unknown error');
+        } else {
+          const message = await res.text();  // Plain text response
+          console.error(message);
+          throw new Error(message || 'Unknown error');
+        }
+      }
+      // const result = await res.json();
+      setFail(null);
+
+    } catch(error: unknown) {
+      if (error instanceof Error) {
+        console.error('Error:', error.message)
+        setFail(error.message);
+      } else {
+        setFail('An unknown error occurred');
+      }
+    }
+  }
+
+  const handleAddToList = async() => {
+    if (selectedList) {
+      await addToList(selectedList.id, 'lists');
+    }
+    if (selectedWatchlist) {
+      await addToList(selectedWatchlist.id, 'watchlists');
+    }
+    if (!fail) {
+      setSuccess(true);
+    }
+  };
+
   if (!login) {
     navigate('/', { replace: true });
   }
@@ -240,6 +306,11 @@ export default function MediaInfo({ type }: { type: string }) {
 
   return (
     <div className={`${s.media_info} ${loading ? 'hidden' : 'fade-in-slow'}`}>
+      {fail && 
+        <div className={'fail_message'}>
+          <h1>{fail}</h1>
+        </div>
+      }
       <div className={s.container_space_around}>
         <div className={s.poster_div}>
           <img
@@ -310,7 +381,11 @@ export default function MediaInfo({ type }: { type: string }) {
                   >
                     Website
                   </Button>
-                  {data?.videos?.results?.length && data?.videos?.results?.length > 0 && <Button onClick={() => setOpen(true)} href='#' endIcon={<Theaters />}>Trailer</Button>}
+                  {data?.videos?.results?.length && data?.videos?.results?.length > 0 && 
+                    <Button onClick={() => setOpen(true)} href='#' endIcon={<Theaters />}>
+                      Trailer
+                    </Button>
+                  }
                 </ButtonGroup>
               </div>
               <div className={s.buttonContainer}>
@@ -325,7 +400,41 @@ export default function MediaInfo({ type }: { type: string }) {
             </div>
           </div>
         </div>
-
+      </div>
+      <div className={s.list_container}>
+        <h1>Add {(type == 'shows' || type == 'anime') ? data?.name : data?.title} to one of your lists</h1>
+        <div className={s.list_container__dropdowns}>
+          <Dropdown
+            defaultValue="My media lists"
+            options={user.lists}
+            selectedValue={selectedList?.title}
+            onChange={(val: any) => {
+              setSelectedList(val);
+            }}
+            size={'half'}
+          />
+          <Dropdown
+            defaultValue="My watchlists"
+            options={user.watchlists}
+            selectedValue={selectedWatchlist?.title}
+            onChange={(val: any) => {
+              setSelectedWatchlist(val);
+            }}
+            size={'half'}
+          />
+        </div>
+        <div className={s.list_container__button}>
+          <Button 
+            variant='outlined'
+            sx={{
+              opacity: (!selectedList && !selectedWatchlist) ? 0.5 : 1,
+              pointerEvents: (!selectedList && !selectedWatchlist) ? 'none' : 'auto',
+            }}
+            onClick={handleAddToList}
+          >
+            Add to list
+          </Button>
+        </div>
       </div>
       <div className={s.review_container}>
         <h3 style={{textAlign: 'center', marginBottom: '1rem'}}>
@@ -422,7 +531,6 @@ export default function MediaInfo({ type }: { type: string }) {
         
         </div>
 
-
         <Modal
           closeAfterTransition
           className={s.modal}
@@ -439,6 +547,12 @@ export default function MediaInfo({ type }: { type: string }) {
             />
           ) : <></>}
         </Modal>
+        <Snackbar
+          open={success}
+          setOpen={setSuccess}
+        >
+          Added to list(s)
+        </Snackbar>
     </div>
   );
 };

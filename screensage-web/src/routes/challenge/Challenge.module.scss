@@ -21,7 +21,7 @@
   // box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   box-shadow: var(--box-shadow-primary-large);
   max-width: 500px;
-  margin: auto;
+  margin: var(--spacing) auto;
 
   @media screen and (width > 600px) {
     min-width: 30rem;

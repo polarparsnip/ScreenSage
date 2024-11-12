@@ -4,10 +4,6 @@
   color: var(--color-text-primary);
   width: 100%;
 
-  @media screen and (width > 800px) {
-    width: 10rem;
-  }
-
   label {
     margin-bottom: calc(var(--spacing) / 2);
     font-weight: bold;
@@ -57,6 +53,9 @@
       font-size: var(--font-base-size);
       background-color: var(--color-background-primary-mono);
       cursor: pointer;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
 
       &:hover {
         outline: 1px solid var(--color-text-secondary);
@@ -64,5 +63,35 @@
         text-shadow: var(--text-shadow-primary-large);
       }
     }
+  }
+}
+
+.regular {
+  @media screen and (width > 800px) {
+    width: 10rem;
+  }
+}
+
+.medium {
+  @media screen and (width > 800px) {
+    width: 14rem;
+  }
+}
+
+.large {
+  @media screen and (width > 800px) {
+    width: 18rem;
+  }
+}
+
+.half {
+  @media screen and (width > 800px) {
+    width: 50%;
+  }
+}
+
+.full {
+  @media screen and (width > 800px) {
+    width: 100%;
   }
 }

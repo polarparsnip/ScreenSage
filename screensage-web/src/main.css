@@ -1,6 +1,6 @@
 html {
   box-sizing: border-box;
-  background-color: black;
+  /* background-color: black; */
 }
 
 *,
@@ -188,4 +188,10 @@ ul {
 
 .hidden {
   opacity: 0;
+}
+
+.fail_message {
+  display: flex;
+  justify-content: center;
+  text-shadow: var(--text-shadow-primary);
 }

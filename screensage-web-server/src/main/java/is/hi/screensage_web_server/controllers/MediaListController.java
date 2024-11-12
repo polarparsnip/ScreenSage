@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import is.hi.screensage_web_server.entities.MediaList;
+import is.hi.screensage_web_server.models.MediaListPostRequest;
 import is.hi.screensage_web_server.models.MediaListRequest;
 import is.hi.screensage_web_server.models.UserPrincipal;
 import is.hi.screensage_web_server.services.MediaListService;
@@ -40,7 +41,7 @@ public class MediaListController {
   public ResponseEntity<?> getLists(
     @RequestParam(defaultValue = "1") int page
   ) { 
-    int pageSize = 20;
+    int pageSize = 10;
     Page<MediaList> userMediaList = mediaListService.getMediaLists(page, pageSize);
     return ResponseEntity.ok(userMediaList);
   }
@@ -54,7 +55,7 @@ public class MediaListController {
    */
   @PostMapping("/lists")
   public ResponseEntity<?> postList(
-    @RequestBody MediaListRequest mediaListRequest
+    @RequestBody MediaListPostRequest mediaListRequest
   ) throws Exception {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
@@ -89,6 +90,7 @@ public class MediaListController {
    */
   @PatchMapping("/lists/{listId}")
   public ResponseEntity<?> updateList(
+    @RequestParam(defaultValue = "false") boolean replace,
     @PathVariable int listId,
     @RequestBody MediaListRequest mediaListRequest
   ) throws Exception {
@@ -96,7 +98,7 @@ public class MediaListController {
     UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
     int userId = authenticatedUser.getId();
 
-    MediaList updatedMediaList = mediaListService.updateMediaList(listId, userId, mediaListRequest);
+    MediaList updatedMediaList = mediaListService.updateMediaList(listId, userId, mediaListRequest, replace);
     return ResponseEntity.ok(updatedMediaList);
   }
 
@@ -109,7 +111,7 @@ public class MediaListController {
    */
   @PostMapping("/watchlists")
   public ResponseEntity<?> postWatchlist(
-    @RequestBody MediaListRequest mediaListRequest
+    @RequestBody MediaListPostRequest mediaListRequest
   ) throws Exception {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
@@ -148,6 +150,7 @@ public class MediaListController {
    */
   @PatchMapping("/watchlists/{watchlistId}")
   public ResponseEntity<?> updateWatchlist(
+    @RequestParam(defaultValue = "false") boolean replace,
     @PathVariable int watchlistId,
     @RequestBody MediaListRequest mediaListRequest
   ) throws Exception {
@@ -155,7 +158,7 @@ public class MediaListController {
     UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
     int userId = authenticatedUser.getId();
 
-    MediaList updatedWatchlist = mediaListService.updateMediaList(watchlistId, userId, mediaListRequest);
+    MediaList updatedWatchlist = mediaListService.updateMediaList(watchlistId, userId, mediaListRequest, replace);
     return ResponseEntity.ok(updatedWatchlist);
   }
 

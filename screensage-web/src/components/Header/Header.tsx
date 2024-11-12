@@ -32,6 +32,8 @@ export default function Header() {
       }
 
       setScrollPosition(currentScrollPos);
+      setIsMediaOpen(false);
+      setIsAccountOpen(false);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -137,21 +139,26 @@ export default function Header() {
     },
     {
       id:7,
-      name: 'Profile',
-      href: '/profile',
-    },
-    {
-      id:8,
-      name: 'Watchlists',
-      href: '/watchlists',
-    },
-    {
-      id:9,
       name: 'Lists',
       href: '/lists',
     },
     {
+      id:8,
+      name: 'Profile',
+      href: '/profile',
+    },
+    {
+      id:9,
+      name: 'Watchlists',
+      href: '/watchlists',
+    },
+    {
       id:10,
+      name: 'My lists',
+      href: '/users/profile/lists',
+    },
+    {
+      id:11,
       name: 'Log out',
       href: '#',
     },
@@ -217,6 +224,7 @@ export default function Header() {
                         <NavLink to={'/movies'}><div className={s.dropdown__menu__item}>Movies</div></NavLink>
                         <NavLink to={'/shows'}><div className={s.dropdown__menu__item}>Shows</div></NavLink>
                         <NavLink to={'/anime'}><div className={s.dropdown__menu__item}>Anime</div></NavLink>
+                        <NavLink to={'/lists'}><div className={s.dropdown__menu__item}>Lists</div></NavLink>
                       </div>
                     )}
                   </div>
@@ -233,7 +241,7 @@ export default function Header() {
                         <div ref={accountRef} className={`${s.dropdown__menu} ${isAccountOpen ? s.dropdown_menu__show : ''}`}>
                           <NavLink to={'/profile'}><div className={s.dropdown__menu__item}>Profile</div></NavLink>
                           <NavLink to={'/watchlists'}><div className={s.dropdown__menu__item}>Watchlists</div></NavLink>
-                          <NavLink to={'/lists'}><div className={s.dropdown__menu__item}>Lists</div></NavLink>
+                          <NavLink to={'/users/profile/lists'}><div className={s.dropdown__menu__item}>My lists</div></NavLink>
                           <Link to={'#'} onClick={loginContext.logOut}><div className={s.dropdown__menu__item}>Log out</div></Link>
                         </div>
                       )}
@@ -268,7 +276,7 @@ export default function Header() {
             {login 
               ? userLinksMobile.map((link: { id: number, name: string, href: string }) => {
                 return (<li key={link.id} onClick={toggleMenu}>
-                  {link.id == 10 
+                  {link.id == 11 
                     ? <Link onClick={loginContext.logOut} to={link.href}>{link.name}</Link> 
                     : <NavLink to={link.href}>{link.name}</NavLink>}
                   </li>

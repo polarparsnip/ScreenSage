@@ -34,7 +34,7 @@ public class MediaList {
   private String description;
   private String type;
 
-  @OneToMany(mappedBy = "mediaList", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "mediaList", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
   @OrderBy("created_at DESC")
   private List<MediaListItem> mediaListItems;
 

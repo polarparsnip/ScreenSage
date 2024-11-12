@@ -4,14 +4,14 @@ import * as React from 'react';
 import { createContext, useContext, useEffect, useState } from 'react';
 
 interface IUserContext {
-    userLoggedIn: { login: boolean; user: { id: number, username: string } };
+    userLoggedIn: { login: boolean; user: { id: number, username: string, watchlists: any, lists: any } };
     setUserLoggedIn: React.Dispatch<React.SetStateAction<{ login: boolean; 
-      user: { id: number, username: string } }>>;
+      user: { id: number, username: string, watchlists: any, lists: any } }>>;
     logOut: () => void;
 }
   
 export const UserContext = createContext<IUserContext>({
-    userLoggedIn: { login: false, user: { id: -1, username: '' } },
+    userLoggedIn: { login: false, user: { id: -1, username: '', watchlists: [], lists: [] } },
     setUserLoggedIn: () => {},
     logOut: () => {},
 })
@@ -24,13 +24,13 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
 
     const [userLoggedIn, setUserLoggedIn] = useState({
         login: false,
-        user: { id: -1, username: '' },
+        user: { id: -1, username: '', watchlists: [], lists: [] },
     });
 
     // const [login, setLogin] = useState({});
 
     const logOut = () => {
-      setUserLoggedIn({ login: false, user: { id: -1, username: '' }});
+      setUserLoggedIn({ login: false, user: { id: -1, username: '', watchlists: [], lists: [] }});
       removeCookie('token', { path: '/' });
       removeCookie('user', { path: '/' });
       navigate('/', { replace: true });

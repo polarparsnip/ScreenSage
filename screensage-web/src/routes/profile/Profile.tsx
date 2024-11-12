@@ -25,6 +25,7 @@ export default function Profile() {
   const [cookies, setCookie] = useCookies(['token']);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [fail, setFail] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [userReviews, setUserReviews] = useState<Page | null>(null);
 
@@ -172,13 +173,16 @@ export default function Profile() {
           secure: true,
         });
       }
+
+      setNewUsername(null);
+      setFail(null);
       // return result;
 
     } catch(error: unknown) {
       if (error instanceof Error) {
-        setError(error.message);
+        setFail(error.message);
       } else {
-        setError('An unknown error occurred');
+        setFail('An unknown error occurred');
       }
     }
   }
@@ -208,14 +212,63 @@ export default function Profile() {
         }
       }
       
+      setNewPassword(null);
+      setFail(null);
       // const result = await res.json();
       // return result;
 
     } catch(error: unknown) {
       if (error instanceof Error) {
-        setError(error.message);
+        setFail(error.message);
       } else {
-        setError('An unknown error occurred');
+        setFail('An unknown error occurred');
+      }
+    }
+  }
+
+  const updateProfileImage = async (newProfileImage: File): Promise<void> => {
+    const formData = new FormData();
+    formData.append('image', newProfileImage);
+  
+    let res;
+    try {
+      res = await fetch(`${apiUrl}/users/profile/image`, {
+        method: 'PATCH',
+        headers: {
+          Authorization: `Bearer ${cookies.token}`,
+        },
+        body: formData,
+      });
+
+      if (res && !res.ok) {
+        if (res.headers.get('content-type')?.includes('application/json')) {
+          console.error('Error:', res.status, res.statusText);
+          const message = await res.json();
+          console.error(message.error);
+          throw new Error(message.error || 'Unknown error');
+        } else {
+          const message = await res.text();  // Plain text response
+          console.error(message);
+          throw new Error(message || 'Unknown error');
+        }
+      }
+      
+      const reader = new FileReader();
+      reader.readAsDataURL(newProfileImage);
+      reader.onloadend = () => {
+        setProfilePicture(reader.result as string);
+      };
+
+      setFail(null);
+
+      // const result = await res.json();
+      // return result;
+
+    } catch(error: unknown) {
+      if (error instanceof Error) {
+        setFail(error.message);
+      } else {
+        setFail('An unknown error occurred');
       }
     }
   }
@@ -223,11 +276,7 @@ export default function Profile() {
   const handleProfilePictureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProfilePicture(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      updateProfileImage(file);
     }
   };
 
@@ -259,6 +308,11 @@ export default function Profile() {
 
   return (
     <div className={`${s.profile} ${loading ? 'hidden' : 'fade-in-fast'}`}>
+      {fail && 
+        <div className={'fail_message'}>
+          <h1>{fail}</h1>
+        </div>
+      }
       <div className={s.profile_container}>
         <div className={s.profile_header}>
           <label htmlFor='profilePicture'>

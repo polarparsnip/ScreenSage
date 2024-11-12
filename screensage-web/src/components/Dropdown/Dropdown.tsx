@@ -1,25 +1,45 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import s from './Dropdown.module.scss';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface DropdownProps {
   defaultValue: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   options: any;
   selectedValue: string;
   onChange: (value: string) => void;
+  size?: string;
 }
 
-export default function Dropdown({ defaultValue, options, selectedValue, onChange }: DropdownProps): React.JSX.Element {
+export default function Dropdown({ defaultValue, options, selectedValue, onChange, size }: DropdownProps): React.JSX.Element {
   const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   const handleOptionClick = (value: string) => {
     onChange(value);
     setIsOpen(false);
   };
 
+  const handleClickOutside = (event: MouseEvent) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      setIsOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className={s.dropdown}>
+    <div 
+      className={
+        `${s.dropdown} 
+        ${size == 'full' ? s.full : size == 'half' ? s.half : size == 'large' ? s.large : size == 'medium' ? s.medium : 'regular'}`
+      } 
+      ref={dropdownRef}
+    >
       <div 
         className={s.selectBox} 
         onClick={() => setIsOpen(!isOpen)}
@@ -37,7 +57,7 @@ export default function Dropdown({ defaultValue, options, selectedValue, onChang
               className={s.optionItem}
               onClick={() => handleOptionClick(option)}
             >
-              {option.name}
+              {option.name || option.title}
             </li>
           ))}
         </ul>

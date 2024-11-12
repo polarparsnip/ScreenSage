@@ -2,6 +2,7 @@ package is.hi.screensage_web_server.services;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -30,9 +31,11 @@ import is.hi.screensage_web_server.config.CustomExceptions.ResourceNotFoundExcep
 import is.hi.screensage_web_server.config.CustomExceptions.UnauthorizedException;
 import is.hi.screensage_web_server.entities.Review;
 import is.hi.screensage_web_server.entities.Users;
+import is.hi.screensage_web_server.interfaces.MediaListServiceInterface;
 import is.hi.screensage_web_server.interfaces.MediaServiceInterface;
 import is.hi.screensage_web_server.interfaces.UserServiceInterface;
 import is.hi.screensage_web_server.models.JwtPayload;
+import is.hi.screensage_web_server.models.MediaListConcise;
 import is.hi.screensage_web_server.models.UserPrincipal;
 import is.hi.screensage_web_server.models.UserProfile;
 import is.hi.screensage_web_server.models.UserScore;
@@ -59,6 +62,10 @@ public class UserService implements UserServiceInterface {
   @Lazy
   @Autowired
   private MediaServiceInterface mediaService;
+
+  @Lazy
+  @Autowired
+  private MediaListServiceInterface mediaListService;
 
   @Value("${user.default_profile_img}")
   private String defaultProfileImg;
@@ -217,6 +224,16 @@ public class UserService implements UserServiceInterface {
       String token = jwtService.generateToken(username);
       UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
       // System.out.println(authenticatedUser.getUser());
+
+      Users user = authenticatedUser.getUser();
+      try {
+        List<MediaListConcise> mlc = mediaListService.getAllUserMediaListsConcise(user.getId(), false);
+        List<MediaListConcise> wlc = mediaListService.getAllUserMediaListsConcise(user.getId(), true);
+        user.setLists(mlc);
+        user.setWatchlists(wlc);
+      } catch (Exception e) {
+        throw new RuntimeException(e.getMessage());
+      }
       
       JwtPayload jwtPayload = new JwtPayload(authenticatedUser.getUser(), token);
 
@@ -303,7 +320,7 @@ public class UserService implements UserServiceInterface {
     }
     if (newPassword.length() < MIN_PASSWORD_LENGTH || newPassword.length() > MAX_PASSWORD_LENGTH){
       throw new InvalidInputException(
-        "Password must be between " + MIN_PASSWORD_LENGTH + " and " + MAX_PASSWORD_LENGTH + "characters."
+        "Password must be between " + MIN_PASSWORD_LENGTH + " and " + MAX_PASSWORD_LENGTH + " characters."
       );
     }
 

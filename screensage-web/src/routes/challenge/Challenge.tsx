@@ -24,6 +24,7 @@ export default function Challenge() {
 
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [fail, setFail] = useState<string | null>(null);
 
   const [isPopupVisible, setIsPopupVisible] = useState(false);
 
@@ -118,14 +119,16 @@ export default function Challenge() {
       setResultString(resultString)
       handleResult();
 
+      setFail(null);
+
       // return result;
 
     } catch(error: unknown) {
       if (error instanceof Error) {
         console.error('Error:', error.message)
-        setError(error.message);
+        setFail(error.message);
       } else {
-        setError('An unknown error occurred');
+        setFail('An unknown error occurred');
       }
     }
   }
@@ -148,6 +151,11 @@ export default function Challenge() {
 
   return (
     <div className={`${s.challengePage} ${loading ? 'hidden' : 'fade-in'}`}>
+      {fail && 
+        <div className={'fail_message'}>
+          <h1>{fail}</h1>
+        </div>
+      }
       <form className={s.form} onSubmit={submitAnswer}>
         {challenge?.image && <div className={s.form__image}>
           <img
