@@ -53,7 +53,7 @@ public interface MediaListRepository extends JpaRepository<MediaList, Integer> {
    * 
    * This method queries the database to find all {@link MediaListConcise} records associated
    * with a given user ID, filtered by whether or not the media lists are designated as a watchlist.
-   * Each result includes the media list's ID, title, type, watchlist status, and sharedWith property.
+   * Each result includes the media list's ID, title, watchlist status, and sharedWith property.
    * 
    * @param userId    the ID of the user for whom to retrieve media lists
    * @param watchlist a boolean flag indicating whether to retrieve media lists marked as watchlists {@code true}
@@ -61,7 +61,7 @@ public interface MediaListRepository extends JpaRepository<MediaList, Integer> {
    * @return          a list of {@link MediaListConcise} objects containing selected fields from {@link MediaList}
    */
   @Query(
-    "SELECT new is.hi.screensage_web_server.models.MediaListConcise(ml.id, ml.title, ml.type, ml.watchlist, ml.sharedWith) " +
+    "SELECT new is.hi.screensage_web_server.models.MediaListConcise(ml.id, ml.title, ml.watchlist, ml.sharedWith) " +
     "FROM MediaList ml WHERE ml.user.id = :userId AND ml.watchlist = :watchlist"
   )
   List<MediaListConcise> findAllByUserIdAndWatchlist(@Param("userId") Integer userId, @Param("watchlist") boolean watchlist);

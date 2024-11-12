@@ -1,13 +1,18 @@
-import { Alert, Snackbar as MuiSnackbar ,Slide, SnackbarCloseReason } from "@mui/material";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Alert, Snackbar as MuiSnackbar ,Slide, SnackbarCloseReason } from '@mui/material';
 
 export default function Snackbar({ 
   children, 
+  type,
   open, 
-  setOpen 
+  setOpen,
+  setMessage,
 }: { 
   children: React.ReactNode, 
+  type?: string,
   open: boolean, 
-  setOpen: (open: boolean) => void
+  setOpen: (open: any) => void
+  setMessage?: (msg: string | null) => void
 }): React.JSX.Element {
   
   const handleSnackbarClose = (
@@ -19,6 +24,10 @@ export default function Snackbar({
     }
 
     setOpen(false);
+    
+    if (setMessage) {
+      setMessage(null);
+    }
   };
 
   return (
@@ -30,11 +39,20 @@ export default function Snackbar({
     >
       <Alert
         onClose={handleSnackbarClose} 
-        severity="success" 
+        severity={
+          type == 'success' 
+            ? 'success' 
+            : type == 'error' 
+              ? 'error' 
+              : type == 'warning' 
+              ? 'warning' 
+              : 'info'
+        }
         sx={{ 
           width: '100%',
           color: 'var(--color-text-primary)',
-          backgroundColor: 'var(--color-background-secondary)'
+          backgroundColor: 'var(--color-background-secondary)',
+          outline: '1px solid var(--color-main-white)'
         }}
       >
         {children}

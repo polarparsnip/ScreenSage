@@ -9,6 +9,7 @@ import { Page, Review, User } from '../../types';
 import { useUserContext } from '../../context';
 import { Loader } from '../../components/Loader/Loader';
 import { ErrorDisplay } from '../../components/ErrorDisplay/ErrorDisplay';
+import Snackbar from '../../components/Snackbar/Snackbar';
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -25,7 +26,12 @@ export default function Profile() {
   const [cookies, setCookie] = useCookies(['token']);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [fail, setFail] = useState<string | null>(null);
+
+  const [fail, setFail] = useState<boolean>(false);
+  const [failMessage, setFailMessage] = useState<string | null>(null);
+  const [success, setSuccess] = useState<boolean>(false);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
   const [user, setUser] = useState<User | null>(null);
   const [userReviews, setUserReviews] = useState<Page | null>(null);
 
@@ -175,14 +181,16 @@ export default function Profile() {
       }
 
       setNewUsername(null);
-      setFail(null);
-      // return result;
+      setSuccessMessage('Username updated');
+      setSuccess(true);
 
     } catch(error: unknown) {
       if (error instanceof Error) {
-        setFail(error.message);
+        setFailMessage(error.message);
+        setFail(true);
       } else {
-        setFail('An unknown error occurred');
+        setFailMessage('An unknown error occurred');
+        setFail(true);
       }
     }
   }
@@ -213,15 +221,16 @@ export default function Profile() {
       }
       
       setNewPassword(null);
-      setFail(null);
-      // const result = await res.json();
-      // return result;
+      setSuccessMessage('Password updated');
+      setSuccess(true);
 
     } catch(error: unknown) {
       if (error instanceof Error) {
-        setFail(error.message);
+        setFailMessage(error.message);
+        setFail(true);
       } else {
-        setFail('An unknown error occurred');
+        setFailMessage('An unknown error occurred');
+        setFail(true);
       }
     }
   }
@@ -259,16 +268,16 @@ export default function Profile() {
         setProfilePicture(reader.result as string);
       };
 
-      setFail(null);
-
-      // const result = await res.json();
-      // return result;
+      setSuccessMessage('Profile image updated');
+      setSuccess(true);
 
     } catch(error: unknown) {
       if (error instanceof Error) {
-        setFail(error.message);
+        setFailMessage(error.message);
+        setFail(true);
       } else {
-        setFail('An unknown error occurred');
+        setFailMessage('An unknown error occurred');
+        setFail(true);
       }
     }
   }
@@ -308,11 +317,6 @@ export default function Profile() {
 
   return (
     <div className={`${s.profile} ${loading ? 'hidden' : 'fade-in-fast'}`}>
-      {fail && 
-        <div className={'fail_message'}>
-          <h1>{fail}</h1>
-        </div>
-      }
       <div className={s.profile_container}>
         <div className={s.profile_header}>
           <label htmlFor='profilePicture'>
@@ -458,6 +462,22 @@ export default function Profile() {
           top={searchParams.get('page') ? 350 : 0}
         />}
       </div>
+      <Snackbar
+        type={'success'}
+        open={success}
+        setOpen={setSuccess}
+        setMessage={setSuccessMessage}
+      >
+        {successMessage}
+      </Snackbar>
+      <Snackbar
+        type={'error'}
+        open={fail}
+        setOpen={setFail}
+        setMessage={setFailMessage}
+      >
+        {failMessage}
+      </Snackbar>
     </div>
   );
 };

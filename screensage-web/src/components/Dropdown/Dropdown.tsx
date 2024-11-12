@@ -36,7 +36,7 @@ export default function Dropdown({ defaultValue, options, selectedValue, onChang
     <div 
       className={
         `${s.dropdown} 
-        ${size == 'full' ? s.full : size == 'half' ? s.half : size == 'large' ? s.large : size == 'medium' ? s.medium : 'regular'}`
+        ${size == 'full' ? s.full : size == 'half' ? s.half : size == 'large' ? s.large : size == 'medium' ? s.medium : s.regular}`
       } 
       ref={dropdownRef}
     >
@@ -46,14 +46,14 @@ export default function Dropdown({ defaultValue, options, selectedValue, onChang
       >
         {/* {selectedValue || `Select ${label}`} */}
         {selectedValue || defaultValue}
-        <span className={s.arrow}>{isOpen ? "▲" : "▼"}</span>
+        <span className={s.arrow}>{isOpen ? '▲' : '▼'}</span>
       </div>
 
       {isOpen && options && (
         <ul className={s.optionsList}>
-          {options.map((option: any) => (
+          {options.map((option: any, i: number) => (
             <li
-              key={option.name}
+              key={i}
               className={s.optionItem}
               onClick={() => handleOptionClick(option)}
             >

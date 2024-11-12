@@ -10,14 +10,12 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public class MediaListConcise {
   private int id;
   private String title;
-  private String type;
   private boolean watchlist;
   private List<Integer> sharedWith;
 
-  public MediaListConcise(int id, String title, String type, boolean watchlist, List<Integer> sharedWith) {
+  public MediaListConcise(int id, String title, boolean watchlist, List<Integer> sharedWith) {
     this.id = id;
     this.title = title;
-    this.type = type;
     this.watchlist = watchlist;
     this.sharedWith = sharedWith;
   }
@@ -56,24 +54,6 @@ public class MediaListConcise {
    */
   public void setTitle(String title) {
     this.title = title;
-  }
-
-  /**
-   * Gets the type of media the list is for (e.g., "movie" or "tv").
-   *
-   * @return the type of the media list
-   */
-  public String getType() {
-    return type;
-  }
-
-  /**
-   * Sets the type of media the list is for (e.g., "movie" or "tv").
-   *
-   * @param type the type of media list to set
-   */
-  public void setType(String type) {
-    this.type = type;
   }
 
   /**

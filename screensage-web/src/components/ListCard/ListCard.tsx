@@ -29,7 +29,7 @@ export function ListCard({ list }: { list: any }) {
           <p>
             {list.description}
           </p>
-          <div>{list.type.charAt(0).toUpperCase() + list.type.slice(1)} in list: {list.mediaListItems.length}</div>
+          <div>Media items in list: {list.mediaListItems.length}</div>
         </div>
       </div>
     </Link>

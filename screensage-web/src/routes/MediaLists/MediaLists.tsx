@@ -27,8 +27,12 @@ export default function MediaLists({ listType }: { listType: string }) {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [fail, setFail] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
+
+  const [fail, setFail] = useState<boolean>(false);
+  const [failMessage, setFailMessage] = useState<string | null>(null);
+  const [success, setSuccess] = useState<boolean>(false);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
   const [cookies] = useCookies(['token']);
   const [listCreated, setListCreated] = useState<string | null>(null);
 
@@ -139,15 +143,18 @@ export default function MediaLists({ listType }: { listType: string }) {
       setFormData(
         { title: '', description: '', type: '', watchlist: listType == 'watchlists', sharedWith: [] }
       );
-      setFail(null);
+
+      setSuccessMessage('List created successfully');
       setSuccess(true);
 
     } catch(error: unknown) {
       if (error instanceof Error) {
         console.error('Error:', error.message)
-        setFail(error.message);
+        setFailMessage(error.message);
+        setFail(true);
       } else {
-        setFail('An unknown error occurred');
+        setFailMessage('An unknown error occurred');
+        setFail(true);
       }
     }
   }
@@ -203,45 +210,27 @@ export default function MediaLists({ listType }: { listType: string }) {
         type={listType == 'watchlists' ? 'watchlists' : 'media lists'}
         top={0}
       />}
-      {fail && 
-        <div className={'fail_message'}>
-          <h1>{fail}</h1>
-        </div>
-      }
       {(listType == 'watchlists' || listType == 'userLists') &&
       <div className={s.createFormContainer}>
         <h1>Create a new {listType == 'watchlists' ? 'watchlist' : 'media list'}</h1>
         <form className={s.formContainer} onSubmit={handleSubmit}>
           <input
-            type="text"
-            name="title"
-            placeholder="Title"
+            type={'text'}
+            name={'title'}
+            placeholder={'Title'}
             value={formData.title}
             onChange={handleChange}
             className={s.inputField}
             required
           />
           <textarea
-            name="description"
-            placeholder="Description"
+            name={'description'}
+            placeholder={'Description'}
             value={formData.description}
             onChange={handleChange}
             className={s.inputField}
             // required
           />
-          <select
-            name="type"
-            value={formData.type}
-            onChange={handleChange}
-            className={s.selectField}
-          >
-            <option value="" disabled>
-              Select media type
-            </option>
-            <option value="movies">Movies</option>
-            <option value="shows">Shows</option>
-          </select>
-
           <div className={s.formButton}>
             <Button variant='outlined' type='submit'>
               Create Media List
@@ -251,10 +240,20 @@ export default function MediaLists({ listType }: { listType: string }) {
       </div>
       }
       <Snackbar
+        type={'success'}
         open={success}
         setOpen={setSuccess}
+        setMessage={setSuccessMessage}
       >
-        List created successfully
+        {successMessage}
+      </Snackbar>
+      <Snackbar
+        type={'error'}
+        open={fail}
+        setOpen={setFail}
+        setMessage={setFailMessage}
+      >
+        {failMessage}
       </Snackbar>
     </div>
   )

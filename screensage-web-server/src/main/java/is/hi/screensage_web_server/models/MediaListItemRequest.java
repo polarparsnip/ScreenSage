@@ -1,13 +1,14 @@
 package is.hi.screensage_web_server.models;
 
-  /**
-   * Represents an item in a media list payload.
-   */
+/**
+ * Represents an item in a media list payload.
+ */
 public class MediaListItemRequest {
   private int mediaId;
   private String mediaTitle;
   private String mediaSummary;
   private String mediaImg;
+  private String type;
 
   /**
    * Gets the media ID.
@@ -79,6 +80,33 @@ public class MediaListItemRequest {
    */
   public void setMediaImg(String mediaImg) {
     this.mediaImg = mediaImg;
+  }
+  
+    /**
+   * Returns the media type of the media.
+   * Either shows, anime or movies.
+   *
+   * @return the media type
+   */
+  public String getType() {
+    return type;
+  }
+
+  /**
+   * Sets the media type of the media.
+   * Either shows, anime or movies.
+   * 
+   * @param type the media type to be set
+   */
+  public void setType(String type) {
+    if (
+      !type.equals("anime") &&
+      !type.equals("shows") &&
+      !type.equals("movies")
+    ) {
+      return;
+    }
+    this.type = type;
   }
 
 }

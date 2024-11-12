@@ -31,8 +31,11 @@ export default function MediaInfo({ type }: { type: string }) {
   const [recommendations, setRecommendations] = useState<Media[] | null>(null); 
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [fail, setFail] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
+
+  const [fail, setFail] = useState<boolean>(false);
+  const [failMessage, setFailMessage] = useState<string | null>(null);
+  const [success, setSuccess] = useState<boolean>(false);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const [cookies] = useCookies(['token']);
 
@@ -215,17 +218,20 @@ export default function MediaInfo({ type }: { type: string }) {
         }
       }
 
-      // const result = await response.json();
       setReviewPosted(true);
       setUserHasRated(true);
-      // return result;
+      setSuccessMessage('Review posted');
+      setSuccess(true);
+
 
     } catch(error: unknown) {
       if (error instanceof Error) {
         console.error('Error:', error.message)
-        throw new Error(error.message);
+        setFailMessage(error.message);
+        setFail(true);
       } else {
-        throw new Error('An unknown error occurred');
+        setFailMessage('An unknown error occurred');
+        setFail(true);
       }
     }
   }
@@ -237,7 +243,8 @@ export default function MediaInfo({ type }: { type: string }) {
             mediaId: id,
             mediaTitle: (type == 'shows' || type == 'anime') ? data?.name : data?.title,
             mediaSummary: data?.overview,
-            mediaImg: `https://image.tmdb.org/t/p/w500/${data?.poster_path}`
+            mediaImg: `https://image.tmdb.org/t/p/w500/${data?.poster_path}`,
+            type: type
           }
         ]
       }
@@ -264,14 +271,15 @@ export default function MediaInfo({ type }: { type: string }) {
         }
       }
       // const result = await res.json();
-      setFail(null);
 
     } catch(error: unknown) {
       if (error instanceof Error) {
         console.error('Error:', error.message)
-        setFail(error.message);
+        setFailMessage(error.message);
+        setFail(true);
       } else {
-        setFail('An unknown error occurred');
+        setFailMessage('An unknown error occurred');
+        setFail(true);
       }
     }
   }
@@ -284,6 +292,7 @@ export default function MediaInfo({ type }: { type: string }) {
       await addToList(selectedWatchlist.id, 'watchlists');
     }
     if (!fail) {
+      setSuccessMessage('Added to list(s)');
       setSuccess(true);
     }
   };
@@ -306,11 +315,6 @@ export default function MediaInfo({ type }: { type: string }) {
 
   return (
     <div className={`${s.media_info} ${loading ? 'hidden' : 'fade-in-slow'}`}>
-      {fail && 
-        <div className={'fail_message'}>
-          <h1>{fail}</h1>
-        </div>
-      }
       <div className={s.container_space_around}>
         <div className={s.poster_div}>
           <img
@@ -405,7 +409,7 @@ export default function MediaInfo({ type }: { type: string }) {
         <h1>Add {(type == 'shows' || type == 'anime') ? data?.name : data?.title} to one of your lists</h1>
         <div className={s.list_container__dropdowns}>
           <Dropdown
-            defaultValue="My media lists"
+            defaultValue={'My media lists'}
             options={user.lists}
             selectedValue={selectedList?.title}
             onChange={(val: any) => {
@@ -414,7 +418,7 @@ export default function MediaInfo({ type }: { type: string }) {
             size={'half'}
           />
           <Dropdown
-            defaultValue="My watchlists"
+            defaultValue={'My watchlists'}
             options={user.watchlists}
             selectedValue={selectedWatchlist?.title}
             onChange={(val: any) => {
@@ -474,15 +478,7 @@ export default function MediaInfo({ type }: { type: string }) {
                 <form className={s.create_review__form}
                   onSubmit={async (event) => {
                     event.preventDefault();
-                    try {
-                      await postReview(event);
-                    } catch(error: unknown) {
-                      if (error instanceof Error) {
-                        setError(error.message);
-                      } else {
-                        setError('An unknown error occurred');
-                      }
-                    }
+                    await postReview(event);
                   }}
                 >
                   {error && <h3>{error}</h3>}
@@ -548,10 +544,20 @@ export default function MediaInfo({ type }: { type: string }) {
           ) : <></>}
         </Modal>
         <Snackbar
+          type={'success'}
           open={success}
           setOpen={setSuccess}
+          setMessage={setSuccessMessage}
         >
-          Added to list(s)
+          {successMessage}
+        </Snackbar>
+        <Snackbar
+          type={'error'}
+          open={fail}
+          setOpen={setFail}
+          setMessage={setFailMessage}
+        >
+          {failMessage}
         </Snackbar>
     </div>
   );

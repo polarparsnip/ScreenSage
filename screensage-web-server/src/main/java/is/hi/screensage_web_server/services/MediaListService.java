@@ -67,17 +67,10 @@ public class MediaListService implements MediaListServiceInterface {
       throw new ResourceNotFoundException("User not found");
     }
 
-    String type = mediaListRequest.getType();
-
-    if (!type.equals("shows") && !type.equals("movies")) {
-      System.out.println("Media type is missing or incorrect.");
-      throw new Exception("Media type is missing or incorrect.");
-    }
-
     String title = mediaListRequest.getTitle();
     String description = mediaListRequest.getDescription();
 
-    MediaList newMediaList = new MediaList(user, type, title, description);
+    MediaList newMediaList = new MediaList(user, title, description);
 
     boolean isWatchlist = mediaListRequest.isWatchlist();
     if (isWatchlist) {
@@ -90,7 +83,6 @@ public class MediaListService implements MediaListServiceInterface {
     }
 
     // List<MediaListItem> newMediaListItems = new ArrayList<>();
-
     // List<MediaListItemRequest> mediaListItems = mediaListRequest.getMediaListItems();
     // for (MediaListItemRequest item : mediaListItems) {
     //   MediaListItem newMediaListItem = new MediaListItem(
@@ -98,11 +90,11 @@ public class MediaListService implements MediaListServiceInterface {
     //     item.getMediaId(), 
     //     item.getMediaTitle(), 
     //     item.getMediaSummary(),
-    //     item.getMediaImg()
+    //     item.getMediaImg(),
+    //     item.getType()
     //   );
     //   newMediaListItems.add(newMediaListItem);
     // }
-
     // newMediaList.setMediaListItems(newMediaListItems);
 
     try {
@@ -163,14 +155,24 @@ public class MediaListService implements MediaListServiceInterface {
 
     List<MediaListItemRequest> mediaListItems = mediaListRequest.getMediaListItems();
     for (MediaListItemRequest item : mediaListItems) {
+      if (
+        !(item.getMediaId() > 0) 
+        || item.getMediaTitle() == null 
+        || item.getMediaImg() == null 
+        || item.getType() == null
+      ) {
+        System.out.println("A media field is missing or incorrect.");
+        throw new Exception("A media field is missing or incorrect.");
+      }
       MediaListItem newMediaListItem = new MediaListItem(
         mediaList, 
         item.getMediaId(), 
         item.getMediaTitle(), 
         item.getMediaSummary(),
-        item.getMediaImg()
+        item.getMediaImg(),
+        item.getType()
       );
-      if (!(mediaList.getMediaListItems().stream().anyMatch(obj -> obj.getMediaId() == item.getMediaId()))) {
+      if (replace || !(mediaList.getMediaListItems().stream().anyMatch(obj -> obj.getMediaId() == item.getMediaId()))) {
         newMediaListItems.add(newMediaListItem);
       }
     }

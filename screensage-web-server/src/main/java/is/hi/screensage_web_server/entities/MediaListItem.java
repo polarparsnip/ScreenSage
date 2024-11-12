@@ -32,6 +32,7 @@ public class MediaListItem {
   private String mediaTitle;
   private String mediaSummary;
   private String mediaImg;
+  private String type;
 
   @Column(nullable = false, updatable = false)
   @CreationTimestamp
@@ -45,19 +46,22 @@ public class MediaListItem {
    * @param mediaTitle   the title of the media
    * @param mediaSummary the summary of the media
    * @param mediaImg     the URL of the media image
+   * @param type         the type of the media (e.g., "movies", "shows", or "anime").
    */
   public MediaListItem(
     MediaList mediaList, 
     int mediaId, 
     String mediaTitle, 
     String mediaSummary, 
-    String mediaImg
+    String mediaImg,
+    String type
   )  {
     this.mediaList = mediaList;
     this.mediaId = mediaId;
     this.mediaTitle = mediaTitle;
     this.mediaSummary = mediaSummary;
     this.mediaImg = mediaImg;
+    this.type = type;
   }
 
   /**
@@ -163,6 +167,33 @@ public class MediaListItem {
    */
   public void setMediaImg(String mediaImg) {
     this.mediaImg = mediaImg;
+  }
+
+  /**
+   * Returns the media type of the media.
+   * Either shows, anime or movies.
+   *
+   * @return the media type
+   */
+  public String getType() {
+    return type;
+  }
+
+  /**
+   * Sets the media type of the media.
+   * Either shows, anime or movies.
+   * 
+   * @param type the media type to be set
+   */
+  public void setType(String type) {
+    if (
+      !type.equals("anime") &&
+      !type.equals("shows") &&
+      !type.equals("movies")
+    ) {
+      return;
+    }
+    this.type = type;
   }
 
   /**

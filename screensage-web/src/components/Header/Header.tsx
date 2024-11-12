@@ -36,10 +36,10 @@ export default function Header() {
       setIsAccountOpen(false);
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
 
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener('scroll', handleScroll);
     };
   }, [scrollPosition]);
 
@@ -200,7 +200,7 @@ export default function Header() {
 
 
   return (
-    <div className={`${s.header}  ${!showHeader ? s.hidden : ""}`}>
+    <div className={`${s.header}  ${!showHeader ? s.hidden : ''}`}>
       <div className={s.header__title}>
         <Link to={'/'} className={s.header__title}>
           <img src='/img/icon.png' alt='screensage-logo' width='60px' height='60px' />

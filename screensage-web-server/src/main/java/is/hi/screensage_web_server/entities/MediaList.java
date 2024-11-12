@@ -32,7 +32,6 @@ public class MediaList {
   
   private String title;
   private String description;
-  private String type;
 
   @OneToMany(mappedBy = "mediaList", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
   @OrderBy("created_at DESC")
@@ -49,24 +48,20 @@ public class MediaList {
    * Constructs a new MediaList with the specified user.
    *
    * @param user           the user associated with the media list
-   * @param type           the type of media the list is for (e.g., "movie" or "tv").
    */
-  public MediaList(Users user, String type)  {
+  public MediaList(Users user)  {
     this.user = user;
-    this.type = type;
   }
 
   /**
    * Constructs a new MediaList with the specified user.
    *
    * @param user        the user associated with the media list
-   * @param type        the type of media the list is for (e.g., "movie" or "tv").
    * @param title       the title of the media list
    * @param description the description of the media list
    */
-  public MediaList(Users user, String type, String title, String description)  {
+  public MediaList(Users user, String title, String description)  {
     this.user = user;
-    this.type = type;
     this.title = title;
     this.description = description;
   }
@@ -75,12 +70,10 @@ public class MediaList {
    * Constructs a new MediaList with the specified user and media IDs.
    *
    * @param user           the user associated with the media list
-   * @param type           the type of media the list is for (e.g., "movie" or "tv").
    * @param mediaListItems a list of {@link MediaListItem} objects to set as the media items of the list.
    */
-  public MediaList(Users user, String type, List<MediaListItem> mediaListItems)  {
+  public MediaList(Users user, List<MediaListItem> mediaListItems)  {
     this.user = user;
-    this.type = type;
     this.mediaListItems = mediaListItems;
   }
 
@@ -88,14 +81,12 @@ public class MediaList {
    * Constructs a new MediaList with the specified user and media IDs.
    *
    * @param user           the user associated with the media list
-   * @param type           the type of media the list for (e.g., "movie" or "tv").
    * @param title          the title of the media list
    * @param description    the description of the media list
    * @param mediaListItems a list of {@link MediaListItem} objects to set as the media items of the list.
    */
-  public MediaList(Users user, String type, String title, String description, List<MediaListItem> mediaListItems)  {
+  public MediaList(Users user, String title, String description, List<MediaListItem> mediaListItems)  {
     this.user = user;
-    this.type = type;
     this.title = title;
     this.description = description;
     this.mediaListItems = mediaListItems;
@@ -106,7 +97,6 @@ public class MediaList {
    * watchlist status and users to share with.
    * 
    * @param user            the user associated with the watchlist
-   * @param type            the type of media the list if for (e.g., "movie" or "tv").
    * @param title           the title of the watchlist
    * @param mediaListItems  a list of {@link MediaListItem} objects to set as the media items of the list.
    * @param watchlist       the watchlist status of the media list
@@ -114,7 +104,6 @@ public class MediaList {
    */
   public MediaList(
     Users user,
-    String type,
     String title,
     List<MediaListItem> mediaListItems,
     boolean watchlist,
@@ -122,7 +111,6 @@ public class MediaList {
   ) {
     this.user = user;
     this.title = title;
-    this.type = type;
     this.mediaListItems = mediaListItems;
     this.watchlist = watchlist;
     this.sharedWith = sharedWith;
@@ -195,29 +183,6 @@ public class MediaList {
    */
   public void setDescription(String description) {
     this.description = description;
-  }
-
-  /**
-   * Returns the media type of the media the list is for.
-   * Either tv or movie.
-   *
-   * @return the media type
-   */
-  public String getType() {
-    return type;
-  }
-
-  /**
-   * Sets the media type of the media the list is for.
-   * Either tv or movie.
-   * 
-   * @param type the media type to be set
-   */
-  public void setType(String type) {
-    if (!type.equals("tv") && !type.equals("movie")) {
-      return;
-    }
-    this.type = type;
   }
 
   /**

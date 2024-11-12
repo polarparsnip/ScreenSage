@@ -7,6 +7,7 @@ import { ErrorDisplay } from '../../components/ErrorDisplay/ErrorDisplay';
 import { Loader } from '../../components/Loader/Loader';
 import { useUserContext } from '../../context';
 import { MediaListItem } from '../../components/MediaListItem/MediaListItem';
+import Snackbar from '../../components/Snackbar/Snackbar';
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -19,7 +20,12 @@ export default function MediaList({ listType }: { listType: string }) {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [fail, setFail] = useState<string | null>(null);
+
+  const [fail, setFail] = useState<boolean>(false);
+  const [failMessage, setFailMessage] = useState<string | null>(null);
+  const [success, setSuccess] = useState<boolean>(false);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
   const [cookies] = useCookies(['token']);
 
   useEffect(() => {
@@ -91,14 +97,17 @@ export default function MediaList({ listType }: { listType: string }) {
       }
       const result = await res.json();
       setData(result);
-      setFail(null);
+      setSuccessMessage('List has been updated');
+      setSuccess(true);
 
     } catch(error: unknown) {
       if (error instanceof Error) {
         console.error('Error:', error.message)
-        setFail(error.message);
+        setFailMessage(error.message);
+        setFail(true);
       } else {
-        setFail('An unknown error occurred');
+        setFailMessage('An unknown error occurred');
+        setFail(true);
       }
     }
   }
@@ -130,11 +139,6 @@ export default function MediaList({ listType }: { listType: string }) {
 
   return (
     <div className={s.media_list}>
-      {fail && 
-        <div className={'fail_message'}>
-          <h1>{fail}</h1>
-        </div>
-      }
       <div className={s.media_list__title}>
         <h1>{data && data.title ? data.title : 'Media list'}</h1>
         {listType === 'list' && data && data.description && <div>{data.description}</div>}
@@ -149,7 +153,7 @@ export default function MediaList({ listType }: { listType: string }) {
               <div key={i}>
                 <MediaListItem 
                   mediaListItem={item} 
-                  type={data.type}
+                  type={item.type}
                   author={data?.user.id == user.id}
                   onRemove={handleRemove}
                   i={i} 
@@ -159,6 +163,22 @@ export default function MediaList({ listType }: { listType: string }) {
           })}
         </div>
       </div>
+      <Snackbar
+        type={'success'}
+        open={success}
+        setOpen={setSuccess}
+        setMessage={setSuccessMessage}
+      >
+        {successMessage}
+      </Snackbar>
+      <Snackbar
+        type={'error'}
+        open={fail}
+        setOpen={setFail}
+        setMessage={setFailMessage}
+      >
+        {failMessage}
+      </Snackbar>
     </div>
   )
 };

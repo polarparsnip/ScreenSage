@@ -18,6 +18,11 @@ export function ReviewCard({ review, href }: { review: Review, href?: string }) 
             precision={0.5}
             readOnly
             style={{marginTop: '2px'}}
+            sx={{
+              '& .MuiRating-iconEmpty': {
+                color: 'lightgray',
+              },
+            }}
           />
         </div>
 
