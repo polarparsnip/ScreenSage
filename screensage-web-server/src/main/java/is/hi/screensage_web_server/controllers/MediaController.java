@@ -120,7 +120,7 @@ public class MediaController {
     UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
     int userId = authenticatedUser.getId();
 
-    MediaDetailed movie = mediaService.getSingleMedia(userId, "movie", movieId);
+    MediaDetailed movie = mediaService.getSingleMedia(userId, "movies", movieId);
     return ResponseEntity.ok(movie);
   }
 
@@ -139,7 +139,7 @@ public class MediaController {
     UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
     int userId = authenticatedUser.getId();
 
-    MediaDetailed show = mediaService.getSingleMedia(userId, "tv", showId);
+    MediaDetailed show = mediaService.getSingleMedia(userId, "shows", showId);
     return ResponseEntity.ok(show);
   }
 
@@ -158,7 +158,7 @@ public class MediaController {
     UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
     int userId = authenticatedUser.getId();
     
-    MediaDetailed anime = mediaService.getSingleMedia(userId, "tv", animeId);
+    MediaDetailed anime = mediaService.getSingleMedia(userId, "anime", animeId);
     return ResponseEntity.ok(anime);
   }
 
@@ -329,6 +329,17 @@ public class MediaController {
     int userId = authenticatedUser.getId();
     Review newReview = mediaService.postMediaReview(userId, "tv", animeId, reviewRequest);
     return ResponseEntity.ok(newReview);
+  }
+
+  /**
+   * Retrieves a random media item to be featured.
+   *
+   * @return {@link ResponseEntity} containing the random media item.
+   */
+  @GetMapping("/featured")
+  public ResponseEntity<?> getRandomMedia() {
+    MediaDetailed randomMedia = mediaService.getRandomMedia();
+    return ResponseEntity.ok(randomMedia);
   }
 
 }

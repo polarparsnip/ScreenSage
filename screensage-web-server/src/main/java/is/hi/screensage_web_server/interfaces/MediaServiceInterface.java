@@ -87,4 +87,12 @@ public interface MediaServiceInterface {
    * @return a {@link Page} of {@link Review} objects for the specified user, containing the reviews for the requested page
    */
   public Page<Review> getUserReviews(int userId, int page, int pageSize);
+
+  /**
+   * Retrieves a random media item, which could be a movie or TV show.
+   *
+   * @return a {@link MediaDetailed} object containing detailed information about the randomly selected media.
+   */
+  public MediaDetailed getRandomMedia();
+
 }

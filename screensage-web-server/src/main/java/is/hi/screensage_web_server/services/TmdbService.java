@@ -1,6 +1,7 @@
 package is.hi.screensage_web_server.services;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -8,11 +9,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import is.hi.screensage_web_server.config.CustomExceptions.ResourceNotFoundException;
 import is.hi.screensage_web_server.models.MediaDetailed;
 import is.hi.screensage_web_server.models.MediaPageResponse;
 
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 
 @Service
 public class TmdbService {
@@ -108,6 +112,55 @@ public class TmdbService {
       .toUriString();
     String genres = restTemplate.getForObject(url, String.class);
     return genres;
+  }
+
+
+  public MediaDetailed getRandomMedia() {
+    Random random = new Random();
+    String randomType = random.nextBoolean() ? "movie" : "tv"; 
+
+    String latestMediaUrl = UriComponentsBuilder.fromHttpUrl(String.format("https://api.themoviedb.org/3/%s/latest", randomType))
+      .queryParam("api_key", tmdbApiKey)
+      .toUriString();
+
+    int latestMediaId;
+
+    MediaDetailed latestMedia;
+    try {
+      latestMedia = restTemplate.getForObject(latestMediaUrl, MediaDetailed.class);
+    } catch (Exception e) {
+      throw new RuntimeException("Failed to fetch latest media: ", e);
+    }
+
+    if (latestMedia == null) {
+      throw new ResourceNotFoundException("No media found with the specified ID");
+    }
+
+    latestMediaId = latestMedia.getId();
+
+    MediaDetailed randomMedia = null;
+
+    while (randomMedia == null) {
+      int randomId = random.nextInt(latestMediaId) + 1;
+      String url = UriComponentsBuilder.fromHttpUrl(String.format("https://api.themoviedb.org/3/%s/%d", randomType, randomId))
+        .queryParam("api_key", tmdbApiKey)
+        .toUriString();
+
+      try {
+        randomMedia = restTemplate.getForObject(url, MediaDetailed.class);
+      } catch (HttpClientErrorException e) {
+        if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
+          System.out.println(
+            String.format("Failed to get media for type %s and ID %d", randomType, randomId)
+          );
+          continue;
+        } else {
+          throw e;
+        }
+      }
+    }
+
+    return randomMedia;
   }
 
 }
