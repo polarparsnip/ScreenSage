@@ -357,5 +357,29 @@ public class MediaListService implements MediaListServiceInterface {
       throw new Exception("Error occurred while saving media list.");
     }
   }
+
+  @Override
+  public void deleteMediaList(int listId, int userId) throws Exception {
+    MediaList mediaList;
+    try {
+      mediaList = findMediaList(listId);
+    } catch (Exception e) {
+      System.out.println("Error: Media list not found");
+      throw new ResourceNotFoundException("Media list not found");
+    }
+
+    Users listAuthor = mediaList.getUser();
+
+    if (userId != listAuthor.getId()) {
+      throw new UnauthorizedException("You do not have permission to delete this list");
+    }
+
+    try {
+      mediaListRepository.delete(mediaList);
+    } catch (Exception e) {
+      System.out.println("Error occurred while deleting the media list: " + e.getMessage());
+      throw new RuntimeException("Error occurred while deleting media list.");
+    }
+  }
   
 }

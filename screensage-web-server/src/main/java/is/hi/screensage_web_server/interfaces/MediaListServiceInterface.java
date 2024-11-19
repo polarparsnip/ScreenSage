@@ -133,4 +133,16 @@ public interface MediaListServiceInterface {
    */
   public void toggleMediaListLike(int userId, int listId) throws Exception;
 
+  /**
+   * Deletes a media list by its ID.
+   *
+   * This method removes the media list corresponding to the provided ID from the database.
+   * It ensures that only the user who created the list can perform this action.
+   *
+   * @param listId     the ID of the media list to delete
+   * @param userId     the ID of the user requesting the deletion
+   * @throws Exception if an error occurs during the deletion or if the list is not found
+   */
+  public void deleteMediaList(int listId, int userId) throws Exception;
+
 }
