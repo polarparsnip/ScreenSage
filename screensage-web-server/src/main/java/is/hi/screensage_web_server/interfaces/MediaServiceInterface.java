@@ -95,4 +95,15 @@ public interface MediaServiceInterface {
    */
   public MediaDetailed getRandomMedia();
 
+  /**
+   * Toggles the "like" status of a media item for a specific user.
+   * If the user has already liked the media, it will be unliked; otherwise, it will be liked.
+   *
+   * @param userId     the ID of the user performing the action.
+   * @param type       the type of media (e.g., "movies", "shows", or "anime").
+   * @param mediaId    the ID of the media item for which to toggle the like status.
+   * @throws Exception if an error occurs while toggling the like status.
+   */
+  public void toggleMediaLike(int userId, String type, int medaId) throws Exception;
+  
 }

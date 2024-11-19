@@ -75,8 +75,12 @@ public class MediaListController {
   @GetMapping("/lists/{listId}")
   public ResponseEntity<?> getList(
     @PathVariable int listId
-  ) throws Exception { 
-    MediaList userMediaList = mediaListService.getMediaList(listId);
+  ) throws Exception {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
+    int userId = authenticatedUser.getId();
+    
+    MediaList userMediaList = mediaListService.getMediaList(listId, userId);
     return ResponseEntity.ok(userMediaList);
   }
 
@@ -185,6 +189,24 @@ public class MediaListController {
       return ResponseEntity.ok(updatedSharedWith);
     }
     return ResponseEntity.badRequest().body("Bad request");
+  }
+
+  /**
+   * Adds a like by the authenticated user to the media list with the specified ID.
+   *
+   * @return           a ResponseEntity containing a success message if like was successful
+   * @throws Exception if an error occurs while adding the like
+   */
+  @PostMapping("/lists/{listId}/likes")
+  public ResponseEntity<?> postListLike(
+    @PathVariable int listId
+  ) throws Exception {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
+    int userId = authenticatedUser.getId();
+
+    mediaListService.toggleMediaListLike(userId, listId);
+    return ResponseEntity.ok("Like status updated");
   }
   
 }

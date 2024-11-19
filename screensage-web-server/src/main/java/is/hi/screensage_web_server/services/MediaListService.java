@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 
 import is.hi.screensage_web_server.config.CustomExceptions.ResourceNotFoundException;
 import is.hi.screensage_web_server.config.CustomExceptions.UnauthorizedException;
+import is.hi.screensage_web_server.entities.Like;
 import is.hi.screensage_web_server.entities.MediaList;
 import is.hi.screensage_web_server.entities.MediaListItem;
 import is.hi.screensage_web_server.entities.Users;
@@ -21,6 +22,7 @@ import is.hi.screensage_web_server.models.MediaListConcise;
 import is.hi.screensage_web_server.models.MediaListItemRequest;
 import is.hi.screensage_web_server.models.MediaListPostRequest;
 import is.hi.screensage_web_server.models.MediaListRequest;
+import is.hi.screensage_web_server.repositories.LikeRepository;
 import is.hi.screensage_web_server.repositories.MediaListRepository;
 import jakarta.transaction.Transactional;
 
@@ -28,6 +30,9 @@ import jakarta.transaction.Transactional;
 public class MediaListService implements MediaListServiceInterface {
   @Autowired
   private MediaListRepository mediaListRepository;
+
+  @Autowired
+  private LikeRepository likeRepository;
 
   @Lazy
   @Autowired
@@ -108,7 +113,7 @@ public class MediaListService implements MediaListServiceInterface {
   }
 
   @Override
-  public MediaList getMediaList(int listId) throws Exception {
+  public MediaList getMediaList(int listId, int userId) throws Exception {
     MediaList mediaList;
     try {
       mediaList = findMediaList(listId);
@@ -120,6 +125,12 @@ public class MediaListService implements MediaListServiceInterface {
     if (mediaList.isWatchlist()) {
       throw new Exception("Cannot fetch list because it is a watchlist");
     }
+
+    long likeCount = likeRepository.countByMediaList(mediaList);
+    mediaList.setLikeCount(likeCount);
+
+    boolean userHasLiked = likeRepository.existsByUser_IdAndMediaList(userId, mediaList);
+    mediaList.setUserHasLiked(userHasLiked);
 
     return mediaList;
   }
@@ -310,4 +321,41 @@ public class MediaListService implements MediaListServiceInterface {
   
     return userLists;
   }
+
+  @Override
+  @Transactional
+  public void toggleMediaListLike(int userId, int listId) throws Exception {
+    Users user = userService.findUser(userId);
+    if (user == null) {
+      System.out.println("Error: User not found");
+      throw new ResourceNotFoundException("User not found");
+    }
+
+    MediaList mediaList = getMediaList(listId, userId);
+    if (mediaList == null) {
+      System.out.println("Error: Media list not found");
+      throw new ResourceNotFoundException("Media list not found");
+    }
+
+    boolean userHasLiked = likeRepository.existsByUser_IdAndMediaList(userId, mediaList);
+
+    try {
+      if (userHasLiked) {
+        likeRepository.deleteByUserAndMediaList(user, mediaList);
+      } else {
+        likeRepository.save(new Like(user, mediaList));
+      }
+    } catch (Exception e) {
+      System.out.println("Error occurred while updating list like information: " + e.getMessage());
+      throw new RuntimeException("Error occurred while updating list like information.");
+    }
+
+    try {
+      mediaListRepository.save(mediaList);
+    } catch (Exception e) {
+      System.out.println("Error occured while saving media list: " + e.getMessage());
+      throw new Exception("Error occurred while saving media list.");
+    }
+  }
+  
 }

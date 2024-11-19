@@ -13,6 +13,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 import is.hi.screensage_web_server.config.CustomExceptions.ResourceNotFoundException;
+import is.hi.screensage_web_server.entities.Like;
 import is.hi.screensage_web_server.entities.Review;
 import is.hi.screensage_web_server.entities.Users;
 import is.hi.screensage_web_server.interfaces.MediaServiceInterface;
@@ -21,7 +22,9 @@ import is.hi.screensage_web_server.models.Media;
 import is.hi.screensage_web_server.models.MediaDetailed;
 import is.hi.screensage_web_server.models.MediaPageResponse;
 import is.hi.screensage_web_server.models.ReviewRequest;
+import is.hi.screensage_web_server.repositories.LikeRepository;
 import is.hi.screensage_web_server.repositories.ReviewRepository;
+import jakarta.transaction.Transactional;
 
 
 @Service
@@ -31,6 +34,9 @@ public class MediaService implements MediaServiceInterface {
 
   @Autowired
   private ReviewRepository reviewRepository;
+
+  @Autowired
+  private LikeRepository likeRepository;
 
   @Lazy
   @Autowired
@@ -78,6 +84,12 @@ public class MediaService implements MediaServiceInterface {
     if (userRating != null) {
       media.setUser_rating(userRating.doubleValue());
     }
+
+    long likeCount = likeRepository.countByTypeAndMediaId(type, mediaId);
+    media.setLike_count(likeCount);
+
+    boolean userHasLiked = likeRepository.existsByUser_IdAndTypeAndMediaId(userId, type, mediaId);
+    media.setUser_has_liked(userHasLiked);
 
     Pageable pageable = PageRequest.of(0, 10);
     List<Review> recentReviews = reviewRepository.getRecentReviewsForMedia(type, mediaId, pageable);
@@ -172,6 +184,29 @@ public class MediaService implements MediaServiceInterface {
   public MediaDetailed getRandomMedia() {
     MediaDetailed randomMedia = tmdbService.getRandomMedia();
     return randomMedia;
+  }
+
+  @Override
+  @Transactional
+  public void toggleMediaLike(int userId, String type, int mediaId) throws Exception {
+    Users user = userService.findUser(userId);
+    if (user == null) {
+      System.out.println("Error: User not found");
+      throw new ResourceNotFoundException("User not found");
+    }
+
+    boolean userHasLiked = likeRepository.existsByUser_IdAndTypeAndMediaId(userId, type, mediaId);
+
+    try {
+      if (userHasLiked) {
+        likeRepository.deleteByUserAndTypeAndMediaId(user, type, mediaId);
+      } else {
+        likeRepository.save(new Like(user, type, mediaId));
+      }
+    } catch (Exception e) {
+      System.out.println("Error occurred while updating media like information: " + e.getMessage());
+      throw new RuntimeException("Error occurred while updating media like information.");
+    }
   }
 
 }
