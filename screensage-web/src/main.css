@@ -1,6 +1,6 @@
 html {
   box-sizing: border-box;
-  /* background-color: black; */
+  background-color: black;
 }
 
 *,
@@ -66,6 +66,7 @@ html {
 
 body {
   margin: 0;
+  padding-top: calc(var(--spacing) * 2);
   min-height: 100vh;
   min-width: 320px;
   background: var(--color-background-primary);
@@ -98,7 +99,7 @@ body {
 
 main {
   /* padding: 6em 2em 2em; */
-  padding-top: calc(var(--spacing) * 2);
+  /* padding-top: calc(var(--spacing) * 2); */
   margin: 6rem auto 2rem auto;
   max-width: var(--max-width);
   min-height: 100vh;

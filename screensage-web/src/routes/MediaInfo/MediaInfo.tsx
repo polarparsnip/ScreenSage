@@ -293,6 +293,8 @@ export default function MediaInfo({ type }: { type: string }) {
     }
     if (!fail) {
       setSuccessMessage('Added to list(s)');
+      setSelectedList('My media lists');
+      setSelectedWatchlist('My watchlists');
       setSuccess(true);
     }
   };

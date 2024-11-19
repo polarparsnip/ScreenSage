@@ -25,6 +25,16 @@ export default function MediaFilter({ genres }: { genres: any }): React.JSX.Elem
   // }
 
   useEffect(() => {
+    const queryGenreId = searchParams.get('genre');
+    if (queryGenreId) {
+      const queryGenre = genres.find((genre: any) => genre.id == queryGenreId);
+      if (queryGenre?.name) {
+        setSelectedGenre(queryGenre.name);
+      }
+    }
+  }, [genres, searchParams]);
+
+  useEffect(() => {
     if (debouncedSearchTerm) {
       searchParams.set('search', debouncedSearchTerm);
       setSearchParams(searchParams);
