@@ -1,5 +1,7 @@
 package is.hi.screensage_web_server.repositories;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -42,5 +44,13 @@ public interface UserRepository extends JpaRepository<Users, Integer> {
   + "GROUP BY u.id "
   + "ORDER BY SUM(cc.points) DESC, u.username ASC")
   Page<UserScore> findUsersOrderedByTotalPoints(Pageable pageable);
+
+  /**
+   * Retrieves a list of users whose usernames contain the specified query string.
+   *
+   * @param query the query string to search for in the usernames of the users
+   * @return      a list of {@link Users} objects whose usernames contain the query string
+   */
+  List<Users> findByUsernameContainingIgnoreCase(String query);
 
 }

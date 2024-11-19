@@ -419,4 +419,8 @@ public class UserService implements UserServiceInterface {
     Users user = userRepository.getReferenceById(userId);
     return user;
   }
+  
+  public List<Users> searchUsersByUsername(String query) {
+    return userRepository.findByUsernameContainingIgnoreCase(query);
+  }
 }

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import is.hi.screensage_web_server.entities.Quote;
 import is.hi.screensage_web_server.entities.Review;
 import is.hi.screensage_web_server.interfaces.MediaServiceInterface;
 import is.hi.screensage_web_server.models.MediaDetailed;
@@ -342,7 +343,18 @@ public class MediaController {
     return ResponseEntity.ok(randomMedia);
   }
 
-    /**
+  /**
+   * Retrieves a random media quote.
+   *
+   * @return {@link ResponseEntity} containing the random quote.
+   */
+  @GetMapping("/quote")
+  public ResponseEntity<?> getRandomQuote() {
+    Quote randomQuote = mediaService.getRandomQuote();
+    return ResponseEntity.ok(randomQuote);
+  }
+
+  /**
    * Adds a like by the authenticated user for the movie with the specified ID.
    *
    * @return                 a ResponseEntity containing a success message if like was successful

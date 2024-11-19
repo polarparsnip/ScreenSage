@@ -2,6 +2,7 @@ package is.hi.screensage_web_server.interfaces;
 
 import org.springframework.data.domain.Page;
 
+import is.hi.screensage_web_server.entities.Quote;
 import is.hi.screensage_web_server.entities.Review;
 import is.hi.screensage_web_server.models.MediaDetailed;
 import is.hi.screensage_web_server.models.MediaPageResponse;
@@ -94,6 +95,13 @@ public interface MediaServiceInterface {
    * @return a {@link MediaDetailed} object containing detailed information about the randomly selected media.
    */
   public MediaDetailed getRandomMedia();
+
+  /**
+   * Retrieves a random media quote.
+   *
+   * @return a random {@link Quote} object containing the quote details.
+   */
+  public Quote getRandomQuote();
 
   /**
    * Toggles the "like" status of a media item for a specific user.

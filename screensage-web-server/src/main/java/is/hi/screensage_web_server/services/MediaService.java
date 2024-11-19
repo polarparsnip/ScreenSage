@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 
 import is.hi.screensage_web_server.config.CustomExceptions.ResourceNotFoundException;
 import is.hi.screensage_web_server.entities.Like;
+import is.hi.screensage_web_server.entities.Quote;
 import is.hi.screensage_web_server.entities.Review;
 import is.hi.screensage_web_server.entities.Users;
 import is.hi.screensage_web_server.interfaces.MediaServiceInterface;
@@ -23,6 +24,7 @@ import is.hi.screensage_web_server.models.MediaDetailed;
 import is.hi.screensage_web_server.models.MediaPageResponse;
 import is.hi.screensage_web_server.models.ReviewRequest;
 import is.hi.screensage_web_server.repositories.LikeRepository;
+import is.hi.screensage_web_server.repositories.QuoteRepository;
 import is.hi.screensage_web_server.repositories.ReviewRepository;
 import jakarta.transaction.Transactional;
 
@@ -34,6 +36,9 @@ public class MediaService implements MediaServiceInterface {
 
   @Autowired
   private ReviewRepository reviewRepository;
+
+  @Autowired
+  private QuoteRepository quoteRepository;
 
   @Autowired
   private LikeRepository likeRepository;
@@ -184,6 +189,12 @@ public class MediaService implements MediaServiceInterface {
   public MediaDetailed getRandomMedia() {
     MediaDetailed randomMedia = tmdbService.getRandomMedia();
     return randomMedia;
+  }
+  
+  @Override
+  public Quote getRandomQuote() {
+    Quote randomQuote = quoteRepository.getRandomQuote();
+    return randomQuote;
   }
 
   @Override
