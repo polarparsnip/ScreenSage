@@ -17,6 +17,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+
 import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -39,6 +41,9 @@ public class MediaList {
 
   private boolean watchlist = false;
   private List<Integer> sharedWith;
+  private long likeCount;
+  @Transient
+  private boolean userHasLiked;
 
   @Column(nullable = false, updatable = false)
   @CreationTimestamp
@@ -230,14 +235,50 @@ public class MediaList {
     return sharedWith;
   }
 
-/**
- * Sets the list of user IDs to share the media list with.
- * 
- * @param sharedWith the list of user IDs to share the media list with.
- */
-  public void setSharedWith(List<Integer> sharedWith) {
-  this.sharedWith = sharedWith;
-}
+  /**
+   * Sets the list of user IDs to share the media list with.
+   * 
+   * @param sharedWith the list of user IDs to share the media list with.
+   */
+    public void setSharedWith(List<Integer> sharedWith) {
+    this.sharedWith = sharedWith;
+  }
+
+  /**
+   * Gets the amount of likes by users for the media list.
+   * 
+   * @return the amount of likes for the media list.
+   */
+  public long getLikeCount() {
+    return likeCount;
+  }
+
+  /**
+   * Sets the amount of likes by users for the media list.
+   * 
+   * @param likeCount the amount of likes to set.
+   */
+  public void setLikeCount(long likeCount) {
+    this.likeCount = likeCount;
+  }
+
+  /**
+   * Gets whether the current user has liked the media list.
+   *
+   * @return whether the current user has liked the media list
+   */
+  public boolean getUserHasLiked() {
+    return userHasLiked;
+  }
+
+  /**
+   * Sets whether the current user has liked the media list.
+   * 
+   * @param userHasLiked whether the current user has liked the media list
+   */
+  public void setUserHasLiked(boolean userHasLiked) {
+    this.userHasLiked = userHasLiked;
+  }
 
   /**
    * Gets the creation timestamp of the media list.

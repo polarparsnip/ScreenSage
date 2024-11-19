@@ -1,6 +1,8 @@
 package is.hi.screensage_web_server.models;
 
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import is.hi.screensage_web_server.entities.Review;
@@ -13,7 +15,10 @@ import is.hi.screensage_web_server.entities.Review;
 public class MediaDetailed {
   private double average_rating;
   private double user_rating;
+  @JsonIgnore
   private List<Review> recent_reviews;
+  private long like_count;
+  private boolean user_has_liked;
 
   private int id;
   private String title;
@@ -75,6 +80,22 @@ public class MediaDetailed {
   
   public void setRecent_reviews(List<Review> recent_reviews) {
     this.recent_reviews = recent_reviews;
+  }
+
+  public long getLike_count() {
+    return like_count;
+  }
+
+  public void setLike_count(long like_count) {
+    this.like_count = like_count;
+  }
+
+  public boolean getUser_has_liked() {
+    return user_has_liked;
+  }
+
+  public void setUser_has_liked(boolean user_has_liked) {
+    this.user_has_liked = user_has_liked;
   }
 
   

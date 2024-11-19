@@ -331,7 +331,7 @@ public class MediaController {
     return ResponseEntity.ok(newReview);
   }
 
-  /**
+    /**
    * Retrieves a random media item to be featured.
    *
    * @return {@link ResponseEntity} containing the random media item.
@@ -340,6 +340,60 @@ public class MediaController {
   public ResponseEntity<?> getRandomMedia() {
     MediaDetailed randomMedia = mediaService.getRandomMedia();
     return ResponseEntity.ok(randomMedia);
+  }
+
+    /**
+   * Adds a like by the authenticated user for the movie with the specified ID.
+   *
+   * @return                 a ResponseEntity containing a success message if like was successful
+   * @throws Exception       if an error occurs while adding the like
+   */
+  @PostMapping("/movies/{movieId}/likes")
+  public ResponseEntity<?> postMovieLike(
+    @PathVariable int movieId
+  ) throws Exception {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
+    int userId = authenticatedUser.getId();
+
+    mediaService.toggleMediaLike(userId, "movies", movieId);
+    return ResponseEntity.ok("Like status updated");
+  }
+
+  /**
+   * Adds a like by the authenticated user for the show with the specified ID.
+   *
+   * @return                 a ResponseEntity containing a success message if like was successful
+   * @throws Exception       if an error occurs while adding the like
+   */
+  @PostMapping("/shows/{showId}/likes")
+  public ResponseEntity<?> postShowLike(
+    @PathVariable int showId
+  ) throws Exception {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
+    int userId = authenticatedUser.getId();
+
+    mediaService.toggleMediaLike(userId, "shows", showId);
+    return ResponseEntity.ok("Like status updated");
+  }
+
+  /**
+   * Adds a like by the authenticated user for the anime with the specified ID.
+   *
+   * @return                 a ResponseEntity containing a success message if like was successful
+   * @throws Exception       if an error occurs while adding the like
+   */
+  @PostMapping("/anime/{animeId}/likes")
+  public ResponseEntity<?> postAnimeLike(
+    @PathVariable int animeId
+  ) throws Exception {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
+    int userId = authenticatedUser.getId();
+
+    mediaService.toggleMediaLike(userId, "anime", animeId);
+    return ResponseEntity.ok("Like status updated");
   }
 
 }

@@ -48,10 +48,11 @@ public interface MediaListServiceInterface {
    * Retrieves a media list by its ID.
    *
    * @param listId     the ID of the media list to retrieve
+   * @param userId     the ID of the user making the request
    * @return           the MediaList object corresponding to the specified ID
    * @throws Exception if the media list is not found or another error occurs
    */
-  public MediaList getMediaList(int listId) throws Exception;
+  public MediaList getMediaList(int listId, int userId) throws Exception;
 
   /**
    * Updates an existing media list.
@@ -121,4 +122,15 @@ public interface MediaListServiceInterface {
    * @throws Exception if an error occurs while retrieving the data
    */
   public List<MediaListConcise> getAllUserMediaListsConcise(int userId, boolean watchlist) throws Exception;
+
+  /**
+   * Toggles the "like" status of a media list for a specific user.
+   * If the user has already liked the list, it will be unliked; otherwise, it will be liked.
+   *
+   * @param userId     the ID of the user performing the action
+   * @param listId     the ID of the media list for which to toggle the like status
+   * @throws Exception if an error occurs while toggling the like status
+   */
+  public void toggleMediaListLike(int userId, int listId) throws Exception;
+
 }
