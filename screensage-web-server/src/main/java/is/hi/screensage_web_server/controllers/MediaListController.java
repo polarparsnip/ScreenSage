@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import is.hi.screensage_web_server.entities.MediaList;
+import is.hi.screensage_web_server.interfaces.MediaListServiceInterface;
 import is.hi.screensage_web_server.models.MediaListPostRequest;
 import is.hi.screensage_web_server.models.MediaListRequest;
 import is.hi.screensage_web_server.models.UserPrincipal;
-import is.hi.screensage_web_server.services.MediaListService;
 import org.springframework.data.domain.Page;
 
 /**
@@ -29,7 +29,7 @@ import org.springframework.data.domain.Page;
 public class MediaListController {
 
   @Autowired
-  private MediaListService mediaListService;
+  private MediaListServiceInterface mediaListService;
 
   /**
    * Retrieves a paginated list of media lists for the authenticated user.

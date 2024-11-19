@@ -30,7 +30,10 @@ public class MediaListItem {
 
   private int mediaId;
   private String mediaTitle;
+
+  @Column(length = 1000)
   private String mediaSummary;
+  
   private String mediaImg;
   private String type;
 

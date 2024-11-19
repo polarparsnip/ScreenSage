@@ -39,10 +39,6 @@ public class Users {
   @JsonIgnore
   private String profileImgId;
 
-  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-  @OrderBy("created_at DESC")
-  private List<Review> reviews;
-
   @Transient
   private List<MediaListConcise> lists;
   @Transient

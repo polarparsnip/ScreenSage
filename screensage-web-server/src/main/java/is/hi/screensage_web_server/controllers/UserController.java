@@ -13,13 +13,13 @@ import org.springframework.web.multipart.MultipartFile;
 import is.hi.screensage_web_server.entities.MediaList;
 import is.hi.screensage_web_server.entities.Review;
 import is.hi.screensage_web_server.entities.Users;
+import is.hi.screensage_web_server.interfaces.MediaListServiceInterface;
 import is.hi.screensage_web_server.interfaces.MediaServiceInterface;
 import is.hi.screensage_web_server.interfaces.UserServiceInterface;
 import is.hi.screensage_web_server.models.JwtPayload;
 import is.hi.screensage_web_server.models.UserPrincipal;
 import is.hi.screensage_web_server.models.UserRequest;
 import is.hi.screensage_web_server.models.UserScore;
-import is.hi.screensage_web_server.services.MediaListService;
 
 
 /**
@@ -38,7 +38,7 @@ public class UserController {
   private MediaServiceInterface mediaService;
 
   @Autowired
-  private MediaListService mediaListService;
+  private MediaListServiceInterface mediaListService;
 
   /**
    * Registers a new user with the provided username and password.
