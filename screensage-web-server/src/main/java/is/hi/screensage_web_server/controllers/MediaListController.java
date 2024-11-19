@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -207,6 +208,44 @@ public class MediaListController {
 
     mediaListService.toggleMediaListLike(userId, listId);
     return ResponseEntity.ok("Like status updated");
+  }
+
+  /**
+   * Deletes an existing media list.
+   *
+   * @param listId     the ID of the media list to delete
+   * @return           a ResponseEntity containing a success message if deletion was successful
+   * @throws Exception if an error occurs during list deletion
+   */
+  @DeleteMapping("/lists/{listId}")
+  public ResponseEntity<?> deleteList(
+    @PathVariable int listId
+  ) throws Exception {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
+    int userId = authenticatedUser.getId();
+
+    mediaListService.deleteMediaList(listId, userId);
+    return ResponseEntity.ok("List deleted successfully");
+  }
+
+  /**
+   * Deletes an existing watchlist.
+   *
+   * @param watchlistId the ID of the watchlist to delete
+   * @return            a ResponseEntity containing a success message if deletion was successful
+   * @throws Exception  if an error occurs during list deletion
+   */
+  @DeleteMapping("/watchlists/{watchlistId}")
+  public ResponseEntity<?> deleteWatchlist(
+    @PathVariable int watchlistId
+  ) throws Exception {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
+    int userId = authenticatedUser.getId();
+
+    mediaListService.deleteMediaList(watchlistId, userId);
+    return ResponseEntity.ok("Watchlist deleted successfully");
   }
   
 }
