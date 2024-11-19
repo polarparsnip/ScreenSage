@@ -1,5 +1,7 @@
 package is.hi.screensage_web_server.interfaces;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -134,5 +136,13 @@ public interface UserServiceInterface {
    * @return a reference to the {@link Users} entity with the specified ID
    */
   public Users getUserReferenceById(int userId);
+
+  /**
+   * Retrieves a list of users whose usernames contain the specified query string.
+   *
+   * @param query the query string to search for in the usernames of the users
+   * @return     a list of {@link Users} objects matching the search criteria
+   */
+  public List<Users> searchUsersByUsername(String query);
 
 }

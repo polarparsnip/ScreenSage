@@ -1,5 +1,6 @@
 package is.hi.screensage_web_server.controllers;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -224,4 +225,17 @@ public class UserController {
     Page<UserScore> scoreboard = userService.getUserScoreboard(page, pageSize);
     return ResponseEntity.ok(scoreboard);
   }
+
+  /**
+   * Retrieves users whose username contain the query string.
+   *
+   * @param query the query string to search for in the usernames of the users
+   * @return     a list of users whose usernames contain the query string
+   */
+  @GetMapping("/users/search")
+  public List<Users> searchUsers(@RequestParam String query) {
+    List<Users> users = userService.searchUsersByUsername(query);
+    return users;
+  }
+
 }
