@@ -14,6 +14,7 @@ import { Loader } from '../../components/Loader/Loader';
 import { ErrorDisplay } from '../../components/ErrorDisplay/ErrorDisplay';
 import Dropdown from '../../components/Dropdown/Dropdown';
 import Snackbar from '../../components/Snackbar/Snackbar';
+import LikeButton from '../../components/LikeButton/LikeButton';
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -51,6 +52,9 @@ export default function MediaInfo({ type }: { type: string }) {
   const [selectedList, setSelectedList] = useState<any | null>(null);
   const [selectedWatchlist, setSelectedWatchlist] = useState<any | null>(null);
 
+  const [userHasLiked, setUserHasLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(0);
+
   document.title = data ? (type == 'shows' || type == 'anime') ? data?.name : data?.title : 'Media info';
 
   useEffect(() => {
@@ -79,6 +83,8 @@ export default function MediaInfo({ type }: { type: string }) {
 
         const result = await res.json();
         setData(result);
+        setUserHasLiked(result.user_has_liked);
+        setLikeCount(result.like_count);
 
         // if (result?.recent_reviews && result.recent_reviews.length > 0) {
         //   setReviews(result.recent_reviews);
@@ -299,6 +305,48 @@ export default function MediaInfo({ type }: { type: string }) {
     }
   };
 
+  const likeMedia = async (): Promise<void> => {
+    try {
+      const res = await fetch(`${apiUrl}/${type}/${id}/likes`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${cookies.token}`,
+        },
+      });
+
+      if (res && !res.ok) {
+        if (res.headers.get('content-type')?.includes('application/json')) {
+          console.error('Error:', res.status, res.statusText);
+          const message = await res.json();
+          console.error(message.error);
+          throw new Error(message.error || 'Unknown error');
+        } else {
+          const message = await res.text();  // Plain text response
+          console.error(message);
+          throw new Error(message || 'Unknown error');
+        }
+      }
+
+      setUserHasLiked((prev) => !prev);
+      setLikeCount((prev) => (userHasLiked ? prev - 1 : prev + 1));
+
+      setSuccessMessage(`You ${userHasLiked ? 'removed your like for' : 'liked'} ${data?.title}`);
+      setSuccess(true);
+      
+
+    } catch(error: unknown) {
+      if (error instanceof Error) {
+        console.error('Error:', error.message)
+        setFailMessage(error.message);
+        setFail(true);
+      } else {
+        setFailMessage('An unknown error occurred');
+        setFail(true);
+      }
+    }
+  }
+
   if (!login) {
     navigate('/', { replace: true });
   }
@@ -362,6 +410,11 @@ export default function MediaInfo({ type }: { type: string }) {
               </Typography>
             </div>
             {data?.runtime ? <div>{data.runtime}min</div> : data?.number_of_episodes ? <div>{data?.number_of_episodes} episodes</div> : <></>}
+            {data && data.like_count != null && data.user_has_liked != null && <LikeButton
+              likeCount={likeCount} 
+              userHasLiked={userHasLiked} 
+              toggleLike={likeMedia} 
+            />}
           </div>
           <div className={s.genres_container}>
             {data?.genres?.map((genre: Genre) => (

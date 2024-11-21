@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { Loader } from '../../components/Loader/Loader';
 import { ErrorDisplay } from '../../components/ErrorDisplay/ErrorDisplay';
 import Snackbar from '../../components/Snackbar/Snackbar';
+import { useCookies } from 'react-cookie';
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -17,6 +18,8 @@ export default function Challenge() {
 
   const loginContext = useUserContext();
   const { user } = loginContext.userLoggedIn;
+  const [cookies] = useCookies(['token', 'user']);
+  const navigate = useNavigate();
 
   const [challenge, setChallenge] = useState<ChallengeType | null>(null);
   const [selectedOption, setSelectedOption] = useState<ChallengeOption | null>(null);
@@ -31,7 +34,7 @@ export default function Challenge() {
 
   const [isPopupVisible, setIsPopupVisible] = useState(false);
 
-  const navigate = useNavigate();
+  const [hasCompleted, setHasCompleted] = useState<boolean>(false);
 
   const handleResult = () => {
     setIsPopupVisible(true);
@@ -69,6 +72,32 @@ export default function Challenge() {
         const challenge = await res.json();
         setChallenge(challenge);
         setLoading(false);
+
+        if (challenge?.id && cookies.token) {
+          const completedRes = await fetch(`${apiUrl}/challenge/${challenge.id}/has-completed`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${cookies.token}`,
+            }
+          });
+  
+          if (completedRes && !completedRes.ok) {
+            if (completedRes.headers.get('content-type')?.includes('application/json')) {
+              console.error('Error:', completedRes.status, completedRes.statusText);
+              const message = await completedRes.json();
+              console.error(message.error);
+              throw new Error(message.error || 'Unknown error');
+            } else {
+              const message = await completedRes.text();  // Plain text response
+              console.error(message);
+              throw new Error(message || 'Unknown error');
+            }
+          }
+
+          const challengeInfo = await completedRes.json();
+          setHasCompleted(challengeInfo.completed)
+        }
 
       } catch (error: unknown) {
         if (error instanceof Error) {
@@ -147,6 +176,16 @@ export default function Challenge() {
   if (error) {
     return (
       <ErrorDisplay errorMessage={error} />
+    );
+  }
+
+  console.log(challenge)
+
+  if (hasCompleted) {
+    return (
+      <div className={s.completed}>
+        <h1>You have already completed this challenge</h1>
+      </div>
     );
   }
 

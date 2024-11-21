@@ -30,9 +30,10 @@ public interface MediaListServiceInterface {
    *
    * @param page     the page number to retrieve
    * @param pageSize the number of entries per page
+   * @param userId   the ID of the user making the request
    * @return         a Page of MediaList objects
    */
-  public Page<MediaList> getMediaLists(int page, int pageSize);
+  public Page<MediaList> getMediaLists(int page, int pageSize, int userId);
 
   /**
    * Creates a new media list for a user based on the provided request.

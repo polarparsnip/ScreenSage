@@ -10,6 +10,7 @@ import Paging from '../../components/Paging/Paging';
 import { ListCard } from '../../components/ListCard/ListCard';
 import { Button } from '@mui/material';
 import Snackbar from '../../components/Snackbar/Snackbar';
+import Confirm from '../../components/Confirm/Confirm';
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -18,7 +19,7 @@ export default function MediaLists({ listType }: { listType: string }) {
 
   const navigate = useNavigate();
   const loginContext = useUserContext();
-  const { login } = loginContext.userLoggedIn;
+  const { login, user } = loginContext.userLoggedIn;
   const [searchParams, setSearchParams] = useSearchParams();
   const pageNr = searchParams.get('page') || 1;
 
@@ -33,15 +34,18 @@ export default function MediaLists({ listType }: { listType: string }) {
   const [success, setSuccess] = useState<boolean>(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-  const [cookies] = useCookies(['token']);
+  // const [cookies] = useCookies(['token']);
+  const [cookies, setCookie] = useCookies(['token', 'user']);
   const [listCreated, setListCreated] = useState<string | null>(null);
+
+  const [activeListID, setActiveListID] = useState<number | null>(null);
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
 
   const pathString = listType == 'watchlists' ? 'users/profile/watchlists' : listType == 'userLists' ? 'users/profile/lists': 'lists';
 
   interface MediaFormData {
     title: string;
     description: string;
-    type: 'movies' | 'shows' | '';
     watchlist: boolean;
     sharedWith: [];
   }
@@ -49,7 +53,6 @@ export default function MediaLists({ listType }: { listType: string }) {
   const [formData, setFormData] = useState<MediaFormData>({
     title: '',
     description: '',
-    type: '',
     watchlist: listType == 'watchlists',
     sharedWith: []
   });
@@ -113,7 +116,7 @@ export default function MediaLists({ listType }: { listType: string }) {
     };
 
     fetchData();
-  }, [cookies.token, id, pageNr, pathString, listType, listCreated]);
+  }, [cookies.token, id, pageNr, pathString, listType, listCreated, success]);
 
   const createList = async (data: any): Promise<void> => {
     try {
@@ -138,14 +141,94 @@ export default function MediaLists({ listType }: { listType: string }) {
           throw new Error(message || 'Unknown error');
         }
       }
-      // const result = await res.json();
+      const result = await res.json();
+
       setListCreated('List created');
       setFormData(
-        { title: '', description: '', type: '', watchlist: listType == 'watchlists', sharedWith: [] }
+        { title: '', description: '', watchlist: listType == 'watchlists', sharedWith: [] }
       );
 
-      setSuccessMessage('List created successfully');
+      setSuccessMessage(`${listType == 'watchlists' ? 'Watchlist' : 'List'} created successfully`);
       setSuccess(true);
+
+      if (listType == 'watchlists') {
+        setCookie(
+          'user', 
+          JSON.stringify({ 
+            login: true, 
+            user: { ...user, 
+              watchlists: [
+                ...user.watchlists, 
+                { id: result.id, title: result.title, watchlist: result.watchlist, sharedWith: [] }
+              ] 
+            } 
+          }), 
+          {
+            path: '/',
+            maxAge: 5 * 24 * 60 * 60,
+            secure: true,
+          }
+        );
+      } else {
+        setCookie(
+          'user', 
+          JSON.stringify({ 
+            login: true, 
+            user: { ...user, 
+              lists: [
+                ...user.lists, 
+                { id: result.id, title: result.title, watchlist: result.watchlist }
+              ] 
+            } 
+          }), 
+          {
+            path: '/',
+            maxAge: 5 * 24 * 60 * 60,
+            secure: true,
+          }
+        );
+      }
+      
+
+    } catch(error: unknown) {
+      if (error instanceof Error) {
+        console.error('Error:', error.message)
+        setFailMessage(error.message);
+        setFail(true);
+      } else {
+        setFailMessage('An unknown error occurred');
+        setFail(true);
+      }
+    }
+  }
+
+  const deleteList = async (): Promise<void> => {
+    try {
+      const res = await fetch(`${apiUrl}/${listType == 'watchlists' ? 'watchlists' : 'lists'}/${activeListID}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${cookies.token}`,
+        }
+      });
+
+      if (res && !res.ok) {
+        if (res.headers.get('content-type')?.includes('application/json')) {
+          console.error('Error:', res.status, res.statusText);
+          const message = await res.json();
+          console.error(message.error);
+          throw new Error(message.error || 'Unknown error');
+        } else {
+          const message = await res.text();  // Plain text response
+          console.error(message);
+          throw new Error(message || 'Unknown error');
+        }
+      }
+      // const result = await res.json();
+      // setData(result);
+      setSuccessMessage(`${listType == 'watchlists' ? 'Watchlist' : 'List'} has been deleted`);
+      setSuccess(true);
+      setActiveListID(null);
 
     } catch(error: unknown) {
       if (error instanceof Error) {
@@ -191,7 +274,16 @@ export default function MediaLists({ listType }: { listType: string }) {
         {data && data.content?.map((list: any, i: number) => {
           return (
             <div key={i} className={s.media_lists__card_container}>
-              <ListCard list={list} />
+              <ListCard 
+                list={list} 
+                author={list.user?.id == user.id}
+                listType={listType}
+                onRemove={(id: number) => {
+                  setActiveListID(id);
+                  setConfirmDeleteOpen(true);
+                }}
+                i={i}
+              />
             </div>
           );
         })}
@@ -233,7 +325,7 @@ export default function MediaLists({ listType }: { listType: string }) {
           />
           <div className={s.formButton}>
             <Button variant='outlined' type='submit'>
-              Create Media List
+              Create {listType == 'watchlists' ? 'watchlist' : 'Media list'}
             </Button>
           </div>
         </form>
@@ -255,6 +347,15 @@ export default function MediaLists({ listType }: { listType: string }) {
       >
         {failMessage}
       </Snackbar>
+      <Confirm
+        open={confirmDeleteOpen} 
+        setOpen={setConfirmDeleteOpen} 
+        title={`Delete ${listType == 'watchlists' ? 'watchlist' : 'list'}`}
+        description={`Are you sure you want to delete this ${listType == 'watchlists' ? 'watchlist' : 'list'}? This action cannot be undone.`}
+        onConfirm={async() => {
+          await deleteList();
+        }}
+      />
     </div>
   )
 };

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export type Sort = {
   empty: boolean;
   sorted: boolean;
@@ -35,6 +36,8 @@ export type User = {
   // email: string;
   profileImg: string;
   passwordPlaceholder: string;
+  watchlists: any;
+  lists: any;
   // createdAt: string;
 };
 
@@ -58,7 +61,9 @@ export type MediaDetailed = {
   id: number;
   average_rating: number;
   user_rating: number;
-  recent_reviews: Review[];
+  // recent_reviews: Review[];
+  like_count: number;
+  user_has_liked: boolean;
   title: string;
   original_title: string;
   original_language: string;

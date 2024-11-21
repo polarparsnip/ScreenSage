@@ -13,6 +13,7 @@ import is.hi.screensage_web_server.entities.CompletedChallenge;
 import is.hi.screensage_web_server.entities.Users;
 import is.hi.screensage_web_server.interfaces.ChallengeServiceInterface;
 import is.hi.screensage_web_server.interfaces.UserServiceInterface;
+import is.hi.screensage_web_server.models.ChallengeInfoDTO;
 import is.hi.screensage_web_server.models.ChallengeResponse;
 import is.hi.screensage_web_server.repositories.ChallengeOptionRepository;
 import is.hi.screensage_web_server.repositories.ChallengeRepository;
@@ -85,5 +86,16 @@ public class ChallengeService implements ChallengeServiceInterface {
       return challengeOption.get();
     }
     return null;
+  }
+
+  @Override
+  public ChallengeInfoDTO hasCompletedChallenge(int userId, int challengeId) {
+    Users user = userService.findUser(userId);
+    Challenge challenge = findChallenge(challengeId);
+
+    boolean hasCompletedChallenge = completedChallengeRepository.existsByUserAndChallenge(user, challenge);
+
+    ChallengeInfoDTO challengeInfo = new ChallengeInfoDTO(user, challenge, hasCompletedChallenge);
+    return challengeInfo;
   }
 }

@@ -8,6 +8,9 @@ import { Loader } from '../../components/Loader/Loader';
 import { useUserContext } from '../../context';
 import { MediaListItem } from '../../components/MediaListItem/MediaListItem';
 import Snackbar from '../../components/Snackbar/Snackbar';
+import Confirm from '../../components/Confirm/Confirm';
+import LikeButton from '../../components/LikeButton/LikeButton';
+import SharingSearch from '../../components/SharingSearch/SharingSearch';
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -26,7 +29,14 @@ export default function MediaList({ listType }: { listType: string }) {
   const [success, setSuccess] = useState<boolean>(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
+  const [activeItemID, setActiveItemID] = useState<number | null>(null);
+
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
+
   const [cookies] = useCookies(['token']);
+
+  const [userHasLiked, setUserHasLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(0);
 
   useEffect(() => {
     setLoading(true);
@@ -56,6 +66,9 @@ export default function MediaList({ listType }: { listType: string }) {
         const result = await res.json();
 
         setData(result);
+        setUserHasLiked(result.userHasLiked);
+        setLikeCount(result.likeCount);
+
         setLoading(false);
 
       } catch (error: unknown) {
@@ -112,12 +125,59 @@ export default function MediaList({ listType }: { listType: string }) {
     }
   }
 
-  const handleRemove = async (id: number) => {
+  const handleRemove = async (id: number | null) => {
+    if (!id) {
+      return;
+    }
+
     const updatedItems = data?.mediaListItems?.filter((item: any) => item.id !== id);
     const updatedData = { ...data, mediaListItems: updatedItems };
     
     await updateList(updatedData, true); 
+    setActiveItemID(null);
   };
+
+  const likeList = async (): Promise<void> => {
+    try {
+      const res = await fetch(`${apiUrl}/${listType}/${id}/likes`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${cookies.token}`,
+        },
+      });
+
+      if (res && !res.ok) {
+        if (res.headers.get('content-type')?.includes('application/json')) {
+          console.error('Error:', res.status, res.statusText);
+          const message = await res.json();
+          console.error(message.error);
+          throw new Error(message.error || 'Unknown error');
+        } else {
+          const message = await res.text();  // Plain text response
+          console.error(message);
+          throw new Error(message || 'Unknown error');
+        }
+      }
+
+      setUserHasLiked((prev) => !prev);
+      setLikeCount((prev) => (userHasLiked ? prev - 1 : prev + 1));
+
+      setSuccessMessage(`You ${userHasLiked ? 'removed your like for' : 'liked'} ${data?.title}`);
+      setSuccess(true);
+      
+
+    } catch(error: unknown) {
+      if (error instanceof Error) {
+        console.error('Error:', error.message)
+        setFailMessage(error.message);
+        setFail(true);
+      } else {
+        setFailMessage('An unknown error occurred');
+        setFail(true);
+      }
+    }
+  }
 
   document.title = data?.title ? data.title : 'Media list';
 
@@ -139,10 +199,25 @@ export default function MediaList({ listType }: { listType: string }) {
 
   return (
     <div className={s.media_list}>
-      <div className={s.media_list__title}>
-        <h1>{data && data.title ? data.title : 'Media list'}</h1>
-        {listType === 'list' && data && data.description && <div>{data.description}</div>}
+      <div className={s.media_list__title_like_container}>
+        <div className={s.media_list__title}>
+          <h1>{data && data.title ? data.title : 'Media list'}</h1>
+          {listType === 'lists' && data && data.description && <div>{data.description}</div>}
+        </div>
+        {data && data.likeCount != null && data.userHasLiked != null && listType === 'lists' && 
+          <LikeButton
+            likeCount={likeCount} 
+            userHasLiked={userHasLiked} 
+            toggleLike={likeList} 
+          />
+        }
       </div>
+      {listType === 'watchlists' && id &&
+        <div className={s.share_search}>
+          <p>Share list with other users</p>
+          <SharingSearch listId={id} currentIds={data.sharedWith}/>
+        </div>
+      }
       <div className={s.media_list__body}>
         {data?.mediaListItems?.length < 1 &&
           <div className={s.noMedia}><h1>No media in list</h1></div>
@@ -155,7 +230,10 @@ export default function MediaList({ listType }: { listType: string }) {
                   mediaListItem={item} 
                   type={item.type}
                   author={data?.user.id == user.id}
-                  onRemove={handleRemove}
+                  onRemove={(id: number) => {
+                    setActiveItemID(id);
+                    setConfirmDeleteOpen(true);
+                  }}
                   i={i} 
                 />
               </div>
@@ -179,6 +257,15 @@ export default function MediaList({ listType }: { listType: string }) {
       >
         {failMessage}
       </Snackbar>
+      <Confirm 
+        open={confirmDeleteOpen} 
+        setOpen={setConfirmDeleteOpen} 
+        title={'Delete media item'}
+        description={'Are you sure you want to delete this item? This action cannot be undone.'}
+        onConfirm={async() => {
+          await handleRemove(activeItemID);
+        }}
+      />
     </div>
   )
 };

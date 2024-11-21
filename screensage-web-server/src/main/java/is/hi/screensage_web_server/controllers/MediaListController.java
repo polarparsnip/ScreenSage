@@ -42,8 +42,12 @@ public class MediaListController {
   public ResponseEntity<?> getLists(
     @RequestParam(defaultValue = "1") int page
   ) { 
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
+    int userId = authenticatedUser.getId();
+    
     int pageSize = 10;
-    Page<MediaList> userMediaList = mediaListService.getMediaLists(page, pageSize);
+    Page<MediaList> userMediaList = mediaListService.getMediaLists(page, pageSize, userId);
     return ResponseEntity.ok(userMediaList);
   }
 

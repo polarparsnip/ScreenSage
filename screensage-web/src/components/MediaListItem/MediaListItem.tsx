@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import s from './MediaListItem.module.scss';
 import { Typography, Grow, Tooltip } from '@mui/material';
+import { Clear } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 
 export function MediaListItem({ 
@@ -31,7 +32,7 @@ export function MediaListItem({
                       event.preventDefault();
                       onRemove(mediaListItem.id)
                     }}>
-                    x
+                    <Clear/>
                   </button>
                 </Tooltip>
               }

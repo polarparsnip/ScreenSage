@@ -50,7 +50,7 @@ public class MediaListService implements MediaListServiceInterface {
 
 
   @Override
-  public Page<MediaList> getMediaLists(int page, int pageSize) {
+  public Page<MediaList> getMediaLists(int page, int pageSize, int userId) {
     PageRequest pageRequest = PageRequest.of(page - 1, pageSize);
   
     Page<MediaList> mediaLists;
@@ -59,6 +59,14 @@ public class MediaListService implements MediaListServiceInterface {
     } catch (Exception e) {
       System.out.println("Could not find media lists: " + e.getMessage());
       throw new ResourceNotFoundException("Could not find media lists.");
+    }
+
+    for (MediaList mediaList : mediaLists.getContent()) {
+      long likeCount = likeRepository.countByMediaList(mediaList);
+      mediaList.setLikeCount(likeCount);
+  
+      boolean userHasLiked = likeRepository.existsByUser_IdAndMediaList(userId, mediaList);
+      mediaList.setUserHasLiked(userHasLiked);
     }
   
     return mediaLists;

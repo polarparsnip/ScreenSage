@@ -122,3 +122,12 @@
     max-height: 20rem;
   }
 }
+
+.completed {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  margin-top: calc(var(--spacing) * 12);
+  padding: 0 calc(var(--spacing) * 2);
+  text-shadow: var(--text-shadow-primary);
+}

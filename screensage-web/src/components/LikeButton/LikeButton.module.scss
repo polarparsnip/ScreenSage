@@ -1,0 +1,26 @@
+.likeButton {
+  display: flex;
+  align-items: center;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: calc(var(--spacing) / 2);
+  color: #888;
+
+  &:hover {
+    color: #333;
+    text-shadow: none;
+  }
+
+  &.liked {
+    color: #1976d2;
+  }
+
+  .icon {
+    margin-right: 4px;
+  }
+
+  .count {
+    font-weight: bold;
+  }
+}

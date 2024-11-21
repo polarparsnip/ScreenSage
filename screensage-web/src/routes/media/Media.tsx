@@ -33,6 +33,7 @@ export default function Media({ type }: { type: string }) {
   document.title = type == 'shows' ? 'Shows' : type == 'movies' ? 'Movies' : 'Anime';
 
   useEffect(() => {
+    setLoading(true);
     const fetchData = async () => {
       try {
         const res = await fetch(`${apiUrl}/${type}?page=${pageNr}&search=${search || ''}${genreId ? `&genreId=${genreId}` : ''}`, {
@@ -124,16 +125,15 @@ export default function Media({ type }: { type: string }) {
     );
   }
 
-  let i = 0;
   return (
-    <div className={`${s.mediaPage} ${loading ? 'hidden' : 'fade-in-slow'}`}>
+    <div className={`${s.mediaPage} ${loading ? 'hidden' : 'fade-in'}`}>
       {data && pageNr == 1 && <FeaturedMedia media={data.results[0]} type={type}></FeaturedMedia>}
       <MediaFilter genres={genres} />
       <div className={s.media}>
-        {data && data.results.map((media: MediaType) => {
+        {data && data.results.map((media: MediaType, index: number) => {
           return (
-            <div key={i++}>
-              <MediaCard media={media} type={type} i={i} />
+            <div key={index}>
+              <MediaCard media={media} type={type} i={index} />
             </div>
           );
         })}
