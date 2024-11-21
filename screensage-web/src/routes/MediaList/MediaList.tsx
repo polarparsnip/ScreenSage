@@ -215,7 +215,7 @@ export default function MediaList({ listType }: { listType: string }) {
       {listType === 'watchlists' && id &&
         <div className={s.share_search}>
           <p>Share list with other users</p>
-          <SharingSearch listId={id} currentIds={data.sharedWith}/>
+          <SharingSearch listId={id} currentIds={data?.sharedWith ? data.sharedWith : []}/>
         </div>
       }
       <div className={s.media_list__body}>

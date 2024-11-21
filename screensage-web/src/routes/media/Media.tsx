@@ -33,7 +33,7 @@ export default function Media({ type }: { type: string }) {
   document.title = type == 'shows' ? 'Shows' : type == 'movies' ? 'Movies' : 'Anime';
 
   useEffect(() => {
-    setLoading(true);
+    // setLoading(true);
     const fetchData = async () => {
       try {
         const res = await fetch(`${apiUrl}/${type}?page=${pageNr}&search=${search || ''}${genreId ? `&genreId=${genreId}` : ''}`, {
