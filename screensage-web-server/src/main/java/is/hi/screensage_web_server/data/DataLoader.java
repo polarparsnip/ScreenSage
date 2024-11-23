@@ -425,7 +425,7 @@ public class DataLoader {
     quoteRepository.save(new Quote("A lesson without pain is meaningless.", "Fullmetal Alchemist: Brotherhood", 2009, "anime", 12342));
     quoteRepository.save(new Quote("May the Force be with you.", "Star Wars: A New Hope", 1977, "movies", 12343));
     quoteRepository.save(new Quote("People die when they are killed.", "Fate/Stay Night", 2006, "anime", 12344));
-    quoteRepository.save(new Quote("To infinity and beyond!", "Toy Story", 1995, "movies", 12345));
+    quoteRepository.save(new Quote("To infinity and beyond!", "Toy Story", 1995, "movies", 12345)); 
     
   }
 }
