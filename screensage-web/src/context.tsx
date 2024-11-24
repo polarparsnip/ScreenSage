@@ -21,7 +21,7 @@ export const UserContext = createContext<IUserContext>({
 export function AppWrapper({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [cookies, setCookie, removeCookie] = useCookies(['token', 'user']);
+  const [cookies, _setCookie, removeCookie] = useCookies(['token', 'user']);
 
     const [userLoggedIn, setUserLoggedIn] = useState({
         login: false,

@@ -69,7 +69,7 @@ export default function Login() {
   document.title = 'Login';
   const navigate = useNavigate();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [cookies, setCookie] = useCookies(['token', 'user']);
+  const [_cookies, setCookie] = useCookies(['token', 'user']);
   const loginContext = useUserContext();
 
   const [fail, setFail] = useState<boolean>(false);
