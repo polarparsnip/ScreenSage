@@ -421,10 +421,11 @@ public class DataLoader {
     likeRepository.save(new Like(testuser3, "movies", 1184918));
 
 
-    quoteRepository.save(new Quote("test quote 1", "test quote 1", 1991, "movies", 12341));
-    quoteRepository.save(new Quote("test quote 2", "test quote 1", 1992, "movies", 12342));
-    quoteRepository.save(new Quote("test quote 3", "test quote 1", 1993, "movies", 12343));
-    quoteRepository.save(new Quote("test quote 4", "test quote 1", 1994, "movies", 12344));
-    quoteRepository.save(new Quote("test quote 5", "test quote 1", 1995, "movies", 12345));
+    quoteRepository.save(new Quote("I am vengeance. I am the night. I am Batman!", "Batman: The Animated Series", 1992, "shows", 12341));
+    quoteRepository.save(new Quote("A lesson without pain is meaningless.", "Fullmetal Alchemist: Brotherhood", 2009, "anime", 12342));
+    quoteRepository.save(new Quote("May the Force be with you.", "Star Wars: A New Hope", 1977, "movies", 12343));
+    quoteRepository.save(new Quote("People die when they are killed.", "Fate/Stay Night", 2006, "anime", 12344));
+    quoteRepository.save(new Quote("To infinity and beyond!", "Toy Story", 1995, "movies", 12345)); 
+    
   }
 }
