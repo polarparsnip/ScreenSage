@@ -53,11 +53,11 @@
   
     tbody {
       tr {
-        background-color: #444;
+        // background-color: #444;
   
-        &:nth-child(even) {
-          background-color: #555;
-        }
+        // &:nth-child(even) {
+        //   background-color: #555;
+        // }
   
         &:hover {
           color: var(--color-text-secondary);
@@ -90,5 +90,6 @@
   outline: 1px solid var(--color-text-secondary);
   color: var(--color-text-secondary);
   text-shadow: var(--text-shadow-primary);
-  background-color: transparent !important;
+  // background-color: transparent !important;
+  background-color: #444;
 }

@@ -1,5 +1,6 @@
 package is.hi.screensage_web_server.services;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,10 +36,18 @@ public class ChallengeService implements ChallengeServiceInterface {
   @Autowired
   private UserServiceInterface userService;
 
+  private Challenge dailyChallenge = null;
+  private LocalDate currentDate = null;
+
   @Override
   public Challenge getRandomChallenge() {
-    Challenge randomChallenge = challengeRepository.getRandomChallenge();
-    return randomChallenge;
+    if (currentDate == null || dailyChallenge == null || !LocalDate.now().equals(currentDate)) {
+      currentDate = LocalDate.now();
+      dailyChallenge = challengeRepository.getRandomChallenge();
+      return dailyChallenge;
+    }
+
+    return dailyChallenge;
   };
 
   @Override

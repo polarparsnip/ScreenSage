@@ -4,6 +4,7 @@ import { User } from '../../types';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@mui/material';
+import Snackbar from '../../components/Snackbar/Snackbar';
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -63,7 +64,10 @@ const registerHandler = async (event: React.FormEvent<HTMLFormElement>): Promise
 export default function Register() {
   document.title = 'Register'
   const navigate = useNavigate();
-  const [error, setError] = useState<string | null>(null);
+
+  const [fail, setFail] = useState<boolean>(false);
+  const [failMessage, setFailMessage] = useState<string | null>(null);
+
   const [fileName, setFileName] = useState('Upload image');
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -90,9 +94,12 @@ export default function Register() {
 
             } catch(error: unknown) {
               if (error instanceof Error) {
-                setError(error.message);
+                console.error('Error:', error.message)
+                setFailMessage(error.message);
+                setFail(true);
               } else {
-                setError('An unknown error occurred');
+                setFailMessage('An unknown error occurred');
+                setFail(true);
               }
             }
           }}
@@ -119,7 +126,14 @@ export default function Register() {
           <Link to='/login'>Log in</Link>
         </section>
 
-        {error && <h3>{error}</h3>}
+        <Snackbar
+          type={'error'}
+          open={fail}
+          setOpen={setFail}
+          setMessage={setFailMessage}
+        >
+          {failMessage}
+        </Snackbar>
       </div>
     </>
   )

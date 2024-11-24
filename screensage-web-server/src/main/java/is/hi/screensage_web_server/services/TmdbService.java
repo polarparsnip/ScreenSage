@@ -42,7 +42,9 @@ public class TmdbService {
       
       if (genreId != null) {
         genreIds = "16," + genreId;
-      } 
+      } else {
+        genreIds = "16,10759";
+      }
 
       url = UriComponentsBuilder.fromHttpUrl(String.format("https://api.themoviedb.org/3/discover/tv"))
         .queryParam("with_genres", genreIds)
@@ -68,9 +70,10 @@ public class TmdbService {
           .toUriString();
       }
     } else {
-      url = UriComponentsBuilder.fromHttpUrl(String.format("https://api.themoviedb.org/3/%s/popular", type))
+      url = UriComponentsBuilder.fromHttpUrl(String.format("https://api.themoviedb.org/3/discover/%s", type))
         .queryParam("page", page)
         .queryParam("api_key", tmdbApiKey)
+        .queryParam("with_original_language", "en")
         .toUriString();
     }
 

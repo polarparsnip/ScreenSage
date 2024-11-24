@@ -13,12 +13,12 @@ export function FeaturedMedia({ media, type }: { media: Media, type: string }) {
       <Card className={s.featuredMedia__card} classes={{ root: s.cardRoot }}>
         <CardMedia
           image={`https://image.tmdb.org/t/p/original/${media?.backdrop_path}`}
-          title={media.title}
+          title={media.title ? media.title : media.name}
           className={s.featuredMedia__card__media}
         />
         <Box padding='20px'>
           <CardContent className={s.featuredMedia__card__content} classes={{ root: s.cardContentRoot }}>
-            <Typography variant='h5' gutterBottom>{media.title}</Typography>
+            <Typography variant='h5' gutterBottom>{media.title ? media.title : media.name}</Typography>
             <Typography variant='body2'>{media.overview}</Typography>
           </CardContent>
         </Box>

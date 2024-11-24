@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import { Button } from '@mui/material';
+import Snackbar from '../../components/Snackbar/Snackbar';
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -70,7 +71,9 @@ export default function Login() {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [cookies, setCookie] = useCookies(['token', 'user']);
   const loginContext = useUserContext();
-  const [error, setError] = useState<string | null>(null);
+
+  const [fail, setFail] = useState<boolean>(false);
+  const [failMessage, setFailMessage] = useState<string | null>(null);
 
   return (
     <>
@@ -83,11 +86,14 @@ export default function Login() {
               try {
                 userInfo = await loginHandler(event, setCookie);
               } catch(error: unknown) {
-                if (error instanceof Error) {
-                  setError(error.message);
-                } else {
-                  setError('An unknown error occurred');
-                }
+              if (error instanceof Error) {
+                console.error('Error:', error.message)
+                setFailMessage(error.message);
+                setFail(true);
+              } else {
+                setFailMessage('An unknown error occurred');
+                setFail(true);
+              }
               }
                   
               if (userInfo && userInfo.user !== undefined) {
@@ -118,7 +124,14 @@ export default function Login() {
           <p>New user?</p>
           <Link to='/register'>Create an account</Link>
         </section>
-        {error && <h3>{error}</h3>}
+        <Snackbar
+          type={'error'}
+          open={fail}
+          setOpen={setFail}
+          setMessage={setFailMessage}
+        >
+          {failMessage}
+        </Snackbar>
       </div>
     </>
   )

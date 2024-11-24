@@ -52,7 +52,9 @@ export default function Snackbar({
           width: '100%',
           color: 'var(--color-text-primary)',
           backgroundColor: 'var(--color-background-secondary)',
-          outline: '1px solid var(--color-main-white)'
+          outline: '1px solid var(--color-main-white)',
+          textShadow:  'none',
+          marginBottom: 'var(--spacing)'
         }}
       >
         {children}

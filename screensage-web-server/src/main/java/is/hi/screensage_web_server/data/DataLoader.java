@@ -162,9 +162,9 @@ public class DataLoader {
     MediaList ml1 = new MediaList(testuser1, "My favorite action movies", "short description");
     ml1.setMediaListItems(
       Arrays.asList(
-        new MediaListItem(ml1, 1184918, "Robot", "Summary", testImgOne, "movies"),
-        new MediaListItem(ml1, 1184917, "Smoothie", "Summary", testImgTwo, "movies"),
-        new MediaListItem(ml1, 1184916, "Peanut", "Summary", testImgThree, "movies")
+        new MediaListItem(ml1, 27205, "Inception", "Summary", testImgOne, "movies"),
+        new MediaListItem(ml1, 155, "The Dark Knight", "Summary", testImgTwo, "movies"),
+        new MediaListItem(ml1, 157336, "Interstellar", "Summary", testImgThree, "movies")
       )
     );
     mediaListRepository.save(ml1);
@@ -172,9 +172,9 @@ public class DataLoader {
     MediaList ml2 = new MediaList(testuser1, "My favorite horror movies", "short description");
     ml2.setMediaListItems(
       Arrays.asList(
-        new MediaListItem(ml2, 1184918, "Robot", "Summary", testImgOne, "movies"),
-        new MediaListItem(ml2, 1184917, "Smoothie", "Summary", testImgTwo, "movies"),
-        new MediaListItem(ml2, 1184916, "Peanut", "Summary", testImgThree, "movies")
+        new MediaListItem(ml2, 27205, "Inception", "Summary", testImgOne, "movies"),
+        new MediaListItem(ml2, 155, "The Dark Knight", "Summary", testImgTwo, "movies"),
+        new MediaListItem(ml2, 157336, "Interstellar", "Summary", testImgThree, "movies")
       )
     );
     mediaListRepository.save(ml2);
@@ -182,9 +182,9 @@ public class DataLoader {
     MediaList ml3 = new MediaList(testuser1, "My favorite comedy movies", "short description");
     ml3.setMediaListItems(
       Arrays.asList(
-        new MediaListItem(ml3, 1184918, "Robot", "Summary", testImgOne, "movies"),
-        new MediaListItem(ml3, 1184917, "Smoothie", "Summary", testImgTwo, "movies"),
-        new MediaListItem(ml3, 1184916, "Peanut", "Summary", testImgThree, "movies")
+        new MediaListItem(ml3, 27205, "Inception", "Summary", testImgOne, "movies"),
+        new MediaListItem(ml3, 155, "The Dark Knight", "Summary", testImgTwo, "movies"),
+        new MediaListItem(ml3, 157336, "Interstellar", "Summary", testImgThree, "movies")
       )
     );
     mediaListRepository.save(ml3);
@@ -192,10 +192,9 @@ public class DataLoader {
     MediaList ml4 = new MediaList(testuser1, "My favorite romance movies", "short description");
     ml4.setMediaListItems(
       Arrays.asList(
-        new MediaListItem(ml4, 1184918, "Robot", "Summary", testImgOne, "movies"),
-        new MediaListItem(ml4, 1184917, "Smoothie", "Summary", testImgTwo, "movies"),
-        new MediaListItem(ml4, 1184917, "Smoothie", "Summary", testImgTwo, "movies"),
-        new MediaListItem(ml4, 1184916, "Peanut", "Summary", testImgThree, "movies")
+        new MediaListItem(ml4, 27205, "Inception", "Summary", testImgOne, "movies"),
+        new MediaListItem(ml4, 155, "The Dark Knight", "Summary", testImgTwo, "movies"),
+        new MediaListItem(ml4, 157336, "Interstellar", "Summary", testImgThree, "movies")
       )
     );
     mediaListRepository.save(ml4);
@@ -203,10 +202,9 @@ public class DataLoader {
     MediaList ml5 = new MediaList(testuser1, "My favorite war movies", "short description");
     ml5.setMediaListItems(
       Arrays.asList(
-        new MediaListItem(ml5, 1184918, "Robot", "Summary", testImgOne, "movies"),
-        new MediaListItem(ml5, 1184917, "Smoothie", "Summary", testImgTwo, "movies"),
-        new MediaListItem(ml5, 1184917, "Smoothie", "Summary", testImgTwo, "movies"),
-        new MediaListItem(ml5, 1184916, "Peanut", "Summary", testImgThree, "movies")
+        new MediaListItem(ml5, 27205, "Inception", "Summary", testImgOne, "movies"),
+        new MediaListItem(ml5, 155, "The Dark Knight", "Summary", testImgTwo, "movies"),
+        new MediaListItem(ml5, 157336, "Interstellar", "Summary", testImgThree, "movies")
       )
     );
     mediaListRepository.save(ml5);
@@ -214,10 +212,9 @@ public class DataLoader {
     MediaList ml6 = new MediaList(testuser1, "My favorite historical movies", "short description");
     ml6.setMediaListItems(
       Arrays.asList(
-        new MediaListItem(ml6, 1184918, "Robot", "Summary", testImgOne, "movies"),
-        new MediaListItem(ml6, 1184917, "Smoothie", "Summary", testImgTwo, "movies"),
-        new MediaListItem(ml6, 1184917, "Smoothie", "Summary", testImgTwo, "movies"),
-        new MediaListItem(ml6, 1184916, "Peanut", "Summary", testImgThree, "movies")
+        new MediaListItem(ml6, 27205, "Inception", "Summary", testImgOne, "movies"),
+        new MediaListItem(ml6, 155, "The Dark Knight", "Summary", testImgTwo, "movies"),
+        new MediaListItem(ml6, 157336, "Interstellar", "Summary", testImgThree, "movies")
       )
     );
     mediaListRepository.save(ml6);
@@ -225,8 +222,8 @@ public class DataLoader {
     MediaList ml7 = new MediaList(testuser1, "My favorite adventure movies", "short description");
     ml7.setMediaListItems(
       Arrays.asList(
-        new MediaListItem(ml7, 1184918, "Robot", "Summary", testImgOne, "movies"),
-        new MediaListItem(ml7, 1184916, "Peanut", "Summary", testImgThree, "movies")
+        new MediaListItem(ml7, 27205, "Inception", "Summary", testImgOne, "movies"),
+        new MediaListItem(ml7, 157336, "Interstellar", "Summary", testImgThree, "movies")
       )
     );
     mediaListRepository.save(ml7);
@@ -234,72 +231,32 @@ public class DataLoader {
     MediaList ml8 = new MediaList(testuser1, "My favorite documentary movies", "short description");
     ml8.setMediaListItems(
       Arrays.asList(
-        new MediaListItem(ml8, 1184918, "Robot", "Summary", testImgOne, "movies"),
-        new MediaListItem(ml8, 1184917, "Smoothie", "Summary", testImgTwo, "movies"),
-        new MediaListItem(ml8, 1184916, "Peanut", "Summary", testImgThree, "movies")
+        new MediaListItem(ml8, 27205, "Inception", "Summary", testImgOne, "movies"),
+        new MediaListItem(ml8, 155, "The Dark Knight", "Summary", testImgTwo, "movies"),
+        new MediaListItem(ml8, 157336, "Interstellar", "Summary", testImgThree, "movies")
       )
     );
     mediaListRepository.save(ml8);
 
-    MediaList ml9 = new MediaList(testuser1, "My favorite mystery movies", "short description");
+    MediaList ml9 = new MediaList(testuser2, "My favorite mystery movies", "short description");
     ml9.setMediaListItems(
       Arrays.asList(
-        new MediaListItem(ml9, 1184918, "Robot", "Summary", testImgOne, "movies"),
-        new MediaListItem(ml9, 1184917, "Smoothie", "Summary", testImgTwo, "movies"),
-        new MediaListItem(ml9, 1184916, "Peanut", "Summary", testImgThree, "movies")
+        new MediaListItem(ml9, 27205, "Inception", "Summary", testImgOne, "movies"),
+        new MediaListItem(ml9, 155, "The Dark Knight", "Summary", testImgTwo, "movies"),
+        new MediaListItem(ml9, 157336, "Interstellar", "Summary", testImgThree, "movies")
       )
     );
     mediaListRepository.save(ml9);
 
-    MediaList ml10 = new MediaList(testuser1, "My favorite zombie movies", "short description");
+    MediaList ml10 = new MediaList(testuser3, "My favorite zombie movies", "short description");
     ml10.setMediaListItems(
       Arrays.asList(
-        new MediaListItem(ml10, 1184918, "Robot", "Summary", testImgOne, "movies"),
-        new MediaListItem(ml10, 1184917, "Smoothie", "Summary", testImgTwo, "movies"),
-        new MediaListItem(ml10, 1184916, "Peanut", "Summary", testImgThree, "movies")
+        new MediaListItem(ml10, 27205, "Inception", "Summary", testImgOne, "movies"),
+        new MediaListItem(ml10, 155, "The Dark Knight", "Summary", testImgTwo, "movies"),
+        new MediaListItem(ml10, 157336, "Interstellar", "Summary", testImgThree, "movies")
       )
     );
     mediaListRepository.save(ml10);
-
-    MediaList ml11 = new MediaList(testuser1, "My favorite thriller shows", "short description");
-    ml11.setMediaListItems(
-      Arrays.asList(
-        new MediaListItem(ml11, 1184918, "Robot", "Summary", testImgOne, "shows"),
-        new MediaListItem(ml11, 1184917, "Smoothie", "Summary", testImgTwo, "shows"),
-        new MediaListItem(ml11, 1184916, "Peanut", "Summary", testImgThree, "shows")
-      )
-    );
-    mediaListRepository.save(ml11);
-
-    MediaList ml12 = new MediaList(testuser1, "My favorite adventure shows", "short description");
-    ml12.setMediaListItems(
-      Arrays.asList(
-        new MediaListItem(ml12, 1184918, "Robot", "Summary", testImgOne, "shows"),
-        new MediaListItem(ml12, 1184917, "Smoothie", "Summary", testImgTwo, "shows"),
-        new MediaListItem(ml12, 1184916, "Peanut", "Summary", testImgThree, "shows")
-      )
-    );
-    mediaListRepository.save(ml12);
-
-    MediaList ml13 = new MediaList(testuser2, "My favorite comedy shows", "short description");
-    ml13.setMediaListItems(
-      Arrays.asList(
-        new MediaListItem(ml13, 1184918, "Robot", "Summary", testImgOne, "shows"),
-        new MediaListItem(ml13, 1184917, "Smoothie", "Summary", testImgTwo, "shows"),
-        new MediaListItem(ml13, 1184916, "Peanut", "Summary", testImgThree, "shows")
-      )
-    );
-    mediaListRepository.save(ml13);
-
-    MediaList ml14 = new MediaList(testuser3, "My favorite fantasy shows", "short description");
-    ml14.setMediaListItems(
-      Arrays.asList(
-        new MediaListItem(ml14, 1184918, "Robot", "Summary", testImgOne, "shows"),
-        new MediaListItem(ml14, 1184917, "Smoothie", "Summary", testImgTwo, "shows"),
-        new MediaListItem(ml14, 1184916, "Peanut", "Summary", testImgThree, "shows")
-      )
-    );
-    mediaListRepository.save(ml14);
 
     MediaList wl1 = new MediaList(testuser1);
     wl1.setTitle("Action movies to watch");
@@ -307,9 +264,9 @@ public class DataLoader {
     wl1.setSharedWith(List.of(2, 3, 4));
     wl1.setMediaListItems(
       Arrays.asList(
-        new MediaListItem(wl1, 1184918, "Robot", "Summary", testImgOne, "movies"),
-        new MediaListItem(wl1, 1184917, "Smoothie", "Summary", testImgTwo, "movies"),
-        new MediaListItem(wl1, 1184916, "Peanut", "Summary", testImgThree, "movies")
+        new MediaListItem(wl1, 27205, "Inception", "Summary", testImgOne, "movies"),
+        new MediaListItem(wl1, 155, "The Dark Knight", "Summary", testImgTwo, "movies"),
+        new MediaListItem(wl1, 157336, "Interstellar", "Summary", testImgThree, "movies")
       )
     );
     mediaListRepository.save(wl1);
@@ -320,9 +277,9 @@ public class DataLoader {
     wl2.setSharedWith(List.of(2, 3, 4));
     wl2.setMediaListItems(
       Arrays.asList(
-        new MediaListItem(wl2, 1184918, "Robot", "Summary", testImgOne, "movies"),
-        new MediaListItem(wl2, 1184917, "Smoothie", "Summary", testImgTwo, "movies"),
-        new MediaListItem(wl2, 1184916, "Peanut", "Summary", testImgThree,"movies")
+        new MediaListItem(wl2, 27205, "Inception", "Summary", testImgOne, "movies"),
+        new MediaListItem(wl2, 155, "The Dark Knight", "Summary", testImgTwo, "movies"),
+        new MediaListItem(wl2, 157336, "Interstellar", "Summary", testImgThree,"movies")
       )
     );
     mediaListRepository.save(wl2);
@@ -333,9 +290,9 @@ public class DataLoader {
     wl3.setSharedWith(List.of(3));
     wl3.setMediaListItems(
       Arrays.asList(
-        new MediaListItem(wl3, 1184918, "Robot", "Summary", testImgOne, "movies"),
-        new MediaListItem(wl3, 1184917, "Smoothie", "Summary", testImgTwo, "movies"),
-        new MediaListItem(wl3, 1184916, "Peanut", "Summary", testImgThree,"movies")
+        new MediaListItem(wl3, 27205, "Inception", "Summary", testImgOne, "movies"),
+        new MediaListItem(wl3, 155, "The Dark Knight", "Summary", testImgTwo, "movies"),
+        new MediaListItem(wl3, 157336, "Interstellar", "Summary", testImgThree,"movies")
       )
     );
     mediaListRepository.save(wl3);
@@ -344,7 +301,7 @@ public class DataLoader {
       "When did Inception come out?", 
       ChallengeType.TRIVIA, 
       testImgOne, 
-      500
+      100
     );
     challenge1.setOptions(
       Arrays.asList(
@@ -358,7 +315,7 @@ public class DataLoader {
       "When did The Dark Knight come out?", 
       ChallengeType.TRIVIA, 
       testImgTwo, 
-      500
+      100
     );
     challenge2.setOptions(
       Arrays.asList(
@@ -372,7 +329,7 @@ public class DataLoader {
       "When did Interstellar come out?", 
       ChallengeType.TRIVIA, 
       testImgThree, 
-      500
+      100
     );
     challenge3.setOptions(
       Arrays.asList(
@@ -386,36 +343,37 @@ public class DataLoader {
     challengeRepository.save(challenge2);
     challengeRepository.save(challenge3);
     
-    completedChallengeRepository.save(new CompletedChallenge(testuser1, challenge1, 500));
-    completedChallengeRepository.save(new CompletedChallenge(testuser1, challenge2, 500));
-    completedChallengeRepository.save(new CompletedChallenge(testuser2, challenge1, 500));
-    completedChallengeRepository.save(new CompletedChallenge(testuser3, challenge1, 500));
-    completedChallengeRepository.save(new CompletedChallenge(testuser4, challenge1, 500));
-    completedChallengeRepository.save(new CompletedChallenge(testuser5, challenge1, 500));
-    completedChallengeRepository.save(new CompletedChallenge(testuser6, challenge1, 500));
-    completedChallengeRepository.save(new CompletedChallenge(testuser7, challenge1, 500));
-    completedChallengeRepository.save(new CompletedChallenge(testuser8, challenge1, 500));
-    completedChallengeRepository.save(new CompletedChallenge(testuser9, challenge1, 500));
-    completedChallengeRepository.save(new CompletedChallenge(testuser10, challenge1, 500));
-    completedChallengeRepository.save(new CompletedChallenge(testuser11, challenge1, 500));
-    completedChallengeRepository.save(new CompletedChallenge(testuser12, challenge1, 500));
-    completedChallengeRepository.save(new CompletedChallenge(testuser13, challenge1, 500));
-    completedChallengeRepository.save(new CompletedChallenge(testuser14, challenge1, 500));
-    completedChallengeRepository.save(new CompletedChallenge(testuser15, challenge1, 500));
-    completedChallengeRepository.save(new CompletedChallenge(testuser16, challenge1, 500));
-    completedChallengeRepository.save(new CompletedChallenge(testuser17, challenge1, 500));
-    completedChallengeRepository.save(new CompletedChallenge(testuser18, challenge1, 500));
-    completedChallengeRepository.save(new CompletedChallenge(testuser19, challenge1, 500));
-    completedChallengeRepository.save(new CompletedChallenge(testuser20, challenge1, 500));
-    completedChallengeRepository.save(new CompletedChallenge(testuser21, challenge1, 500));
-    completedChallengeRepository.save(new CompletedChallenge(testuser22, challenge1, 500));
-    completedChallengeRepository.save(new CompletedChallenge(testuser23, challenge1, 500));
-    completedChallengeRepository.save(new CompletedChallenge(testuser24, challenge1, 500));
-    completedChallengeRepository.save(new CompletedChallenge(testuser25, challenge1, 500));
+    completedChallengeRepository.save(new CompletedChallenge(testuser1, challenge1, 300));
+    completedChallengeRepository.save(new CompletedChallenge(testuser2, challenge1, 100));
+    completedChallengeRepository.save(new CompletedChallenge(testuser3, challenge1, 100));
+    completedChallengeRepository.save(new CompletedChallenge(testuser4, challenge1, 100));
+    completedChallengeRepository.save(new CompletedChallenge(testuser5, challenge1, 100));
+    completedChallengeRepository.save(new CompletedChallenge(testuser6, challenge1, 100));
+    completedChallengeRepository.save(new CompletedChallenge(testuser7, challenge1, 100));
+    completedChallengeRepository.save(new CompletedChallenge(testuser8, challenge1, 100));
+    completedChallengeRepository.save(new CompletedChallenge(testuser9, challenge1, 100));
+    completedChallengeRepository.save(new CompletedChallenge(testuser10, challenge1, 100));
+    completedChallengeRepository.save(new CompletedChallenge(testuser11, challenge1, 100));
+    completedChallengeRepository.save(new CompletedChallenge(testuser12, challenge1, 100));
+    completedChallengeRepository.save(new CompletedChallenge(testuser13, challenge1, 100));
+    completedChallengeRepository.save(new CompletedChallenge(testuser14, challenge1, 100));
+    completedChallengeRepository.save(new CompletedChallenge(testuser15, challenge1, 100));
+    completedChallengeRepository.save(new CompletedChallenge(testuser16, challenge1, 100));
+    completedChallengeRepository.save(new CompletedChallenge(testuser17, challenge1, 100));
+    completedChallengeRepository.save(new CompletedChallenge(testuser18, challenge1, 100));
+    completedChallengeRepository.save(new CompletedChallenge(testuser19, challenge1, 100));
+    completedChallengeRepository.save(new CompletedChallenge(testuser20, challenge1, 100));
+    completedChallengeRepository.save(new CompletedChallenge(testuser21, challenge1, 100));
+    completedChallengeRepository.save(new CompletedChallenge(testuser22, challenge1, 100));
+    completedChallengeRepository.save(new CompletedChallenge(testuser23, challenge1, 100));
+    completedChallengeRepository.save(new CompletedChallenge(testuser24, challenge1, 100));
+    completedChallengeRepository.save(new CompletedChallenge(testuser25, challenge1, 100));
 
-
-    likeRepository.save(new Like(testuser1, ml13));
-    likeRepository.save(new Like(testuser6, ml13));
+    likeRepository.save(new Like(testuser1, ml10));
+    likeRepository.save(new Like(testuser6, ml10));
+    likeRepository.save(new Like(testuser7, ml10));
+    likeRepository.save(new Like(testuser1, ml9));
+    likeRepository.save(new Like(testuser6, ml9));
     likeRepository.save(new Like(testuser1, "movies", 1184918));
     likeRepository.save(new Like(testuser2, "movies", 1184918));
     likeRepository.save(new Like(testuser3, "movies", 1184918));

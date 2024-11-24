@@ -31,6 +31,8 @@ export default function MediaFilter({ genres }: { genres: any }): React.JSX.Elem
       if (queryGenre?.name) {
         setSelectedGenre(queryGenre.name);
       }
+    } else {
+      setSelectedGenre('Genres');
     }
   }, [genres, searchParams]);
 

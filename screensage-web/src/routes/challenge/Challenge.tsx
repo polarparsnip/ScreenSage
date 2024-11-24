@@ -179,12 +179,10 @@ export default function Challenge() {
     );
   }
 
-  console.log(challenge)
-
   if (hasCompleted) {
     return (
       <div className={s.completed}>
-        <h1>You have already completed this challenge</h1>
+        <h1>You have already completed today's challenge</h1>
       </div>
     );
   }
