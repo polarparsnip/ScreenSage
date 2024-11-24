@@ -112,7 +112,7 @@ public class MediaListController {
   }
 
   /**
-   * Creates a new wathlist for the authenticated user. 
+   * Creates a new watchlist for the authenticated user. 
    * 
    * @param mediaListRequest  the request payload containing watchlist details
    * @return                  a ResponseEntity containging the newly created watchlist
