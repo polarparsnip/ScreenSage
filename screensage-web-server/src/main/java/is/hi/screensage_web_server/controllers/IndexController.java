@@ -93,11 +93,6 @@ public class IndexController {
           "description", "Add a review for a movie"
       ),
       Map.of(
-        "path", "/movies/genres",
-        "method", "GET",
-        "description", "Get all movie genres available"
-      ),
-      Map.of(
         "path", "/movies/{id}/recommendations",
         "method", "GET",
         "description", "Get recommendations for a movie by ID"
@@ -106,6 +101,11 @@ public class IndexController {
         "path", "/movies/{id}/likes",
         "method", "POST",
         "description", "Adds a like for a movie by ID"
+      ),
+      Map.of(
+        "path", "/movies/genres",
+        "method", "GET",
+        "description", "Get all movie genres available"
       ),
       
       // Shows Endpoints
@@ -130,11 +130,6 @@ public class IndexController {
           "description", "Add a review for a show"
       ),
       Map.of(
-        "path", "/shows/genres",
-        "method", "GET",
-        "description", "Get all show genres available"
-      ),
-      Map.of(
         "path", "/shows/{id}/recommendations",
         "method", "GET",
         "description", "Get recommendations for a show by ID"
@@ -143,6 +138,11 @@ public class IndexController {
         "path", "/shows/{id}/likes",
         "method", "POST",
         "description", "Adds a like for a show by ID"
+      ),
+      Map.of(
+        "path", "/shows/genres",
+        "method", "GET",
+        "description", "Get all show genres available"
       ),
       
       // Anime Endpoints
@@ -232,14 +232,14 @@ public class IndexController {
         "description", "Updates watchlist details by ID"
       ),
       Map.of(
-        "path", "/watchlists/{id}/shared_with",
-        "method", "PATCH",
-        "description", "Updates watchlist visibility by ID"
-      ),
-      Map.of(
         "path", "/watchlists/{id}",
         "method", "DELETE",
         "description", "Deletes watchlist by ID"
+      ),
+      Map.of(
+        "path", "/watchlists/{id}/shared_with",
+        "method", "PATCH",
+        "description", "Updates watchlist visibility by ID"
       )
     );
 
