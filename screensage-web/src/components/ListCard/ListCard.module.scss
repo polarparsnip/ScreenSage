@@ -175,8 +175,13 @@
   align-self: center;
   justify-self: center;
   height: auto;
-  width: 150px;
+  width: 60px;
   outline: 1px solid var(--color-text-primary);
+
+  @media screen and (width > 600px) {
+    width: 150px;
+  }
+
 }
 
 .items_likes_container {
