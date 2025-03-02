@@ -30,7 +30,12 @@ public class TmdbService {
     String url;
 
     if (searchQuery != null && !searchQuery.isEmpty()) {
-      url = UriComponentsBuilder.fromHttpUrl(String.format("https://api.themoviedb.org/3/search/%s", type))
+      url = UriComponentsBuilder.fromHttpUrl(
+        String.format(
+          "https://api.themoviedb.org/3/search/%s", 
+          type == "movie" ? "movie" : "tv"
+        )
+      )
         .queryParam("query", searchQuery)
         .queryParam("page", page)
         .queryParam("api_key", tmdbApiKey)
