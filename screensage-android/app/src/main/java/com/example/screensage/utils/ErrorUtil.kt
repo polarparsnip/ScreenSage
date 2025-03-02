@@ -1,4 +1,4 @@
-package com.example.screensage.Util
+package com.example.screensage.utils
 
 import org.json.JSONObject
 import retrofit2.Response

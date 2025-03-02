@@ -8,8 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.screensage.R
-import com.example.screensage.Util.ErrorUtil
-import com.example.screensage.Util.ToastUtil
+import com.example.screensage.utils.ErrorUtil
+import com.example.screensage.utils.ToastUtil
 import com.example.screensage.service.AuthManager
 import com.example.screensage.databinding.FragmentLoginBinding
 import com.example.screensage.network.LoginRequest

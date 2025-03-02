@@ -1,4 +1,4 @@
-package com.example.screensage.Util
+package com.example.screensage.utils
 
 import android.content.Context
 import android.widget.Toast

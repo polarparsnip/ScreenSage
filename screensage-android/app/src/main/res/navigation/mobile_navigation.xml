@@ -12,6 +12,26 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
+        android:id="@+id/nav_media"
+        android:name="com.example.screensage.ui.MediaFragment"
+        android:label="Media"
+        tools:layout="@layout/fragment_media">
+        <argument
+          android:name="mediaType"
+          app:argType="string"
+          android:defaultValue="movies" />
+    </fragment>
+    
+    <fragment
+      android:id="@+id/mediaDetailedFragment"
+      android:name="com.example.screensage.ui.MediaDetailedFragment"
+      android:label="Media">
+      <argument
+          android:name="mediaId"
+          app:argType="integer"/>
+    </fragment>
+
+    <fragment
         android:id="@+id/nav_gallery"
         android:name="com.example.screensage.ui.gallery.GalleryFragment"
         android:label="@string/menu_gallery"
