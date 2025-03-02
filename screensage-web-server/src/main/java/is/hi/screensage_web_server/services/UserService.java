@@ -258,6 +258,15 @@ public class UserService implements UserServiceInterface {
       throw new ResourceNotFoundException("User profile not found");
     }
 
+    try {
+      List<MediaListConcise> mlc = mediaListService.getAllUserMediaListsConcise(user.getId(), false);
+      List<MediaListConcise> wlc = mediaListService.getAllUserMediaListsConcise(user.getId(), true);
+      user.setLists(mlc);
+      user.setWatchlists(wlc);
+    } catch (Exception e) {
+      throw new RuntimeException(e.getMessage());
+    }
+
     int pageSize = 5;
     int page = 1;
     Page<Review> recentUserReviews = mediaService.getUserReviews(userId, page, pageSize);
