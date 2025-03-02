@@ -186,6 +186,17 @@ public class MediaController {
   }
 
   /**
+   * Retrieves a list of genres available for anime.
+   *
+   * @return {@link ResponseEntity} containing the available genres for anime.
+   */
+  @GetMapping("/anime/genres")
+  public ResponseEntity<?> getAnimeGenres() {
+    String genres = mediaService.getGenres("anime");
+    return ResponseEntity.ok(genres);
+  }
+
+  /**
    * Retrieves recommendations for a specific movie based on its ID.
    *
    * @param movieId the ID of the movie for which recommendations are requested (required).

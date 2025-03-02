@@ -1,5 +1,6 @@
 package is.hi.screensage_web_server.services;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,10 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import is.hi.screensage_web_server.config.CustomExceptions.ResourceNotFoundException;
 import is.hi.screensage_web_server.entities.Like;
@@ -107,7 +112,33 @@ public class MediaService implements MediaServiceInterface {
 
   @Override
   public String getGenres(String type) {
-    String genres = tmdbService.getGenres(type);
+
+    String genres = tmdbService.getGenres(type.equals("movie") ? "movie" : "tv");
+
+    if (type.equals("anime")) {
+      try {
+        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectNode rootNode = (ObjectNode) objectMapper.readTree(genres);
+        ArrayNode genresArray = (ArrayNode) rootNode.get("genres");
+
+        List<Integer> excludedGenres = Arrays.asList(16, 37, 99, 10763, 10764, 10767);
+        ArrayNode filteredGenres = objectMapper.createArrayNode();
+
+        for (JsonNode genre : genresArray) {
+          if (!excludedGenres.contains(genre.get("id").asInt())) {
+            filteredGenres.add(genre);
+          }
+        }
+
+        rootNode.set("genres", filteredGenres);
+        return objectMapper.writeValueAsString(rootNode);
+
+      } catch (Exception e) {
+        System.out.println("Error occured while parsing genres: " + e.getMessage());
+        return genres;
+      }
+    }
+
     return genres;
   }
 
