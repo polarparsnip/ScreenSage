@@ -33,6 +33,7 @@ public class MediaDetailed {
   private int budget;
   private List<Genre> genres;
   private String homepage;
+  @JsonIgnore
   private String imdb_id;
   private List<String> origin_country;
   private List<ProductionCompany> production_companies;
