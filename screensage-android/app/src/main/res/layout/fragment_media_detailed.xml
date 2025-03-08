@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
@@ -29,6 +30,15 @@
             android:textStyle="bold"
             android:paddingTop="8dp"/>
 
+        <TextView
+            android:id="@+id/mediaExtraInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@android:color/darker_gray"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="4dp"/>
+
         <RatingBar
             android:id="@+id/mediaRatingBar"
             android:layout_width="wrap_content"
@@ -39,10 +49,101 @@
             android:paddingTop="6dp"/>
 
         <TextView
+            android:id="@+id/mediaGenres"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@android:color/darker_gray"
+            android:layout_marginTop="4dp"/>
+
+        <TextView
             android:id="@+id/mediaOverview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:paddingTop="8dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/reviewRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="32dp"
+            android:nestedScrollingEnabled="false"
+            android:scrollbars="vertical"/>
+
+        <LinearLayout
+            android:id="@+id/reviewPaginationLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_margin="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/reviewRecyclerView">
+
+            <Button
+                android:id="@+id/btnPreviousReviews"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Previous"
+                android:visibility="gone"
+                android:layout_margin="8dp"
+                android:enabled="false" />
+
+            <Button
+                android:id="@+id/btnNextReviews"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Next"
+                android:layout_margin="8dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/reviewFormContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="12dp"
+            android:background="@drawable/card_shadow">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Write a Review"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:paddingBottom="4dp"/>
+
+            <RatingBar
+                android:id="@+id/reviewRatingBarInput"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:numStars="5"
+                android:stepSize="0.5"
+                android:isIndicator="false"
+                android:paddingBottom="4dp"/>
+
+            <EditText
+                android:id="@+id/reviewContentInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Write your review..."
+                android:minHeight="100dp"
+                android:gravity="top"
+                android:padding="8dp"/>
+
+            <Button
+                android:id="@+id/reviewSubmitButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Submit Review"
+                android:backgroundTint="@color/white"
+                android:textColor="@color/black"
+                android:paddingTop="8dp"/>
+        </LinearLayout>
+
     </LinearLayout>
 </ScrollView>
