@@ -25,6 +25,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Multipart
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
@@ -90,6 +91,16 @@ data class ReviewRequest(
     val content: String
 )
 
+@Serializable
+data class UsernameRequest(
+    val username: String
+)
+
+@Serializable
+data class PasswordRequest(
+    val password: String
+)
+
 interface NetworkService {
     @GET("/")
     suspend fun getIndex(): Response<IndexApiResponse>
@@ -143,6 +154,29 @@ interface NetworkService {
         @Path("id") id: Int,
         @Body request: ReviewRequest
     ): Response<Review>
+
+    @GET("/users/profile")
+    suspend fun getUserProfile(
+        @Header("Authorization") token: String
+    ): Response<User>
+
+    @PATCH("/users/profile/username")
+    suspend fun updateUsername(
+        @Header("Authorization") token: String,
+        @Body request: UsernameRequest
+    ): Response<JWTPayload>
+
+    @PATCH("/users/profile/password")
+    suspend fun updatePassword(
+        @Header("Authorization") token: String,
+        @Body request: PasswordRequest
+    ): Response<User>
+
+    @PATCH("/users/profile/image")
+    suspend fun updateProfileImage(
+        @Header("Authorization") token: String,
+        @Part image: MultipartBody.Part? = null
+    ): Response<User>
 }
 
 object ScreensageApi {

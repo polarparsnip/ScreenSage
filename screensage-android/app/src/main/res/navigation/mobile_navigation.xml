@@ -43,6 +43,12 @@
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_slideshow" />
 
+    <fragment
+        android:id="@+id/profile"
+        android:name="com.example.screensage.ui.UserProfileFragment"
+        android:label="@string/action_profile"
+        tools:layout="@layout/fragment_user_profile" />
+
     <!-- Login/Register Screens (Accessible Without Login) -->
     <fragment
         android:id="@+id/loginFragment"
