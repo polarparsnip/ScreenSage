@@ -29,7 +29,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import is.hi.screensage_web_server.config.CustomExceptions.InvalidInputException;
 import is.hi.screensage_web_server.config.CustomExceptions.ResourceNotFoundException;
 import is.hi.screensage_web_server.config.CustomExceptions.UnauthorizedException;
-import is.hi.screensage_web_server.entities.Review;
 import is.hi.screensage_web_server.entities.Users;
 import is.hi.screensage_web_server.interfaces.MediaListServiceInterface;
 import is.hi.screensage_web_server.interfaces.MediaServiceInterface;
@@ -37,13 +36,13 @@ import is.hi.screensage_web_server.interfaces.UserServiceInterface;
 import is.hi.screensage_web_server.models.JwtPayload;
 import is.hi.screensage_web_server.models.MediaListConcise;
 import is.hi.screensage_web_server.models.UserPrincipal;
-import is.hi.screensage_web_server.models.UserProfile;
 import is.hi.screensage_web_server.models.UserScore;
 import is.hi.screensage_web_server.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 
 /**
- * Service for user-related services, including user registration and authentication.
+ * Service for user-related services, including user registration and
+ * authentication.
  */
 @Service
 public class UserService implements UserServiceInterface {
@@ -55,7 +54,7 @@ public class UserService implements UserServiceInterface {
 
   @Autowired
   private JWTService jwtService;
-  
+
   @Autowired
   private Cloudinary cloudinary;
 
@@ -77,18 +76,19 @@ public class UserService implements UserServiceInterface {
   private final int MIN_PASSWORD_LENGTH = 2;
   private final int MAX_PASSWORD_LENGTH = 30;
 
-
   /**
    * Registers a new user with the provided username and password.
    *
-   * Performs validation checks on the username and password, ensuring they are not empty, 
-   * do not contain whitespace characters, and meet specified length requirements. 
-   * If the username already exists in the repository, it returns a bad request response.
+   * Performs validation checks on the username and password, ensuring they are
+   * not empty,
+   * do not contain whitespace characters, and meet specified length requirements.
+   * If the username already exists in the repository, it returns a bad request
+   * response.
    * 
    * @param username the username of the new user
    * @param password the password of the new user
    * @return The newly created user object
-   * @throws IOException 
+   * @throws IOException
    */
   @Override
   public Users register(String username, String password) {
@@ -104,11 +104,13 @@ public class UserService implements UserServiceInterface {
 
     if (username.length() < MIN_USERNAME_LENGTH || username.length() > MAX_USERNAME_LENGTH) {
       System.out.println("Username must be between");
-      throw new InvalidInputException("Username must be between " + MIN_USERNAME_LENGTH + " and " + MAX_USERNAME_LENGTH + " characters.");
+      throw new InvalidInputException(
+          "Username must be between " + MIN_USERNAME_LENGTH + " and " + MAX_USERNAME_LENGTH + " characters.");
     }
     if (password.length() < MIN_PASSWORD_LENGTH || password.length() > MAX_PASSWORD_LENGTH) {
       System.out.println("Password must be between");
-      throw new InvalidInputException("Password must be between " + MIN_PASSWORD_LENGTH + " and " + MAX_PASSWORD_LENGTH + " characters.");
+      throw new InvalidInputException(
+          "Password must be between " + MIN_PASSWORD_LENGTH + " and " + MAX_PASSWORD_LENGTH + " characters.");
     }
 
     if (userRepository.findByUsername(username) != null) {
@@ -135,14 +137,17 @@ public class UserService implements UserServiceInterface {
   /**
    * Registers a new user with the provided username, password and profile image.
    *
-   * Performs validation checks on the username and password, ensuring they are not empty, 
-   * do not contain whitespace characters, and meet specified length requirements. 
-   * If the username already exists in the repository, it returns a bad request response.
+   * Performs validation checks on the username and password, ensuring they are
+   * not empty,
+   * do not contain whitespace characters, and meet specified length requirements.
+   * If the username already exists in the repository, it returns a bad request
+   * response.
    * 
-   * Then generates a url and id for the hosted image by uploading the it to cloudinary.
+   * Then generates a url and id for the hosted image by uploading the it to
+   * cloudinary.
    * 
-   * @param username the username of the new user
-   * @param password the password of the new user
+   * @param username  the username of the new user
+   * @param password  the password of the new user
    * @param imageFile the profile image file of the new user
    * @return The newly created user object
    */
@@ -160,11 +165,13 @@ public class UserService implements UserServiceInterface {
 
     if (username.length() < MIN_USERNAME_LENGTH || username.length() > MAX_USERNAME_LENGTH) {
       System.out.println("Username must be between");
-      throw new InvalidInputException("Username must be between " + MIN_USERNAME_LENGTH + " and " + MAX_USERNAME_LENGTH + " characters.");
+      throw new InvalidInputException(
+          "Username must be between " + MIN_USERNAME_LENGTH + " and " + MAX_USERNAME_LENGTH + " characters.");
     }
     if (password.length() < MIN_PASSWORD_LENGTH || password.length() > MAX_PASSWORD_LENGTH) {
       System.out.println("Password must be between");
-      throw new InvalidInputException("Password must be between " + MIN_PASSWORD_LENGTH + " and " + MAX_PASSWORD_LENGTH + " characters.");
+      throw new InvalidInputException(
+          "Password must be between " + MIN_PASSWORD_LENGTH + " and " + MAX_PASSWORD_LENGTH + " characters.");
     }
 
     if (userRepository.findByUsername(username) != null) {
@@ -198,15 +205,17 @@ public class UserService implements UserServiceInterface {
   /**
    * Authenticates a user using the provided username and password.
    *
-   * If the authentication is successful, it generates a JWT token for the user and returns it in the response.
-   * Performs validation on the username and password, ensuring they are not empty and do not contain whitespace characters.
+   * If the authentication is successful, it generates a JWT token for the user
+   * and returns it in the response.
+   * Performs validation on the username and password, ensuring they are not empty
+   * and do not contain whitespace characters.
    * 
    * @param username the username of the user attempting to log in
    * @param password the password of the user attempting to log in
    * @return JwtPayload containing the authorized user and a JWT token
    */
   @Override
-  public JwtPayload login(String username, String password) { 
+  public JwtPayload login(String username, String password) {
     if (username == null || username.trim().isEmpty() || username.matches(".*\\s.*")) {
       System.out.println("Username cannot be empty");
       throw new InvalidInputException("Username cannot be empty and must not contain whitespace characters.");
@@ -215,11 +224,10 @@ public class UserService implements UserServiceInterface {
       System.out.println("Password cannot be empty");
       throw new InvalidInputException(("Password cannot be empty and must not contain whitespace characters."));
     }
-    
+
     try {
       Authentication authentication = authManager.authenticate(
-        new UsernamePasswordAuthenticationToken(username, password)
-      );
+          new UsernamePasswordAuthenticationToken(username, password));
 
       String token = jwtService.generateToken(username);
       UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
@@ -234,7 +242,7 @@ public class UserService implements UserServiceInterface {
       } catch (Exception e) {
         throw new RuntimeException(e.getMessage());
       }
-      
+
       JwtPayload jwtPayload = new JwtPayload(authenticatedUser.getUser(), token);
 
       return jwtPayload;
@@ -245,9 +253,8 @@ public class UserService implements UserServiceInterface {
 
   }
 
-  
   @Override
-  public UserProfile getUserProfile() {
+  public Users getUserProfile() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
     int userId = authenticatedUser.getId();
@@ -267,17 +274,7 @@ public class UserService implements UserServiceInterface {
       throw new RuntimeException(e.getMessage());
     }
 
-    int pageSize = 5;
-    int page = 1;
-    Page<Review> recentUserReviews = mediaService.getUserReviews(userId, page, pageSize);
-
-    UserProfile userProfile = new UserProfile(user);
-
-    if (recentUserReviews.hasContent()) {
-      userProfile.setRecentReviews(recentUserReviews.getContent());
-    }
-
-    return userProfile;
+    return user;
   }
 
   @Transactional
@@ -285,13 +282,11 @@ public class UserService implements UserServiceInterface {
   public JwtPayload updateUsername(int userId, String newUsername) {
     if (newUsername == null || newUsername.trim().isEmpty() || newUsername.matches(".*\\s.*")) {
       throw new InvalidInputException(
-        "Username cannot be empty and must not contain whitespace characters."
-      );
+          "Username cannot be empty and must not contain whitespace characters.");
     }
     if (newUsername.length() < MIN_USERNAME_LENGTH || newUsername.length() > MAX_USERNAME_LENGTH) {
       throw new InvalidInputException(
-        "Username must be between " + MIN_USERNAME_LENGTH + " and " + MAX_USERNAME_LENGTH + " characters."
-      );
+          "Username must be between " + MIN_USERNAME_LENGTH + " and " + MAX_USERNAME_LENGTH + " characters.");
     }
     if (userRepository.findByUsername(newUsername) != null) {
       throw new InvalidInputException("Username already exists.");
@@ -318,19 +313,16 @@ public class UserService implements UserServiceInterface {
     return jwtPayload;
   }
 
-
   @Transactional
   @Override
-  public Users updatePassword(int userId, String newPassword){
+  public Users updatePassword(int userId, String newPassword) {
     if (newPassword == null || newPassword.trim().isEmpty() || newPassword.matches(".*\\s.*")) {
       throw new InvalidInputException(
-        "Password cannot be empty and must not contain whitespace characters."
-      );
+          "Password cannot be empty and must not contain whitespace characters.");
     }
-    if (newPassword.length() < MIN_PASSWORD_LENGTH || newPassword.length() > MAX_PASSWORD_LENGTH){
+    if (newPassword.length() < MIN_PASSWORD_LENGTH || newPassword.length() > MAX_PASSWORD_LENGTH) {
       throw new InvalidInputException(
-        "Password must be between " + MIN_PASSWORD_LENGTH + " and " + MAX_PASSWORD_LENGTH + " characters."
-      );
+          "Password must be between " + MIN_PASSWORD_LENGTH + " and " + MAX_PASSWORD_LENGTH + " characters.");
     }
 
     Users user = findUser(userId);
@@ -342,7 +334,7 @@ public class UserService implements UserServiceInterface {
     user.setPasswordLength(newPassword.length());
     user.setPassword(encoder.encode(newPassword));
 
-    try{
+    try {
       userRepository.save(user);
     } catch (Exception e) {
       System.out.println("Error occured while saving user: " + e.getMessage());
@@ -362,7 +354,7 @@ public class UserService implements UserServiceInterface {
 
     String publicId = user.getProfileImgId();
     Map<String, Object> uploadOptions = new HashMap<>();
-    
+
     if (publicId != null) {
       uploadOptions.put("public_id", publicId);
       uploadOptions.put("overwrite", true);
@@ -381,7 +373,7 @@ public class UserService implements UserServiceInterface {
       ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error occurred while saving profile image.");
     }
 
-    try{
+    try {
       userRepository.save(user);
     } catch (Exception e) {
       System.out.println("Error occured while saving user: " + e.getMessage());
@@ -428,7 +420,7 @@ public class UserService implements UserServiceInterface {
     Users user = userRepository.getReferenceById(userId);
     return user;
   }
-  
+
   public List<Users> searchUsersByUsername(String query) {
     return userRepository.findByUsernameContainingIgnoreCase(query);
   }
