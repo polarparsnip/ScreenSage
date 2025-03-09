@@ -17,6 +17,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -177,6 +178,19 @@ interface NetworkService {
         @Header("Authorization") token: String,
         @Part image: MultipartBody.Part? = null
     ): Response<User>
+
+    @GET("/users/profile/reviews")
+    suspend fun getUserReviews(
+        @Header("Authorization") token: String,
+        @Query("page") page: Int = 1
+    ): Response<ReviewResponse>
+
+    @POST("/{mediaType}/{id}/likes")
+    suspend fun likeMedia(
+        @Header("Authorization") token: String,
+        @Path("mediaType") media: String,
+        @Path("id") id: Int
+    ): Response<ResponseBody>
 }
 
 object ScreensageApi {

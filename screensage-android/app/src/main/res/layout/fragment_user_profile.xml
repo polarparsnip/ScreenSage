@@ -1,78 +1,133 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
-
-    <ImageView
-        android:id="@+id/profileImage"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="32dp"
-        android:contentDescription="Profile image" />
-
-    <TextView
-        android:id="@+id/usernameText"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:textSize="22sp"
-        android:layout_marginTop="16dp"/>
-
-    <EditText
-        android:id="@+id/usernameInput"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:visibility="gone"
-        android:hint="Enter new username"
-        android:textSize="22sp"/>
-
-    <TextView
-        android:id="@+id/passwordText"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:textSize="22sp"
-        android:layout_marginTop="16dp"/>
-
-    <EditText
-        android:id="@+id/passwordInput"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:visibility="gone"
-        android:hint="Enter new password"
-        android:textSize="22sp"
-        android:inputType="textPassword"/>
+    android:fillViewport="true">
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:layout_marginTop="16dp"
-        android:orientation="horizontal">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="16dp">
 
-        <Button
-            android:id="@+id/saveProfileButton"
+        <ImageView
+            android:id="@+id/profileImage"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="32dp"
+            android:contentDescription="Profile image" />
+
+        <TextView
+            android:id="@+id/usernameText"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textSize="22sp"
+            android:layout_marginTop="16dp" />
+
+        <EditText
+            android:id="@+id/usernameInput"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:visibility="gone"
+            android:hint="Enter new username"
+            android:textSize="22sp" />
+
+        <TextView
+            android:id="@+id/passwordText"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textSize="22sp"
+            android:layout_marginTop="16dp" />
+
+        <EditText
+            android:id="@+id/passwordInput"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:visibility="gone"
+            android:hint="Enter new password"
+            android:textSize="22sp"
+            android:inputType="textPassword" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/saveProfileButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Save"
+                android:layout_marginEnd="8dp"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/editProfileButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Edit Profile" />
+
+        </LinearLayout>
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Save"
-            android:layout_marginEnd="8dp"
-            android:visibility="gone" />
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textSize="22sp"
+            android:layout_marginTop="48dp"
+            android:textStyle="bold"
+            android:text="Recent reviews" />
 
-        <Button
-            android:id="@+id/editProfileButton"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/userReviewsRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="24dp"
+            android:nestedScrollingEnabled="false"
+            android:scrollbars="vertical" />
+
+        <LinearLayout
+            android:id="@+id/userReviewsPaginationLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Edit Profile" />
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_margin="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/userReviewsRecyclerView">
+
+            <Button
+                android:id="@+id/btnPreviousUserReviews"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Previous"
+                android:visibility="gone"
+                android:layout_margin="8dp"
+                android:enabled="false" />
+
+            <Button
+                android:id="@+id/btnNextUserReviews"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Next"
+                android:layout_margin="8dp" />
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+</ScrollView>

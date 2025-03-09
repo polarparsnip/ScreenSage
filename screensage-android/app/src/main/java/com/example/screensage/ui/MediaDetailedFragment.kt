@@ -26,6 +26,7 @@ import com.example.screensage.utils.MediaAdapter
 import com.example.screensage.utils.ReviewAdapter
 import com.example.screensage.utils.ToastUtil
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 class MediaDetailedFragment : Fragment() {
     private var _binding: FragmentMediaDetailedBinding? = null
@@ -53,6 +54,10 @@ class MediaDetailedFragment : Fragment() {
     private lateinit var reviewContentInput: EditText
     private lateinit var reviewSubmitButton: Button
 
+    private lateinit var likeButton: ImageView
+    private lateinit var likeCountTextView: TextView
+    private var isLiked = false
+    private var likeCount = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -94,6 +99,9 @@ class MediaDetailedFragment : Fragment() {
         reviewContentInput = view.findViewById(R.id.reviewContentInput)
         reviewSubmitButton = view.findViewById(R.id.reviewSubmitButton)
 
+        likeButton = view.findViewById(R.id.likeButton)
+        likeCountTextView = view.findViewById(R.id.likeCount)
+
         reviewSubmitButton.setOnClickListener {
             submitReview()
         }
@@ -103,6 +111,10 @@ class MediaDetailedFragment : Fragment() {
 
         binding.btnNextReviews.setOnClickListener { goToNextPage() }
         binding.btnPreviousReviews.setOnClickListener { goToPreviousPage() }
+
+        likeButton.setOnClickListener {
+            toggleLike()
+        }
     }
 
     private fun fetchMediaDetails() {
@@ -196,6 +208,30 @@ class MediaDetailedFragment : Fragment() {
         }
     }
 
+    private fun toggleLike() {
+        val token = AuthManager.getToken(requireContext()) ?: return
+
+        lifecycleScope.launch {
+            try {
+                val response = ScreensageApi.retrofitService.likeMedia("Bearer $token", mediaType ?: "movies", mediaId ?: 0)
+
+                if (response.isSuccessful) {
+                    isLiked = !isLiked
+                    likeCount = if (isLiked) likeCount + 1 else likeCount - 1
+                    updateLikeButton()
+                    val message = response.body()?.string()
+                    ToastUtil.showToast(requireContext(), message ?: "Media liked successfully")
+
+                } else {
+                    val errorMessage = ErrorUtil.parseApiErrorMessage(response)
+                    ToastUtil.showToast(requireContext(), errorMessage)
+                }
+            } catch (e: Exception) {
+                ToastUtil.showToast(requireContext(), "Network error: ${e.message}")
+            }
+        }
+    }
+
     private fun updateUI(media: MediaDetailed) {
         mediaTitle.text = media.title ?: media.name ?: "No title"
         mediaOverview.text = media.overview ?: "No Overview"
@@ -211,6 +247,11 @@ class MediaDetailedFragment : Fragment() {
         Glide.with(this)
             .load("https://image.tmdb.org/t/p/w500${media.posterPath}")
             .into(mediaPoster)
+
+        likeCount = media.likeCount ?: 0
+        isLiked = media.userHasLiked ?: false
+
+        updateLikeButton()
     }
 
     private fun goToNextPage() {
@@ -233,5 +274,14 @@ class MediaDetailedFragment : Fragment() {
 
         binding.btnNextReviews.visibility = if (currentPage < totalPages) View.VISIBLE else View.GONE
         binding.btnNextReviews.isEnabled = currentPage < totalPages
+    }
+
+    private fun updateLikeButton() {
+        if (isLiked) {
+            likeButton.setImageResource(R.drawable.thumbs_up_filled)
+        } else {
+            likeButton.setImageResource(R.drawable.thumbs_up_outline)
+        }
+        likeCountTextView.text = String.format(Locale.getDefault(), "%d", likeCount)
     }
 }
