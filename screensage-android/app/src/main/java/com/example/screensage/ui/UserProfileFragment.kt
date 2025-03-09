@@ -10,6 +10,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.screensage.R
 import com.example.screensage.databinding.FragmentUserProfileBinding
@@ -18,6 +20,7 @@ import com.example.screensage.network.ScreensageApi
 import com.example.screensage.network.UsernameRequest
 import com.example.screensage.service.AuthManager
 import com.example.screensage.utils.ErrorUtil
+import com.example.screensage.utils.ReviewAdapter
 import com.example.screensage.utils.ToastUtil
 import kotlinx.coroutines.launch
 
@@ -41,6 +44,11 @@ class UserProfileFragment : Fragment() {
 
     private var editMode = false
 
+    private lateinit var userReviewsRecyclerView: RecyclerView
+    private lateinit var reviewAdapter: ReviewAdapter
+    private var totalPages = 1
+    private var currentPage = 1
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -63,7 +71,11 @@ class UserProfileFragment : Fragment() {
         saveProfileButton = view.findViewById(R.id.saveProfileButton)
         editProfileButton = view.findViewById(R.id.editProfileButton)
 
-        loadUserProfile()
+        userReviewsRecyclerView = view.findViewById(R.id.userReviewsRecyclerView)
+        userReviewsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        reviewAdapter = ReviewAdapter(mutableListOf())
+        userReviewsRecyclerView.adapter = reviewAdapter
 
         editProfileButton.setOnClickListener {
             editMode = !editMode
@@ -74,6 +86,12 @@ class UserProfileFragment : Fragment() {
         saveProfileButton.setOnClickListener {
             saveProfileChanges()
         }
+
+        binding.btnNextUserReviews.setOnClickListener { goToNextPage() }
+        binding.btnPreviousUserReviews.setOnClickListener { goToPreviousPage() }
+
+        loadUserProfile()
+        fetchUserReviews(currentPage)
     }
 
     private fun loadUserProfile() {
@@ -183,4 +201,52 @@ class UserProfileFragment : Fragment() {
             }
         }
     }
+
+    private fun fetchUserReviews(page: Int) {
+        val token = AuthManager.getToken(requireContext()) ?: return
+        lifecycleScope.launch {
+            try {
+                val response = ScreensageApi.retrofitService.getUserReviews(
+                    "Bearer $token",
+                    page
+                )
+                if (response.isSuccessful) {
+                    response.body()?.let { reviewResponse ->
+                        println("concon: " + reviewResponse.content)
+                        reviewAdapter.updateReviews(reviewResponse.content)
+                        totalPages = reviewResponse.totalPages
+                    }
+                    updateButtonVisibility()
+                } else {
+                    val errorMessage = ErrorUtil.parseApiErrorMessage(response)
+                    ToastUtil.showToast(requireContext(), errorMessage)
+                }
+            } catch (e: Exception) {
+                ToastUtil.showToast(requireContext(), "Network error: ${e.message}")
+            }
+        }
+    }
+
+    private fun goToNextPage() {
+        if (currentPage < totalPages) {
+            currentPage++
+            fetchUserReviews(currentPage)
+        }
+    }
+
+    private fun goToPreviousPage() {
+        if (currentPage > 1) {
+            currentPage--
+            fetchUserReviews(currentPage)
+        }
+    }
+
+    private fun updateButtonVisibility() {
+        binding.btnPreviousUserReviews.visibility = if (currentPage > 1) View.VISIBLE else View.GONE
+        binding.btnPreviousUserReviews.isEnabled = currentPage > 1
+
+        binding.btnNextUserReviews.visibility = if (currentPage < totalPages) View.VISIBLE else View.GONE
+        binding.btnNextUserReviews.isEnabled = currentPage < totalPages
+    }
+
 }
