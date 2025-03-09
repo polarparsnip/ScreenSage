@@ -52,6 +52,12 @@ class LoginFragment : Fragment() {
         }
     }
 
+    /**
+     * Attempts to log in the user by making a network request with the provided credentials.
+     *
+     * @param username The username entered by the user.
+     * @param password The password entered by the user.
+     */
     private fun loginUser(username: String, password: String) {
         lifecycleScope.launch {
             try {

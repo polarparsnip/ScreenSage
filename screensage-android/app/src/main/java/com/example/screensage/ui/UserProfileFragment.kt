@@ -94,6 +94,9 @@ class UserProfileFragment : Fragment() {
         fetchUserReviews(currentPage)
     }
 
+    /**
+     * Loads the user profile from the API and updates the UI accordingly.
+     */
     private fun loadUserProfile() {
         val token = AuthManager.getToken(requireContext()) ?: return
 
@@ -119,6 +122,10 @@ class UserProfileFragment : Fragment() {
         }
     }
 
+    /**
+     * Updates the UI elements with the current user profile data.
+     * Sets the username, password placeholder, and profile image in the UI.
+     */
     private fun updateUI() {
         usernameText.text = currentUsername
         passwordText.text = currentPasswordPlaceholder
@@ -128,6 +135,13 @@ class UserProfileFragment : Fragment() {
             .into(profileImage)
     }
 
+    /**
+     * Toggles the edit mode for the user profile.
+     * When in edit mode, displays input fields for the username and password.
+     * When not in edit mode, hides the inputs and shows the read-only text fields.
+     *
+     * @param isEditing Boolean value indicating whether edit mode should be enabled or disabled.
+     */
     private fun toggleEditMode(isEditing: Boolean) {
         usernameInput.visibility = if (isEditing) View.VISIBLE else View.GONE
         passwordInput.visibility = if (isEditing) View.VISIBLE else View.GONE
@@ -137,10 +151,14 @@ class UserProfileFragment : Fragment() {
 
         if (isEditing) {
             usernameInput.setText(currentUsername)
-            // passwordInput.setText("****") // Placeholder for the password
         }
     }
 
+    /**
+     * Saves the profile changes by updating the username and/or password if they have changed,
+     * then updates the UI accordingly.
+     * If the username is updated successfully, it also updates the authentication token.
+     */
     private fun saveProfileChanges() {
         val newUsername = usernameInput.text.toString()
         val newPassword = passwordInput.text.toString()
@@ -202,6 +220,10 @@ class UserProfileFragment : Fragment() {
         }
     }
 
+    /**
+     * Fetches reviews for the current user from the API.
+     * @param page The page number to fetch.
+     */
     private fun fetchUserReviews(page: Int) {
         val token = AuthManager.getToken(requireContext()) ?: return
         lifecycleScope.launch {
@@ -227,6 +249,9 @@ class UserProfileFragment : Fragment() {
         }
     }
 
+    /**
+     * Moves to the next page of user reviews if possible.
+     */
     private fun goToNextPage() {
         if (currentPage < totalPages) {
             currentPage++
@@ -234,6 +259,9 @@ class UserProfileFragment : Fragment() {
         }
     }
 
+    /**
+     * Moves to the previous page of user reviews if possible.
+     */
     private fun goToPreviousPage() {
         if (currentPage > 1) {
             currentPage--
@@ -241,6 +269,9 @@ class UserProfileFragment : Fragment() {
         }
     }
 
+    /**
+     * Updates the visibility and enabled state of the pagination buttons for the user reviews.
+     */
     private fun updateButtonVisibility() {
         binding.btnPreviousUserReviews.visibility = if (currentPage > 1) View.VISIBLE else View.GONE
         binding.btnPreviousUserReviews.isEnabled = currentPage > 1

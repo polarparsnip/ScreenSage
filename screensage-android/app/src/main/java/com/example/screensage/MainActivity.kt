@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity() {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
-            setOf(R.id.nav_home, R.id.nav_media, R.id.nav_gallery, R.id.nav_slideshow),
+            setOf(R.id.nav_home, R.id.nav_media),
             drawerLayout
         )
 
@@ -95,15 +95,7 @@ class MainActivity : AppCompatActivity() {
                     }
                     navController.navigate(R.id.nav_media, bundle)
                 }
-
-
-                R.id.nav_slideshow -> {
-                    val bundle = Bundle().apply {
-                        putString("mediaType", "slideshow")
-                    }
-                    navController.navigate(R.id.nav_slideshow, bundle)
-                }
-                R.id.nav_gallery -> navController.navigate(R.id.nav_gallery)
+                
             }
             drawerLayout.closeDrawers()
             true
@@ -131,10 +123,6 @@ class MainActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.action_profile -> {
                 findNavController(R.id.nav_host_fragment_content_main).navigate(R.id.profile)
-                true
-            }
-            R.id.action_settings -> {
-                findNavController(R.id.nav_host_fragment_content_main).navigate(R.id.nav_gallery)
                 true
             }
             R.id.action_logout -> {

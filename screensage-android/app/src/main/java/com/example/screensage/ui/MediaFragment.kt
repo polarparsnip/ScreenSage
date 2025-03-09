@@ -88,6 +88,10 @@ class MediaFragment : Fragment() {
         binding.btnPrevious.setOnClickListener { goToPreviousPage() }
     }
 
+    /**
+     * Fetches the list of available genres for the selected media type.
+     * Updates the genre dropdown menu with the retrieved genres.
+     */
     private fun fetchGenres() {
         val token = AuthManager.getToken(requireContext()) ?: return
         lifecycleScope.launch {
@@ -118,6 +122,11 @@ class MediaFragment : Fragment() {
         }
     }
 
+    /**
+     * Fetches a paginated list of media items based on the selected genre and search query.
+     * Updates the RecyclerView with the retrieved media list.
+     * @param page The page number to fetch.
+     */
     private fun fetchMedia(page: Int) {
         val token = AuthManager.getToken(requireContext()) ?: return
         lifecycleScope.launch {
@@ -150,6 +159,10 @@ class MediaFragment : Fragment() {
         }
     }
 
+    /**
+     * Sets up the search view to filter media items based on user input.
+     * Implements debounce to optimize network requests.
+     */
     private fun setupSearchView() {
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -175,6 +188,10 @@ class MediaFragment : Fragment() {
         })
     }
 
+    /**
+     * Sets up the genre dropdown menu.
+     * Updates the media items when a genre is selected.
+     */
     private fun setupGenreDropdown() {
         binding.spinnerGenre.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
@@ -191,6 +208,9 @@ class MediaFragment : Fragment() {
         }
     }
 
+    /**
+     * Navigates to the next page of media items if available.
+     */
     private fun goToNextPage() {
         if (currentPage < totalPages) {
             currentPage++
@@ -198,6 +218,9 @@ class MediaFragment : Fragment() {
         }
     }
 
+    /**
+     * Navigates to the previous page of media items if available.
+     */
     private fun goToPreviousPage() {
         if (currentPage > 1) {
             currentPage--
@@ -205,6 +228,9 @@ class MediaFragment : Fragment() {
         }
     }
 
+    /**
+     * Updates the visibility and state of pagination buttons based on the current page.
+     */
     private fun updateButtonVisibility() {
         binding.btnPrevious.visibility = if (currentPage > 1) View.VISIBLE else View.GONE
         binding.btnPrevious.isEnabled = currentPage > 1

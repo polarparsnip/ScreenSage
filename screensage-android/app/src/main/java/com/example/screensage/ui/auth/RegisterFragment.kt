@@ -76,10 +76,20 @@ class RegisterFragment : Fragment() {
         _binding = null
     }
 
+    /**
+     * Creates a [RequestBody] for text data.
+     * @param value The string value to convert into a request body.
+     * @return The created [RequestBody].
+     */
     private fun createTextRequestBody(value: String): RequestBody {
         return value.toRequestBody("text/plain".toMediaTypeOrNull())
     }
 
+    /**
+     * Converts a file into a [MultipartBody.Part] for image uploads.
+     * @param file The image file to be uploaded.
+     * @return A [MultipartBody.Part] containing the image file or null if the file is not provided.
+     */
     private fun createMultipartBodyImagePart(file: File?): MultipartBody.Part? {
         return file?.let {
             val requestFile = it.asRequestBody("image/*".toMediaTypeOrNull())
@@ -87,6 +97,11 @@ class RegisterFragment : Fragment() {
         }
     }
 
+    /**
+     * Converts a [Uri] to a [File] for temporary storage.
+     * @param uri The URI of the selected image.
+     * @return A [File] containing the image data or null in case of failure.
+     */
     private fun uriToFile(uri: Uri): File? {
         val contentResolver: ContentResolver = requireContext().contentResolver
         val file = File(requireContext().cacheDir, "selected_image.jpg")
@@ -104,6 +119,10 @@ class RegisterFragment : Fragment() {
         return null
     }
 
+    /**
+     * Registers an activity result launcher to pick an image from the gallery.
+     * If the result is successful, the image is stored as a file and displayed.
+     */
     private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             result.data?.data?.let { uri ->
@@ -113,6 +132,12 @@ class RegisterFragment : Fragment() {
         }
     }
 
+    /**
+     * Sends a registration request to the API with the provided user details.
+     * @param username The username entered by the user.
+     * @param password The password entered by the user.
+     * @param imageFile The optional profile image file.
+     */
     private fun registerUser(username: String, password: String, imageFile: File? = null) {
         val usernamePart = createTextRequestBody(username)
         val passwordPart = createTextRequestBody(password)

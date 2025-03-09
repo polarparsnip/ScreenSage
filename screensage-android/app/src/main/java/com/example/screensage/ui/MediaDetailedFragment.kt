@@ -117,6 +117,9 @@ class MediaDetailedFragment : Fragment() {
         }
     }
 
+    /**
+     * Fetches media details from the API and updates the UI.
+     */
     private fun fetchMediaDetails() {
         val token = AuthManager.getToken(requireContext()) ?: return
         lifecycleScope.launch {
@@ -142,6 +145,10 @@ class MediaDetailedFragment : Fragment() {
         }
     }
 
+    /**
+     * Fetches reviews for the current media item from the API.
+     * @param page The page number to fetch.
+     */
     private fun fetchReviews(page: Int) {
         val token = AuthManager.getToken(requireContext()) ?: return
         lifecycleScope.launch {
@@ -168,6 +175,9 @@ class MediaDetailedFragment : Fragment() {
         }
     }
 
+    /**
+     * Submits a new review for the media item.
+     */
     private fun submitReview() {
         val token = AuthManager.getToken(requireContext()) ?: return
 
@@ -208,6 +218,10 @@ class MediaDetailedFragment : Fragment() {
         }
     }
 
+    /**
+     * Toggles the like status of the media item.
+     * Sends a request to the API and updates the UI accordingly.
+     */
     private fun toggleLike() {
         val token = AuthManager.getToken(requireContext()) ?: return
 
@@ -220,7 +234,7 @@ class MediaDetailedFragment : Fragment() {
                     likeCount = if (isLiked) likeCount + 1 else likeCount - 1
                     updateLikeButton()
                     val message = response.body()?.string()
-                    ToastUtil.showToast(requireContext(), message ?: "Media liked successfully")
+                    ToastUtil.showToast(requireContext(), message ?: "Like status updated")
 
                 } else {
                     val errorMessage = ErrorUtil.parseApiErrorMessage(response)
@@ -232,6 +246,10 @@ class MediaDetailedFragment : Fragment() {
         }
     }
 
+    /**
+     * Updates the UI elements with the provided media details.
+     * @param media The media details retrieved from the API.
+     */
     private fun updateUI(media: MediaDetailed) {
         mediaTitle.text = media.title ?: media.name ?: "No title"
         mediaOverview.text = media.overview ?: "No Overview"
@@ -254,6 +272,9 @@ class MediaDetailedFragment : Fragment() {
         updateLikeButton()
     }
 
+    /**
+     * Moves to the next page of reviews if possible.
+     */
     private fun goToNextPage() {
         if (currentPage < totalPages) {
             currentPage++
@@ -261,6 +282,9 @@ class MediaDetailedFragment : Fragment() {
         }
     }
 
+    /**
+     * Moves to the previous page of reviews if possible.
+     */
     private fun goToPreviousPage() {
         if (currentPage > 1) {
             currentPage--
@@ -268,6 +292,9 @@ class MediaDetailedFragment : Fragment() {
         }
     }
 
+    /**
+     * Updates the visibility and enabled state of the pagination buttons for the reviews.
+     */
     private fun updateButtonVisibility() {
         binding.btnPreviousReviews.visibility = if (currentPage > 1) View.VISIBLE else View.GONE
         binding.btnPreviousReviews.isEnabled = currentPage > 1
@@ -276,6 +303,9 @@ class MediaDetailedFragment : Fragment() {
         binding.btnNextReviews.isEnabled = currentPage < totalPages
     }
 
+    /**
+     * Updates the like button UI to reflect the current like status.
+     */
     private fun updateLikeButton() {
         if (isLiked) {
             likeButton.setImageResource(R.drawable.thumbs_up_filled)
