@@ -173,6 +173,7 @@ interface NetworkService {
         @Body request: PasswordRequest
     ): Response<User>
 
+    @Multipart
     @PATCH("/users/profile/image")
     suspend fun updateProfileImage(
         @Header("Authorization") token: String,

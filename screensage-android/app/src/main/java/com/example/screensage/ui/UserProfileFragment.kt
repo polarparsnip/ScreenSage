@@ -1,6 +1,11 @@
 package com.example.screensage.ui
 
+import android.app.Activity
+import android.content.ContentResolver
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +13,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,12 +29,20 @@ import com.example.screensage.utils.ErrorUtil
 import com.example.screensage.utils.ReviewAdapter
 import com.example.screensage.utils.ToastUtil
 import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
+import java.io.FileOutputStream
+import java.io.InputStream
 
 class UserProfileFragment : Fragment() {
     private var _binding: FragmentUserProfileBinding? = null
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+
+    private var selectedImageFile: File? = null
 
     private lateinit var profileImage: ImageView
     private lateinit var usernameText: TextView
@@ -89,6 +103,11 @@ class UserProfileFragment : Fragment() {
 
         binding.btnNextUserReviews.setOnClickListener { goToNextPage() }
         binding.btnPreviousUserReviews.setOnClickListener { goToPreviousPage() }
+
+        binding.profileImage.setOnClickListener {
+            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            pickImageLauncher.launch(intent)
+        }
 
         loadUserProfile()
         fetchUserReviews(currentPage)
@@ -215,7 +234,89 @@ class UserProfileFragment : Fragment() {
                 ToastUtil.showToast(requireContext(), "Profile updated successfully!")
 
             } catch (e: Exception) {
+                println("Network error: " + e.message)
                 ToastUtil.showToast(requireContext(), "Network error: ${e.message}")
+            }
+        }
+    }
+
+    /**
+     * Updates the user's profile image, then updates the UI accordingly..
+     *
+     * @param imageFile The image file to be uploaded. If null, no image will be uploaded.
+     */
+    private fun updateProfileImage(imageFile: File? = null) {
+        val token = AuthManager.getToken(requireContext()) ?: return
+        val imagePart = createMultipartBodyImagePart(imageFile)
+
+        lifecycleScope.launch {
+            try {
+                val response = ScreensageApi.retrofitService.updateProfileImage(
+                    "Bearer $token",
+                    imagePart
+                )
+
+                if (response.isSuccessful) {
+                    val user = response.body()
+                    user?.let {
+                        currentProfileImage = it.profileImg
+                    }
+                    ToastUtil.showToast(requireContext(), "Profile image updated successfully!")
+                } else {
+                    val errorMessage = ErrorUtil.parseApiErrorMessage(response)
+                    ToastUtil.showToast(requireContext(), errorMessage)
+                }
+            } catch (e: Exception) {
+                println("Network error: " + e.message)
+                ToastUtil.showToast(requireContext(), "Network error: ${e.message}")
+            }
+        }
+    }
+
+    /**
+     * Converts a file into a [MultipartBody.Part] for image uploads.
+     * @param file The image file to be uploaded.
+     * @return A [MultipartBody.Part] containing the image file or null if the file is not provided.
+     */
+    private fun createMultipartBodyImagePart(file: File?): MultipartBody.Part? {
+        return file?.let {
+            val requestFile = it.asRequestBody("image/*".toMediaTypeOrNull())
+            MultipartBody.Part.createFormData("image", it.name, requestFile)
+        }
+    }
+
+    /**
+     * Converts a [Uri] to a [File] for temporary storage.
+     * @param uri The URI of the selected image.
+     * @return A [File] containing the image data or null in case of failure.
+     */
+    private fun uriToFile(uri: Uri): File? {
+        val contentResolver: ContentResolver = requireContext().contentResolver
+        val file = File(requireContext().cacheDir, "selected_image.jpg")
+
+        try {
+            val inputStream: InputStream? = contentResolver.openInputStream(uri)
+            val outputStream = FileOutputStream(file)
+            inputStream?.copyTo(outputStream)
+            inputStream?.close()
+            outputStream.close()
+            return file
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return null
+    }
+
+    /**
+     * Registers an activity result launcher to pick an image from the gallery.
+     * If the result is successful, the image is stored as a file and displayed.
+     */
+    private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            result.data?.data?.let { uri ->
+                selectedImageFile = uriToFile(uri)
+                updateProfileImage(selectedImageFile)
+                binding.profileImage.setImageURI(uri)
             }
         }
     }
