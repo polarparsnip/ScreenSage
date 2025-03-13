@@ -22,7 +22,6 @@ import com.example.screensage.network.ReviewRequest
 import com.example.screensage.network.ScreensageApi
 import com.example.screensage.service.AuthManager
 import com.example.screensage.utils.ErrorUtil
-import com.example.screensage.utils.MediaAdapter
 import com.example.screensage.utils.ReviewAdapter
 import com.example.screensage.utils.ToastUtil
 import kotlinx.coroutines.launch
@@ -131,6 +130,7 @@ class MediaDetailedFragment : Fragment() {
                 )
                 if (response.isSuccessful) {
                     response.body()?.let { media ->
+                        println(media)
                         updateUI(media)
                     }
                 } else {
@@ -253,9 +253,10 @@ class MediaDetailedFragment : Fragment() {
     private fun updateUI(media: MediaDetailed) {
         mediaTitle.text = media.title ?: media.name ?: "No title"
         mediaOverview.text = media.overview ?: "No Overview"
-        mediaRatingBar.rating = (media.averageRating ?: 0.0).toFloat()
+        println("meme>: " + media.userRating)
+        binding.mediaRatingBar.rating = (media.averageRating ?: 0.0).toFloat()
 
-        mediaGenres.text = media.genres?.joinToString(", ") { it.name } ?: "No genres"
+        mediaGenres.text = media.genres.joinToString(", ") { it.name } ?: "No genres"
         mediaExtraInfo.text = when (mediaType) {
             "movies" -> media.runtime?.let { "${it} min" } ?: ""
             "shows" -> media.numberOfEpisodes?.let { "$it episodes" } ?: ""
@@ -268,6 +269,7 @@ class MediaDetailedFragment : Fragment() {
 
         likeCount = media.likeCount ?: 0
         isLiked = media.userHasLiked ?: false
+        println(media)
 
         updateLikeButton()
     }

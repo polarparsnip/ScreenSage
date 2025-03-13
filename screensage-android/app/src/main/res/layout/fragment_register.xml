@@ -11,6 +11,8 @@
         android:id="@+id/usernameEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/white"
+        android:textColor="@color/white"
         android:hint="Username"
         android:inputType="text"/>
 
@@ -18,17 +20,22 @@
         android:id="@+id/passwordEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/white"
         android:hint="Password"
         android:inputType="textPassword"
+        android:textColor="@color/white"
         android:layout_marginTop="8dp"/>
 
     <EditText
         android:id="@+id/confirmPasswordEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/white"
         android:hint="Confirm Password"
         android:inputType="textPassword"
-        android:layout_marginTop="8dp"/>
+        android:textColor="@color/white"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp" />
 
     <ImageView
         android:id="@+id/profileImageView"
@@ -36,19 +43,24 @@
         android:layout_height="120dp"
         android:layout_gravity="center"
         android:scaleType="centerCrop"
+        android:visibility="gone"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         android:src="@drawable/ic_menu_camera" />
+
     <Button
         android:id="@+id/selectImageButton"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Select Image" />
+        android:layout_marginTop="8dp"
+        android:text="Add profile image (optional)" />
 
     <Button
         android:id="@+id/registerButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Register"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="8dp"/>
 
     <Button
         android:id="@+id/backToLoginButton"

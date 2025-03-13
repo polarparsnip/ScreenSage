@@ -167,10 +167,6 @@ class UserProfileFragment : Fragment() {
         saveProfileButton.visibility = if (isEditing) View.VISIBLE else View.GONE
         usernameText.visibility = if (isEditing) View.GONE else View.VISIBLE
         passwordText.visibility = if (isEditing) View.GONE else View.VISIBLE
-
-        if (isEditing) {
-            usernameInput.setText(currentUsername)
-        }
     }
 
     /**

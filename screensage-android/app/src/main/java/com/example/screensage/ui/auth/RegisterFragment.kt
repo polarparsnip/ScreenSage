@@ -13,6 +13,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.example.screensage.R
 import com.example.screensage.utils.ErrorUtil
 import com.example.screensage.utils.ToastUtil
@@ -127,7 +128,12 @@ class RegisterFragment : Fragment() {
         if (result.resultCode == Activity.RESULT_OK) {
             result.data?.data?.let { uri ->
                 selectedImageFile = uriToFile(uri)
-                binding.profileImageView.setImageURI(uri)
+                binding.profileImageView.setVisibility(View.VISIBLE)
+                Glide.with(this)
+                    .load(uri)
+                    .circleCrop()
+                    .into(binding.profileImageView)
+                // binding.profileImageView.setImageURI(uri)
             }
         }
     }
