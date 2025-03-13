@@ -180,6 +180,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Write your review..."
+                        android:textColor="@android:color/white"
                         android:minHeight="100dp"
                         android:gravity="top"
                         android:padding="8dp" />
