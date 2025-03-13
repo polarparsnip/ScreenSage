@@ -375,9 +375,9 @@ public class DataLoader {
         likeRepository.save(new Like(testuser7, ml10));
         likeRepository.save(new Like(testuser1, ml9));
         likeRepository.save(new Like(testuser6, ml9));
-        likeRepository.save(new Like(testuser1, "movies", 1184918));
-        likeRepository.save(new Like(testuser2, "movies", 1184918));
-        likeRepository.save(new Like(testuser3, "movies", 1184918));
+        likeRepository.save(new Like(testuser1, "movie", 1184918));
+        likeRepository.save(new Like(testuser2, "movie", 1184918));
+        likeRepository.save(new Like(testuser3, "movie", 1184918));
     
         quoteRepository.save(new Quote("I am vengeance. I am the night. I am Batman!", "Batman: The Animated Series", 1992, "shows", 12341));
         quoteRepository.save(new Quote("A lesson without pain is meaningless.", "Fullmetal Alchemist: Brotherhood", 2009, "anime", 12342));

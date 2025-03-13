@@ -64,12 +64,14 @@ public class MediaService implements MediaServiceInterface {
     MediaPageResponse mediaListResponse = tmdbService.getMedia(type, genreId, page, searchQuery);
     List<Media> mediaList = mediaListResponse.getResults();
 
+    String mediaType = type == "anime" ? "tv" : type;
+
     for (Media media : mediaList) {
-      Double averageRating = reviewRepository.getAverageRatingForMedia(type, media.getId());
+      Double averageRating = reviewRepository.getAverageRatingForMedia(mediaType, media.getId());
       if (averageRating != null) {
         media.setAverage_rating(averageRating.doubleValue());
       }
-      Double userRating = reviewRepository.getRatingByUserIdAndMediaIdAndType(userId, type, media.getId());
+      Double userRating = reviewRepository.getRatingByUserIdAndMediaIdAndType(userId, mediaType, media.getId());
       if (userRating != null) {
         media.setUser_rating(userRating.doubleValue());
       }
@@ -82,9 +84,7 @@ public class MediaService implements MediaServiceInterface {
 
   @Override
   public MediaDetailed getSingleMedia(int userId, String type, int mediaId) {
-
-    String tmdbMediaType = type == "movies" ? "movie" : "tv";
-    MediaDetailed media = tmdbService.getSingleMedia(tmdbMediaType, mediaId);
+    MediaDetailed media = tmdbService.getSingleMedia(type, mediaId);
 
     Double averageRating = reviewRepository.getAverageRatingForMedia(type, media.getId());
     if (averageRating != null) {

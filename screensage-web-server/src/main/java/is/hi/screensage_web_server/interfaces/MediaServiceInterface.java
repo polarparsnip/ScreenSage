@@ -108,7 +108,7 @@ public interface MediaServiceInterface {
    * If the user has already liked the media, it will be unliked; otherwise, it will be liked.
    *
    * @param userId     the ID of the user performing the action.
-   * @param type       the type of media (e.g., "movies", "shows", or "anime").
+   * @param type       the type of media (e.g., "movie" or "tv").
    * @param mediaId    the ID of the media item for which to toggle the like status.
    * @throws Exception if an error occurs while toggling the like status.
    */

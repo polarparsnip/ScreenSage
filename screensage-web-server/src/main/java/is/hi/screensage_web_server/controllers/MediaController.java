@@ -121,7 +121,7 @@ public class MediaController {
     UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
     int userId = authenticatedUser.getId();
 
-    MediaDetailed movie = mediaService.getSingleMedia(userId, "movies", movieId);
+    MediaDetailed movie = mediaService.getSingleMedia(userId, "movie", movieId);
     return ResponseEntity.ok(movie);
   }
 
@@ -140,7 +140,7 @@ public class MediaController {
     UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
     int userId = authenticatedUser.getId();
 
-    MediaDetailed show = mediaService.getSingleMedia(userId, "shows", showId);
+    MediaDetailed show = mediaService.getSingleMedia(userId, "tv", showId);
     return ResponseEntity.ok(show);
   }
 
@@ -159,7 +159,7 @@ public class MediaController {
     UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
     int userId = authenticatedUser.getId();
     
-    MediaDetailed anime = mediaService.getSingleMedia(userId, "anime", animeId);
+    MediaDetailed anime = mediaService.getSingleMedia(userId, "tv", animeId);
     return ResponseEntity.ok(anime);
   }
 
@@ -379,7 +379,7 @@ public class MediaController {
     UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
     int userId = authenticatedUser.getId();
 
-    mediaService.toggleMediaLike(userId, "movies", movieId);
+    mediaService.toggleMediaLike(userId, "movie", movieId);
     return ResponseEntity.ok("Like status updated");
   }
 
@@ -397,7 +397,7 @@ public class MediaController {
     UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
     int userId = authenticatedUser.getId();
 
-    mediaService.toggleMediaLike(userId, "shows", showId);
+    mediaService.toggleMediaLike(userId, "tv", showId);
     return ResponseEntity.ok("Like status updated");
   }
 
@@ -415,7 +415,7 @@ public class MediaController {
     UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
     int userId = authenticatedUser.getId();
 
-    mediaService.toggleMediaLike(userId, "anime", animeId);
+    mediaService.toggleMediaLike(userId, "tv", animeId);
     return ResponseEntity.ok("Like status updated");
   }
 
