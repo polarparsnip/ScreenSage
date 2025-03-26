@@ -91,7 +91,7 @@ class MediaDetailedFragment : Fragment() {
         reviewRecyclerView = view.findViewById(R.id.reviewRecyclerView)
         reviewRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        reviewAdapter = ReviewAdapter(mutableListOf())
+        reviewAdapter = ReviewAdapter(mutableListOf(), false)
         reviewRecyclerView.adapter = reviewAdapter
 
         reviewRatingBarInput = view.findViewById(R.id.reviewRatingBarInput)
@@ -197,6 +197,7 @@ class MediaDetailedFragment : Fragment() {
                     "Bearer $token",
                     mediaType ?: "movies",
                     mediaId ?: 0,
+                    (mediaTitle.text ?: "Unknown title").toString(),
                     reviewRequest
                 )
 

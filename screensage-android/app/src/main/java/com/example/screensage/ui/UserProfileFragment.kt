@@ -88,7 +88,7 @@ class UserProfileFragment : Fragment() {
         userReviewsRecyclerView = view.findViewById(R.id.userReviewsRecyclerView)
         userReviewsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        reviewAdapter = ReviewAdapter(mutableListOf())
+        reviewAdapter = ReviewAdapter(mutableListOf(), true)
         userReviewsRecyclerView.adapter = reviewAdapter
 
         editProfileButton.setOnClickListener {
@@ -167,6 +167,10 @@ class UserProfileFragment : Fragment() {
         saveProfileButton.visibility = if (isEditing) View.VISIBLE else View.GONE
         usernameText.visibility = if (isEditing) View.GONE else View.VISIBLE
         passwordText.visibility = if (isEditing) View.GONE else View.VISIBLE
+
+        if (isEditing) {
+            usernameInput.setText(currentUsername)
+        }
     }
 
     /**
@@ -331,7 +335,6 @@ class UserProfileFragment : Fragment() {
                 )
                 if (response.isSuccessful) {
                     response.body()?.let { reviewResponse ->
-                        println("concon: " + reviewResponse.content)
                         reviewAdapter.updateReviews(reviewResponse.content)
                         totalPages = reviewResponse.totalPages
                     }

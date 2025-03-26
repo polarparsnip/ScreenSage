@@ -18,7 +18,7 @@ import com.example.screensage.entities.Review
  *
  * @param reviews A list of Review objects to be displayed.
  */
-class ReviewAdapter(private var reviews: List<Review>) :
+class ReviewAdapter(private var reviews: List<Review>, private var userProfile: Boolean) :
     RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder>() {
 
     /**
@@ -54,7 +54,11 @@ class ReviewAdapter(private var reviews: List<Review>) :
      */
     override fun onBindViewHolder(holder: ReviewViewHolder, position: Int) {
         val review = reviews[position]
-        holder.username.text = review.user?.username ?: "Unknown"
+        if (userProfile) {
+            holder.username.text = review.mediaTitle ?: "Unknown media"
+        } else {
+            holder.username.text = review.user?.username ?: "Unknown user"
+        }
         holder.ratingBar.rating = (review.rating ?: 0.0).toFloat()
         holder.content.text = review.content ?: "No content"
     }

@@ -165,7 +165,7 @@ public class MediaService implements MediaServiceInterface {
   }
 
   @Override
-  public Review postMediaReview(int userId, String type, int mediaId, ReviewRequest reviewRequest) throws Exception {
+  public Review postMediaReview(int userId, String type, int mediaId, String mediaTitle, ReviewRequest reviewRequest) throws Exception {
 
     if (!userService.userExists(userId)) {
       System.out.println("Error: User not found");
@@ -190,7 +190,7 @@ public class MediaService implements MediaServiceInterface {
     double rating = reviewRequest.getRating();
     String content = reviewRequest.getContent();
 
-    Review review = new Review(mediaId, user, rating, content, type);
+    Review review = new Review(mediaId, mediaTitle, user, rating, content, type);
 
     try {
       reviewRepository.save(review);

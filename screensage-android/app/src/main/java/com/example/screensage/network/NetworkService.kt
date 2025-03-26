@@ -153,6 +153,7 @@ interface NetworkService {
         @Header("Authorization") token: String,
         @Path("mediaType") media: String,
         @Path("id") id: Int,
+        @Query("title") title: String,
         @Body request: ReviewRequest
     ): Response<Review>
 

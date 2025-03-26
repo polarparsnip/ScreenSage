@@ -21,6 +21,7 @@ public class Review {
   private int id;
 
   private int mediaId;
+  private String mediaTitle;
 
   @ManyToOne
   private Users user;
@@ -45,11 +46,12 @@ public class Review {
    * @param content the text content of the review
    * @param rating the rating for the media
    */
-  public Review(int mediaId, Users user, double rating, String content, String type)  {
+  public Review(int mediaId, String mediaTitle, Users user, double rating, String content, String type)  {
     if (type.equals("tv") || type.equals("movie")) {
       this.type = type;
     }
     this.mediaId = mediaId;
+    this.mediaTitle = mediaTitle;
     this.user = user;
     this.rating = rating;
     this.content = content;
@@ -86,6 +88,24 @@ public class Review {
    */
   public void setMediaId(int mediaId) {
     this.mediaId = mediaId;
+  }
+
+  /**
+   * Returns the title of the media the review was for.
+   *
+   * @return the media title
+   */
+  public String getMediaTitle() {
+    return mediaTitle;
+  }
+
+  /**
+   * Sets the title of the media the review was for.
+   * 
+   * @param mediaTitle the media title to be set
+   */
+  public void setMediaTitle(String mediaTitle) {
+    this.mediaTitle = mediaTitle;
   }
 
   /**

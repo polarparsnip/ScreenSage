@@ -73,11 +73,12 @@ public interface MediaServiceInterface {
    *
    * @param type the type of media (e.g., "movie" or "tv").
    * @param mediaId the ID of the media item being reviewed.
+   * @param mediaTitle the title of the media item being reviewed.
    * @param reviewRequest the review request containing the review details.
    * @return the posted review.
    * @throws Exception if an error occurs while posting the review.
    */
-  public Review postMediaReview(int userId, String type, int mediaId, ReviewRequest reviewRequest) throws Exception;
+  public Review postMediaReview(int userId, String type, int mediaId, String mediaTitle, ReviewRequest reviewRequest) throws Exception;
 
   /**
    * Retrieves a paginated list of reviews submitted by a specific user.

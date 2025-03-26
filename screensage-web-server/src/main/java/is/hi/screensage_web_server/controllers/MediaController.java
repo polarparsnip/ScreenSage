@@ -294,12 +294,13 @@ public class MediaController {
   @PostMapping("/movies/{movieId}/reviews")
   public ResponseEntity<?> postMovieReview(
     @PathVariable int movieId, 
-    @RequestBody ReviewRequest reviewRequest
+    @RequestBody ReviewRequest reviewRequest,
+    @RequestParam(defaultValue = "Movie") String title
   ) throws Exception {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
     int userId = authenticatedUser.getId();
-    Review newReview = mediaService.postMediaReview(userId, "movie", movieId, reviewRequest);
+    Review newReview = mediaService.postMediaReview(userId, "movie", movieId, title, reviewRequest);
     return ResponseEntity.ok(newReview);
   }
 
@@ -314,12 +315,13 @@ public class MediaController {
   @PostMapping("/shows/{showId}/reviews")
   public ResponseEntity<?> postShowReview(
     @PathVariable int showId, 
-    @RequestBody ReviewRequest reviewRequest
+    @RequestBody ReviewRequest reviewRequest,
+    @RequestParam(defaultValue = "Show") String title
   ) throws Exception {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
     int userId = authenticatedUser.getId();
-    Review newReview = mediaService.postMediaReview(userId, "tv", showId, reviewRequest);
+    Review newReview = mediaService.postMediaReview(userId, "tv", showId, title, reviewRequest);
     return ResponseEntity.ok(newReview);
   }
 
@@ -334,12 +336,13 @@ public class MediaController {
   @PostMapping("/anime/{animeId}/reviews")
   public ResponseEntity<?> postAnimeeview(
     @PathVariable int animeId, 
-    @RequestBody ReviewRequest reviewRequest
+    @RequestBody ReviewRequest reviewRequest,
+    @RequestParam(defaultValue = "Anime") String title
   ) throws Exception {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     UserPrincipal authenticatedUser = (UserPrincipal) authentication.getPrincipal();
     int userId = authenticatedUser.getId();
-    Review newReview = mediaService.postMediaReview(userId, "tv", animeId, reviewRequest);
+    Review newReview = mediaService.postMediaReview(userId, "tv", animeId, title, reviewRequest);
     return ResponseEntity.ok(newReview);
   }
 
