@@ -95,6 +95,13 @@ class MainActivity : AppCompatActivity() {
                     }
                     navController.navigate(R.id.nav_media, bundle)
                 }
+
+                R.id.nav_media_lists -> {
+                    val bundle = Bundle().apply {
+                        putString("listType", "mediaLists")
+                    }
+                    navController.navigate(R.id.nav_media_lists, bundle)
+                }
                 
             }
             drawerLayout.closeDrawers()

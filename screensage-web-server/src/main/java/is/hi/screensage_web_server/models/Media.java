@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public class Media {
   private double average_rating;
   private double user_rating;
+  private String type;
 
   private int id;
   private String title;
@@ -54,6 +55,13 @@ public class Media {
     this.user_rating = user_rating;
   }
   
+  public String getType() {
+    return type;
+  }
+  
+  public void setType(String type) {
+    this.type = type;
+  }
 
   // public double getVote_average() {
   //   return vote_average;

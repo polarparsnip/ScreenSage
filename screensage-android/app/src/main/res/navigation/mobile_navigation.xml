@@ -21,6 +21,17 @@
           app:argType="string"
           android:defaultValue="movies" />
     </fragment>
+
+    <fragment
+        android:id="@+id/nav_media_lists"
+        android:name="com.example.screensage.ui.MediaListsFragment"
+        android:label="Media lists"
+        tools:layout="@layout/fragment_media_lists">
+        <argument
+          android:name="listType"
+          app:argType="string"
+          android:defaultValue="mediaLists" />
+    </fragment>
     
     <fragment
       android:id="@+id/mediaDetailedFragment"
