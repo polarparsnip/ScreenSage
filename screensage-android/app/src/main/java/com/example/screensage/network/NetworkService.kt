@@ -215,6 +215,18 @@ interface NetworkService {
         @Query("page") page: Int = 1,
     ): Response<MediaListResponse>
 
+    @GET("/lists/{id}")
+    suspend fun getMediaList(
+        @Header("Authorization") token: String,
+        @Path("id") id: Int
+    ): Response<MediaList>
+
+    @GET("/watchlists/{id}")
+    suspend fun getWatchlist(
+        @Header("Authorization") token: String,
+        @Path("id") id: Int
+    ): Response<MediaList>
+
     @GET("/users/profile/lists")
     suspend fun getMyMediaLists(
         @Header("Authorization") token: String,

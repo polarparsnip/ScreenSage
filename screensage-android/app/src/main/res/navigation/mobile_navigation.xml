@@ -32,6 +32,20 @@
           app:argType="string"
           android:defaultValue="mediaLists" />
     </fragment>
+
+        <fragment
+        android:id="@+id/nav_media_list"
+        android:name="com.example.screensage.ui.MediaListFragment"
+        android:label="Media list"
+        tools:layout="@layout/fragment_media_list">
+        <argument
+          android:name="listType"
+          app:argType="string"/>
+        <argument
+          android:name="listId"
+          app:argType="integer"
+          android:defaultValue="0" />
+    </fragment>
     
     <fragment
       android:id="@+id/mediaDetailedFragment"

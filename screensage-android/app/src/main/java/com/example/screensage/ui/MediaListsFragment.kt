@@ -10,7 +10,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.screensage.R
-import com.example.screensage.databinding.FragmentMediaBinding
+import com.example.screensage.databinding.FragmentMediaListsBinding
 import com.example.screensage.entities.MediaList
 import com.example.screensage.network.MediaListResponse
 import com.example.screensage.network.ScreensageApi
@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 import retrofit2.Response
 
 class MediaListsFragment : Fragment() {
-    private var _binding: FragmentMediaBinding? = null
+    private var _binding: FragmentMediaListsBinding? = null
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
@@ -49,21 +49,22 @@ class MediaListsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         //return inflater.inflate(R.layout.fragment_media, container, false)
-        _binding = FragmentMediaBinding.inflate(inflater, container, false)
+        _binding = FragmentMediaListsBinding.inflate(inflater, container, false)
         val root: View = binding.root
         return root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recyclerView = view.findViewById(R.id.recyclerView)
+        recyclerView = view.findViewById(R.id.listRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         mediaListAdapter = MediaListsAdapter(mediaLists) { mediaListId ->
             val bundle = Bundle().apply {
                 putString("listType", listType)
+                putInt("listId", mediaListId)
             }
-            findNavController().navigate(R.id.mediaDetailedFragment, bundle)
+            findNavController().navigate(R.id.nav_media_list, bundle)
         }
         recyclerView.adapter = mediaListAdapter
 
