@@ -33,7 +33,7 @@
           android:defaultValue="mediaLists" />
     </fragment>
 
-        <fragment
+    <fragment
         android:id="@+id/nav_media_list"
         android:name="com.example.screensage.ui.MediaListFragment"
         android:label="Media list"
