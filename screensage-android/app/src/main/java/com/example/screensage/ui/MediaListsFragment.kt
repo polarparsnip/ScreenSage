@@ -108,6 +108,7 @@ class MediaListsFragment : Fragment() {
             binding.btnNext.setOnClickListener { goToNextPage() }
             binding.btnPrevious.setOnClickListener { goToPreviousPage() }
         }
+
     }
 
     /**
