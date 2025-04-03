@@ -34,6 +34,28 @@
     </fragment>
 
     <fragment
+      android:id="@+id/nav_my_media_lists"
+      android:name="com.example.screensage.ui.MediaListsFragment"
+      android:label="My media lists"
+      tools:layout="@layout/fragment_media_lists">
+      <argument
+        android:name="listType"
+        app:argType="string"
+        android:defaultValue="myMediaLists" />
+    </fragment>
+
+    <fragment
+      android:id="@+id/nav_watchlists"
+      android:name="com.example.screensage.ui.MediaListsFragment"
+      android:label="My watchlists"
+      tools:layout="@layout/fragment_media_lists">
+      <argument
+        android:name="listType"
+        app:argType="string"
+        android:defaultValue="watchlists" />
+    </fragment>
+
+    <fragment
         android:id="@+id/nav_media_list"
         android:name="com.example.screensage.ui.MediaListFragment"
         android:label="Media list"

@@ -24,5 +24,13 @@
             android:id="@+id/nav_media_lists"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="Media lists" />
+        <item
+            android:id="@+id/nav_my_media_lists"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="My media lists" />
+        <item
+            android:id="@+id/nav_watchlists"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="My watchlists" />
     </group>
 </menu>
