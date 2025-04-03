@@ -75,7 +75,6 @@ public class MediaService implements MediaServiceInterface {
       if (userRating != null) {
         media.setUser_rating(userRating.doubleValue());
       }
-      media.setType(type);
     }
 
     mediaListResponse.setResults(mediaList);
