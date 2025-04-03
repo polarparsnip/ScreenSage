@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.screensage.R
 import com.example.screensage.entities.MediaList
+import com.example.screensage.service.User
 
 /**
  * Adapter for displaying a list of media items (movies, shows, etc.) in a RecyclerView.
@@ -18,11 +19,14 @@ import com.example.screensage.entities.MediaList
  * media item's image, title, and average rating.
  *
  * @param mediaLists A list of MediaList objects to be displayed.
- * @param onItemClick A callback function that is triggered when a media item is clicked, passing the media item's ID.
+ * @param onItemClick A callback function that is triggered when a media list item is clicked, passing the media list's ID.
+ * @param onIconClick A callback function that is triggered when a media list item icon is clicked, passing the media list's ID.
  */
 class MediaListsAdapter(
     private var mediaLists: List<MediaList>,
-    private val onItemClick: (Int) -> Unit
+    private var user: User? = null,
+    private val onItemClick: (Int) -> Unit,
+    private var onIconClick: (Int) -> Unit
 ) :
     RecyclerView.Adapter<MediaListsAdapter.MediaListViewHolder>() {
 
@@ -35,6 +39,7 @@ class MediaListsAdapter(
     class MediaListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val imageView: ImageView = view.findViewById(R.id.mediaListImage)
         val titleView: TextView = view.findViewById(R.id.mediaListTitle)
+        val deleteView: ImageView = view.findViewById(R.id.mediaListDelete)
     }
 
     /**
@@ -61,6 +66,15 @@ class MediaListsAdapter(
         val image = if ((mediaList.mediaListItems?.size ?: 0) > 0) mediaList.mediaListItems?.get(0)?.mediaImg else ""
         holder.titleView.text = mediaList.title  ?: "No title"
         Glide.with(holder.imageView.context).load(image).into(holder.imageView)
+
+        holder.deleteView.visibility = View.GONE
+        if (user != null && user!!.id == mediaList.user?.id) {
+            holder.deleteView.visibility = View.VISIBLE
+        }
+
+        holder.deleteView.setOnClickListener {
+            onIconClick(mediaList.id)
+        }
 
         holder.itemView.setOnClickListener {
             onItemClick(mediaList.id)

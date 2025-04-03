@@ -18,10 +18,15 @@ import com.example.screensage.network.MediaListPostRequest
 import com.example.screensage.network.MediaListResponse
 import com.example.screensage.network.ScreensageApi
 import com.example.screensage.service.AuthManager
+import com.example.screensage.service.RoomService
+import com.example.screensage.service.User
 import com.example.screensage.utils.ErrorUtil
 import com.example.screensage.utils.MediaListsAdapter
 import com.example.screensage.utils.ToastUtil
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import okhttp3.ResponseBody
 import retrofit2.Response
 
 class MediaListsFragment : Fragment() {
@@ -71,23 +76,39 @@ class MediaListsFragment : Fragment() {
         recyclerView = view.findViewById(R.id.listRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        mediaListAdapter = MediaListsAdapter(mediaLists) { mediaListId ->
-            val bundle = Bundle().apply {
-                putString("listType", listType)
-                putInt("listId", mediaListId)
+        CoroutineScope(Dispatchers.Main).launch {
+            var currentUser: User? = null
+            val user = RoomService.getCurrentUser(requireContext())
+            if (user != null) {
+                currentUser = user
             }
-            findNavController().navigate(R.id.nav_media_list, bundle)
+
+            mediaListAdapter = MediaListsAdapter(
+                mediaLists,
+                currentUser,
+                onItemClick = { mediaListId ->
+                    val bundle = Bundle().apply {
+                        putString("listType", listType)
+                        putInt("listId", mediaListId)
+                    }
+                    findNavController().navigate(R.id.nav_media_list, bundle)
+                },
+                onIconClick = { mediaListId ->
+                    deleteList(mediaListId)
+                },
+            )
+            recyclerView.adapter = mediaListAdapter
+
+            fetchMediaLists(currentPage)
+
+            listSubmitButton.setOnClickListener {
+                createList()
+            }
+
+            binding.btnNext.setOnClickListener { goToNextPage() }
+            binding.btnPrevious.setOnClickListener { goToPreviousPage() }
         }
-        recyclerView.adapter = mediaListAdapter
 
-        fetchMediaLists(currentPage)
-
-        listSubmitButton.setOnClickListener {
-            createList()
-        }
-
-        binding.btnNext.setOnClickListener { goToNextPage() }
-        binding.btnPrevious.setOnClickListener { goToPreviousPage() }
     }
 
     /**
@@ -190,6 +211,47 @@ class MediaListsFragment : Fragment() {
                         listDescriptionInput.text.clear()
 
                         ToastUtil.showToast(requireContext(), "List has been created!")
+                    }
+                } else {
+                    val errorMessage = ErrorUtil.parseApiErrorMessage(response)
+                    ToastUtil.showToast(requireContext(), errorMessage)
+                }
+            } catch (e: Exception) {
+                ToastUtil.showToast(requireContext(), "Network error: ${e.message}")
+            }
+        }
+    }
+
+    /**
+     * Deletes a media list / watchlist.
+     */
+    private fun deleteList(id: Int) {
+        val token = AuthManager.getToken(requireContext()) ?: return
+
+        lifecycleScope.launch {
+            try {
+                var response: Response<ResponseBody>? = null
+
+                if (listType == "watchlists") {
+                    response = ScreensageApi.retrofitService.deleteWatchlist(
+                        "Bearer ${token}",
+                        id
+                    )
+                }
+                else {
+                    response = ScreensageApi.retrofitService.deleteMediaList(
+                        "Bearer ${token}",
+                        id
+                    )
+                }
+
+                if (response.isSuccessful) {
+                    val res = response.body()
+                    res?.let {
+                        var newMediaLists = mediaLists.filterNot { it.id == id }
+                        newMediaLists = newMediaLists.sortedByDescending { it.createdAt }
+                        mediaListAdapter.updateMedia(newMediaLists)
+                        ToastUtil.showToast(requireContext(), "List has been deleted!")
                     }
                 } else {
                     val errorMessage = ErrorUtil.parseApiErrorMessage(response)

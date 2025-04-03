@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("org.jetbrains.kotlin.plugin.serialization") version "2.1.20-RC"
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -65,4 +66,8 @@ dependencies {
 
     implementation(libs.glide)
     implementation("androidx.core:core-splashscreen:1.0.0")
+
+    implementation("androidx.room:room-ktx:2.6.1")
+    implementation("androidx.room:room-runtime:2.6.1")
+    ksp("androidx.room:room-compiler:2.6.1")
 }
