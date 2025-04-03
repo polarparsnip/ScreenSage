@@ -8,7 +8,7 @@ data class MediaList(
     val title          : String,
     val watchlist      : Boolean,
     val description    : String?              = null,
-    val mediaListItems : List<MediaListItem>? = null,
+    val mediaListItems : List<MediaListItem>  = listOf(),
     val sharedWith     : List<Int>?           = null,
     val likeCount      : Long?                = null,
     val userHasLiked   : Boolean?             = null,
