@@ -118,6 +118,14 @@ data class MediaListResponse(
     @SerialName("empty"            ) var empty            : Boolean?           = null
 )
 
+@Serializable
+data class MediaListPostRequest(
+    val title: String,
+    val description: String,
+    val watchlist: Boolean,
+    val sharedWith: List<Int>? = listOf()
+)
+
 interface NetworkService {
     @GET("/")
     suspend fun getIndex(): Response<IndexApiResponse>
@@ -215,10 +223,22 @@ interface NetworkService {
         @Query("page") page: Int = 1,
     ): Response<MediaListResponse>
 
+    @POST("/lists")
+    suspend fun createMediaList(
+        @Header("Authorization") token: String,
+        @Body request: MediaListPostRequest
+    ): Response<MediaList>
+
     @GET("/lists/{id}")
     suspend fun getMediaList(
         @Header("Authorization") token: String,
         @Path("id") id: Int
+    ): Response<MediaList>
+
+    @POST("/watchlists")
+    suspend fun createWatchlist(
+        @Header("Authorization") token: String,
+        @Body request: MediaListPostRequest
     ): Response<MediaList>
 
     @GET("/watchlists/{id}")

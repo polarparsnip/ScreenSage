@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -12,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.screensage.R
 import com.example.screensage.databinding.FragmentMediaListsBinding
 import com.example.screensage.entities.MediaList
+import com.example.screensage.network.MediaListPostRequest
 import com.example.screensage.network.MediaListResponse
 import com.example.screensage.network.ScreensageApi
 import com.example.screensage.service.AuthManager
@@ -36,6 +39,10 @@ class MediaListsFragment : Fragment() {
 
     private var listType: String? = null
 
+    private lateinit var listTitleInput: EditText
+    private lateinit var listDescriptionInput: EditText
+    private lateinit var listSubmitButton: Button
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -56,6 +63,11 @@ class MediaListsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        listTitleInput = view.findViewById(R.id.listTitleInput)
+        listDescriptionInput = view.findViewById(R.id.listDescriptionInput)
+        listSubmitButton = view.findViewById(R.id.listSubmitButton)
+
         recyclerView = view.findViewById(R.id.listRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
@@ -69,6 +81,10 @@ class MediaListsFragment : Fragment() {
         recyclerView.adapter = mediaListAdapter
 
         fetchMediaLists(currentPage)
+
+        listSubmitButton.setOnClickListener {
+            createList()
+        }
 
         binding.btnNext.setOnClickListener { goToNextPage() }
         binding.btnPrevious.setOnClickListener { goToPreviousPage() }
@@ -123,6 +139,63 @@ class MediaListsFragment : Fragment() {
 
             } catch (e: Exception) {
                 println("Network error: ${e.message}")
+                ToastUtil.showToast(requireContext(), "Network error: ${e.message}")
+            }
+        }
+    }
+
+    /**
+     * Creates a new media list / watchlist.
+     */
+    private fun createList() {
+        val token = AuthManager.getToken(requireContext()) ?: return
+
+        val title = listTitleInput.text.toString().trim()
+        val description = listDescriptionInput.text.toString().trim()
+
+        if (title.isEmpty()) {
+            ToastUtil.showToast(requireContext(), "List title cannot be empty!")
+            return
+        }
+        if (description.isEmpty()) {
+            ToastUtil.showToast(requireContext(), "List description cannot be empty!")
+            return
+        }
+
+        lifecycleScope.launch {
+            try {
+                var response: Response<MediaList>? = null
+
+                if (listType == "watchlists") {
+                    val listRequest = MediaListPostRequest(title, description, true)
+                    response = ScreensageApi.retrofitService.createWatchlist(
+                        "Bearer ${token}",
+                        listRequest
+                    )
+                }
+                else {
+                    val listRequest = MediaListPostRequest(title, description, false)
+                    response = ScreensageApi.retrofitService.createMediaList(
+                        "Bearer ${token}",
+                        listRequest
+                    )
+                }
+
+                if (response.isSuccessful) {
+                    val newList = response.body()
+                    newList?.let {
+                        mediaLists = mediaLists + it
+                        mediaListAdapter.updateMedia(mediaLists)
+                        listTitleInput.text.clear()
+                        listDescriptionInput.text.clear()
+
+                        ToastUtil.showToast(requireContext(), "List has been created!")
+                    }
+                } else {
+                    val errorMessage = ErrorUtil.parseApiErrorMessage(response)
+                    ToastUtil.showToast(requireContext(), errorMessage)
+                }
+            } catch (e: Exception) {
                 ToastUtil.showToast(requireContext(), "Network error: ${e.message}")
             }
         }
