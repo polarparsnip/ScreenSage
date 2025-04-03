@@ -24,6 +24,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Multipart
@@ -116,6 +117,14 @@ data class MediaListResponse(
     @SerialName("sort"             ) var sort             : Sort?              = Sort(),
     @SerialName("numberOfElements" ) var numberOfElements : Int?               = null,
     @SerialName("empty"            ) var empty            : Boolean?           = null
+)
+
+@Serializable
+data class MediaListPostRequest(
+    val title: String,
+    val description: String,
+    val watchlist: Boolean,
+    val sharedWith: List<Int>? = listOf()
 )
 
 interface NetworkService {
@@ -215,10 +224,22 @@ interface NetworkService {
         @Query("page") page: Int = 1,
     ): Response<MediaListResponse>
 
+    @POST("/lists")
+    suspend fun createMediaList(
+        @Header("Authorization") token: String,
+        @Body request: MediaListPostRequest
+    ): Response<MediaList>
+
     @GET("/lists/{id}")
     suspend fun getMediaList(
         @Header("Authorization") token: String,
         @Path("id") id: Int
+    ): Response<MediaList>
+
+    @POST("/watchlists")
+    suspend fun createWatchlist(
+        @Header("Authorization") token: String,
+        @Body request: MediaListPostRequest
     ): Response<MediaList>
 
     @GET("/watchlists/{id}")
@@ -226,6 +247,18 @@ interface NetworkService {
         @Header("Authorization") token: String,
         @Path("id") id: Int
     ): Response<MediaList>
+
+    @DELETE("/lists/{id}")
+    suspend fun deleteMediaList(
+        @Header("Authorization") token: String,
+        @Path("id") id: Int
+    ): Response<ResponseBody>
+
+    @DELETE("/watchlists/{id}")
+    suspend fun deleteWatchlist(
+        @Header("Authorization") token: String,
+        @Path("id") id: Int
+    ): Response<ResponseBody>
 
     @GET("/users/profile/lists")
     suspend fun getMyMediaLists(

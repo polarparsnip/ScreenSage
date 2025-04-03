@@ -14,6 +14,7 @@ import com.example.screensage.service.AuthManager
 import com.example.screensage.databinding.FragmentLoginBinding
 import com.example.screensage.network.LoginRequest
 import com.example.screensage.network.ScreensageApi
+import com.example.screensage.service.RoomService
 import kotlinx.coroutines.launch
 
 class LoginFragment : Fragment() {
@@ -66,6 +67,8 @@ class LoginFragment : Fragment() {
                 if (response.isSuccessful) {
                     val jwtPayload = response.body()
                     if (jwtPayload != null) {
+                        val user = jwtPayload.user
+                        RoomService.saveUser(requireContext(), user.id, user.username)
                         AuthManager.saveToken(requireContext(), jwtPayload.token)
                         ToastUtil.showToast(requireContext(), "Logged in successfully.")
                         // findNavController().navigate(R.id.nav_home)
