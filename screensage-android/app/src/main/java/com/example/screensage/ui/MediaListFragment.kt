@@ -65,7 +65,7 @@ class MediaListFragment : Fragment() {
         }
         recyclerView.adapter = mediaListAdapter
 
-        if (listType == "watchlist") {
+        if (listType == "watchlists") {
             fetchWatchlist(listId!!)
         } else {
             fetchMediaList(listId!!)

@@ -127,6 +127,23 @@ data class MediaListPostRequest(
     val sharedWith: List<Int>? = listOf()
 )
 
+@Serializable
+data class MediaListItemRequest(
+    val mediaId: Int,
+    val mediaTitle: String,
+    val mediaSummary: String,
+    val mediaImg: String,
+    val type: String
+)
+
+@Serializable
+data class MediaListRequest(
+    val type: String,
+    val watchlist: Boolean,
+    val sharedWith: List<Int>,
+    val mediaListItems: List<MediaListItemRequest>? = null
+)
+
 interface NetworkService {
     @GET("/")
     suspend fun getIndex(): Response<IndexApiResponse>
@@ -236,6 +253,14 @@ interface NetworkService {
         @Path("id") id: Int
     ): Response<MediaList>
 
+    @PATCH("/lists/{id}")
+    suspend fun updateMediaList(
+        @Header("Authorization") token: String,
+        @Path("id") id: Int,
+        @Query("replace") replace: Boolean,
+        @Body request: MediaListRequest
+    ): Response<MediaList>
+
     @POST("/watchlists")
     suspend fun createWatchlist(
         @Header("Authorization") token: String,
@@ -246,6 +271,14 @@ interface NetworkService {
     suspend fun getWatchlist(
         @Header("Authorization") token: String,
         @Path("id") id: Int
+    ): Response<MediaList>
+
+    @PATCH("/watchlists/{id}")
+    suspend fun updateWatchlist(
+        @Header("Authorization") token: String,
+        @Path("id") id: Int,
+        @Query("replace") replace: Boolean,
+        @Body request: MediaListRequest
     ): Response<MediaList>
 
     @DELETE("/lists/{id}")
