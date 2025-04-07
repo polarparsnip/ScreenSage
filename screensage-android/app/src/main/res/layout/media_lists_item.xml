@@ -5,7 +5,7 @@
     android:background="@drawable/card_shadow"
     android:clickable="true"
     android:focusable="true"
-    android:layout_height="338dp"
+    android:layout_height="wrap_content"
     android:layout_marginStart="16dp"
     android:layout_marginTop="16dp">
 
