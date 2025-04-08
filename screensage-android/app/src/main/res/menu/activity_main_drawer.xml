@@ -6,31 +6,31 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_menu_home"
             android:title="@string/menu_home" />
         <item
             android:id="@+id/nav_movies"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_menu_media"
             android:title="Movies" />
         <item
             android:id="@+id/nav_shows"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_menu_tv"
             android:title="Shows" />
         <item
             android:id="@+id/nav_anime"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_menu_anime"
             android:title="Anime" />
         <item
             android:id="@+id/nav_media_lists"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_menu_medialists"
             android:title="Media lists" />
         <item
             android:id="@+id/nav_my_media_lists"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_menu_my_medialists"
             android:title="My media lists" />
         <item
             android:id="@+id/nav_watchlists"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_menu_watchlists"
             android:title="My watchlists" />
     </group>
 </menu>
