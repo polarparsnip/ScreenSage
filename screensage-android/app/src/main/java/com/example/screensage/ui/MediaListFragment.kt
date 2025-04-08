@@ -11,13 +11,20 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.screensage.R
 import com.example.screensage.databinding.FragmentMediaListBinding
+import com.example.screensage.entities.MediaList
 import com.example.screensage.entities.MediaListItem
+import com.example.screensage.network.MediaListRequest
 import com.example.screensage.network.ScreensageApi
 import com.example.screensage.service.AuthManager
+import com.example.screensage.service.RoomService
+import com.example.screensage.service.User
 import com.example.screensage.utils.ErrorUtil
 import com.example.screensage.utils.MediaListAdapter
 import com.example.screensage.utils.ToastUtil
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import retrofit2.Response
 
 class MediaListFragment : Fragment() {
     private var _binding: FragmentMediaListBinding? = null
@@ -31,6 +38,8 @@ class MediaListFragment : Fragment() {
 
     private var listType: String? = null
     private var listId: Int? = null
+
+    var currentUser: User? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,19 +65,33 @@ class MediaListFragment : Fragment() {
         recyclerView = view.findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        mediaListAdapter = MediaListAdapter(mediaList) { mediaId, mediaType ->
-            val bundle = Bundle().apply {
-                putInt("mediaId", mediaId)
-                putString("mediaType", mediaType)
+        CoroutineScope(Dispatchers.Main).launch {
+            val user = RoomService.getCurrentUser(requireContext())
+            if (user != null) {
+                currentUser = user
             }
-            findNavController().navigate(R.id.mediaDetailedFragment, bundle)
-        }
-        recyclerView.adapter = mediaListAdapter
 
-        if (listType == "watchlists") {
-            fetchWatchlist(listId!!)
-        } else {
-            fetchMediaList(listId!!)
+            mediaListAdapter = MediaListAdapter(
+                mediaList,
+                false,
+                onItemClick = { mediaId: Int, mediaType: String ->
+                    val bundle = Bundle().apply {
+                        putInt("mediaId", mediaId)
+                        putString("mediaType", mediaType)
+                    }
+                    findNavController().navigate(R.id.mediaDetailedFragment, bundle)
+                },
+                onIconClick = { mediaId: Int ->
+                    deleteMediaItem(mediaId)
+                },
+            )
+            recyclerView.adapter = mediaListAdapter
+
+            if (listType == "watchlists") {
+                fetchWatchlist(listId!!)
+            } else {
+                fetchMediaList(listId!!)
+            }
         }
     }
 
@@ -88,7 +111,8 @@ class MediaListFragment : Fragment() {
                     val mediaResponse = response.body()
                     if (mediaResponse != null) {
                         mediaList = mediaResponse.mediaListItems
-                        mediaListAdapter.updateMedia(mediaList)
+                        val isAuthor = mediaResponse.user?.id == currentUser?.id
+                        mediaListAdapter.updateMedia(mediaList, isAuthor)
                     }
 
                 } else {
@@ -102,6 +126,7 @@ class MediaListFragment : Fragment() {
             }
         }
     }
+
     /**
      * Fetches a list of watchlist items based on the selected ID.
      * Updates the RecyclerView with the retrieved media list.
@@ -118,7 +143,8 @@ class MediaListFragment : Fragment() {
                     val mediaResponse = response.body()
                     if (mediaResponse != null) {
                         mediaList = mediaResponse.mediaListItems
-                        mediaListAdapter.updateMedia(mediaList)
+                        val isAuthor = mediaResponse.user?.id == currentUser?.id
+                        mediaListAdapter.updateMedia(mediaList, isAuthor)
                     }
 
                 } else {
@@ -133,4 +159,61 @@ class MediaListFragment : Fragment() {
         }
     }
 
+    /**
+     * Deletes a media item from a list based on the selected ID.
+     * Updates the RecyclerView with the updated list.
+     */
+    private fun deleteMediaItem(id: Int) {
+        val token = AuthManager.getToken(requireContext()) ?: return
+
+        val updatedList = mediaList.filter { it.id != id }
+
+        val request = MediaListRequest(
+            watchlist = listType == "watchlists",
+            sharedWith = listOf(),
+            mediaListItems = updatedList
+        )
+
+        lifecycleScope.launch {
+            try {
+                var response: Response<MediaList>? = null
+
+                if (listType == "watchlists") {
+                    response = ScreensageApi.retrofitService.updateWatchlist(
+                        "Bearer ${token}",
+                        listId!!,
+                        true,
+                        request
+                    )
+                }
+                else {
+                    response = ScreensageApi.retrofitService.updateMediaList(
+                        "Bearer ${token}",
+                        listId!!,
+                        true,
+                        request
+                    )
+                }
+
+                response.let {
+                    if (it.isSuccessful) {
+                        val list = it.body()
+                        if (list != null) {
+                            mediaList = list.mediaListItems
+                            mediaListAdapter.updateMedia(list.mediaListItems)
+                            ToastUtil.showToast(requireContext(), "Media removed from list successfully!")
+                        }
+
+                    } else {
+                        val errorMessage = ErrorUtil.parseApiErrorMessage(response)
+                        println(errorMessage)
+                        ToastUtil.showToast(requireContext(), errorMessage)
+                    }
+                }
+            } catch (e: Exception) {
+                println("Network error: ${e.message}")
+                ToastUtil.showToast(requireContext(), "Network error: ${e.message}")
+            }
+        }
+    }
 }
