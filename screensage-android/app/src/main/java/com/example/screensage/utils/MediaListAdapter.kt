@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.example.screensage.R
 import com.example.screensage.entities.Media
 import com.example.screensage.entities.MediaListItem
+import com.example.screensage.service.User
 
 /**
  * Adapter for displaying a list of media items (movies, shows, etc.) in a RecyclerView.
@@ -20,11 +21,15 @@ import com.example.screensage.entities.MediaListItem
  * media item's image and title.
  *
  * @param mediaList A list of Media list item objects to be displayed.
+ * @param author Whether the current user is the author of the media list.
  * @param onItemClick A callback function that is triggered when a media item is clicked, passing the media item's ID.
+ * @param onIconClick A callback function that is triggered when a media list item icon is clicked.
  */
 class MediaListAdapter(
     private var mediaList: List<MediaListItem>,
-    private val onItemClick: (Int, String) -> Unit
+    private var author: Boolean? = false,
+    private val onItemClick: (Int, String) -> Unit,
+    private var onIconClick: (Int) -> Unit
 ) :
     RecyclerView.Adapter<MediaListAdapter.MediaViewHolder>() {
 
@@ -38,6 +43,7 @@ class MediaListAdapter(
         val imageView: ImageView = view.findViewById(R.id.mediaImage)
         val titleView: TextView = view.findViewById(R.id.mediaTitle)
         val ratingBar: RatingBar = view.findViewById(R.id.ratingBar)
+        val deleteView: ImageView = view.findViewById(R.id.mediaDelete)
     }
 
     /**
@@ -65,6 +71,15 @@ class MediaListAdapter(
         Glide.with(holder.imageView.context).load("https://image.tmdb.org/t/p/w500${media.mediaImg}").into(holder.imageView)
 
         holder.ratingBar.visibility = View.GONE
+
+        if (author == true) {
+            holder.deleteView.visibility = View.VISIBLE
+        }
+
+        holder.deleteView.setOnClickListener {
+            onIconClick(media.id!!)
+        }
+
         holder.itemView.setOnClickListener {
             onItemClick(media.mediaId, media.type)
         }
@@ -83,8 +98,11 @@ class MediaListAdapter(
      * @param newMedia A new list of media items to replace the old list.
      */
     @SuppressLint("NotifyDataSetChanged")
-    fun updateMedia(newMedia: List<MediaListItem>) {
+    fun updateMedia(newMedia: List<MediaListItem>, author: Boolean? = null) {
         mediaList = newMedia
+        if (author != null) {
+            this.author = author
+        }
         this.notifyDataSetChanged()
     }
 }

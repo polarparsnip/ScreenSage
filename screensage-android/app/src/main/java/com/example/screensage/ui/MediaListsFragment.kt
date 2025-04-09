@@ -86,6 +86,8 @@ class MediaListsFragment : Fragment() {
             mediaListAdapter = MediaListsAdapter(
                 mediaLists,
                 currentUser,
+                requireContext(),
+                lifecycleScope,
                 onItemClick = { mediaListId ->
                     val bundle = Bundle().apply {
                         putString("listType", listType)

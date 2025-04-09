@@ -10,8 +10,8 @@ data class MediaList(
     val description    : String?              = null,
     val mediaListItems : List<MediaListItem>  = listOf(),
     val sharedWith     : List<Int>?           = null,
-    val likeCount      : Long?                = null,
-    val userHasLiked   : Boolean?             = null,
+    var likeCount      : Long?                = null,
+    var userHasLiked   : Boolean?             = null,
     val createdAt      : String?              = null,
     val user           : User?                = null
 )

@@ -52,6 +52,47 @@
                     android:paddingStart="1dp"
                     android:paddingEnd="1dp" />
 
+                <TextView
+                    android:id="@+id/mediaListSubtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="8dp"
+                    android:paddingStart="1dp"
+                    android:paddingEnd="1dp" />
+
+                <LinearLayout
+                    android:id="@+id/listLikeContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="8dp">
+
+                    <ImageView
+                        android:id="@+id/listLikeButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/thumbs_up_outline"
+                        android:contentDescription="Like Button"
+                        app:tint="@color/white" />
+
+                    <TextView
+                        android:id="@+id/listLikeCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textSize="16sp"
+                        android:textColor="@android:color/white"
+                        android:layout_marginStart="8dp" />
+
+                </LinearLayout>
+
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>

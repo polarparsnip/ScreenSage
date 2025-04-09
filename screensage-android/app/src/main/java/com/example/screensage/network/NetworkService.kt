@@ -6,6 +6,7 @@ import com.example.screensage.entities.IndexApiResponse
 import com.example.screensage.entities.Media
 import com.example.screensage.entities.MediaDetailed
 import com.example.screensage.entities.MediaList
+import com.example.screensage.entities.MediaListItem
 import com.example.screensage.entities.Pageable
 import com.example.screensage.entities.Review
 import com.example.screensage.entities.Sort
@@ -128,20 +129,10 @@ data class MediaListPostRequest(
 )
 
 @Serializable
-data class MediaListItemRequest(
-    val mediaId: Int,
-    val mediaTitle: String,
-    val mediaSummary: String,
-    val mediaImg: String,
-    val type: String
-)
-
-@Serializable
 data class MediaListRequest(
-    val type: String,
     val watchlist: Boolean,
     val sharedWith: List<Int>,
-    val mediaListItems: List<MediaListItemRequest>? = null
+    val mediaListItems: List<MediaListItem> = listOf()
 )
 
 interface NetworkService {
@@ -304,6 +295,12 @@ interface NetworkService {
         @Header("Authorization") token: String,
         @Query("page") page: Int = 1,
     ): Response<MediaListResponse>
+
+    @POST("/lists/{id}/likes")
+    suspend fun likeMediaList(
+        @Header("Authorization") token: String,
+        @Path("id") id: Int
+    ): Response<ResponseBody>
 }
 
 object ScreensageApi {

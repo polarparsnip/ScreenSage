@@ -22,6 +22,7 @@ import com.example.screensage.R
 import com.example.screensage.databinding.FragmentMediaDetailedBinding
 import com.example.screensage.entities.MediaDetailed
 import com.example.screensage.entities.MediaList
+import com.example.screensage.entities.MediaListItem
 import com.example.screensage.network.MediaListItemRequest
 import com.example.screensage.network.MediaListRequest
 import com.example.screensage.network.ReviewRequest
@@ -409,11 +410,10 @@ class MediaDetailedFragment : Fragment() {
         }
 
         val request = MediaListRequest(
-            type = mediaType!!,
-            watchlist = false,
+            watchlist = listType == "watchlists",
             sharedWith = listOf(),
             mediaListItems = listOf(
-                MediaListItemRequest(
+                MediaListItem(
                     mediaId = mediaId!!,
                     mediaTitle = mediaTitle.text.toString(),
                     mediaSummary = mediaOverview.text.toString(),
