@@ -21,7 +21,9 @@ import com.example.screensage.service.User
  * media item's image and title.
  *
  * @param mediaList A list of Media list item objects to be displayed.
+ * @param author Whether the current user is the author of the media list.
  * @param onItemClick A callback function that is triggered when a media item is clicked, passing the media item's ID.
+ * @param onIconClick A callback function that is triggered when a media list item icon is clicked.
  */
 class MediaListAdapter(
     private var mediaList: List<MediaListItem>,
