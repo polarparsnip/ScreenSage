@@ -116,6 +116,8 @@ class MainActivity : AppCompatActivity() {
                     }
                     navController.navigate(R.id.nav_watchlists, bundle)
                 }
+
+                R.id.nav_scoreboard -> navController.navigate(R.id.nav_scoreboard)
             }
             drawerLayout.closeDrawers()
             true
