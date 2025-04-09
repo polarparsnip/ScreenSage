@@ -23,7 +23,6 @@ import com.example.screensage.databinding.FragmentMediaDetailedBinding
 import com.example.screensage.entities.MediaDetailed
 import com.example.screensage.entities.MediaList
 import com.example.screensage.entities.MediaListItem
-import com.example.screensage.network.MediaListItemRequest
 import com.example.screensage.network.MediaListRequest
 import com.example.screensage.network.ReviewRequest
 import com.example.screensage.network.ScreensageApi
