@@ -1,5 +1,7 @@
 package com.example.screensage.network
 
+import com.example.screensage.entities.Challenge
+import com.example.screensage.entities.ChallengeOption
 import com.example.screensage.entities.Genre
 import com.example.screensage.entities.JWTPayload
 import com.example.screensage.entities.IndexApiResponse
@@ -154,6 +156,12 @@ data class ScoreboardResponse(
     @SerialName("sort"             ) var sort             : Sort?              = Sort(),
     @SerialName("numberOfElements" ) var numberOfElements : Int?               = null,
     @SerialName("empty"            ) var empty            : Boolean?           = null
+)
+
+@Serializable
+data class ChallengeResult(
+    val correctOption: ChallengeOption,
+    val answeredCorrectly: Boolean
 )
 
 interface NetworkService {
@@ -328,6 +336,19 @@ interface NetworkService {
         @Header("Authorization") token: String,
         @Query("page") page: Int = 1,
     ): Response<ScoreboardResponse>
+
+    @GET("/challenge")
+    suspend fun getChallenge(
+        @Header("Authorization") token: String
+    ): Response<Challenge>
+
+    @POST("/challenge/{id}")
+    suspend fun postChallengeAnswer(
+        @Header("Authorization") token: String,
+        @Path("id") id: Int,
+        @Query("optionId") optionId: Int,
+        @Query("user") userId: Int? = 0,
+    ): Response<ChallengeResult>
 }
 
 object ScreensageApi {

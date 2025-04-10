@@ -12,4 +12,13 @@
     <color name="dark_gray_200">#B0B0B0</color>
     <color name="dark_gray_500">#505050</color>
     <color name="dark_gray_700">#303030</color>
+    <color name="red_200">#FFB0B0</color>
+    <color name="red_500">#FF5050</color>
+    <color name="red_700">#B03030</color>
+    <color name="yellow_200">#FFF5B0</color>
+    <color name="yellow_500">#FFD950</color>
+    <color name="yellow_700">#B08A30</color>
+    <color name="green_200">#B0FFB0</color>
+    <color name="green_500">#50D950</color>
+    <color name="green_700">#308A30</color>
 </resources>
