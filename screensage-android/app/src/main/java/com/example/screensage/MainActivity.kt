@@ -117,6 +117,8 @@ class MainActivity : AppCompatActivity() {
                     navController.navigate(R.id.nav_watchlists, bundle)
                 }
 
+                R.id.nav_challenge -> navController.navigate(R.id.nav_challenge)
+
                 R.id.nav_scoreboard -> navController.navigate(R.id.nav_scoreboard)
             }
             drawerLayout.closeDrawers()
