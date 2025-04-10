@@ -135,6 +135,27 @@ data class MediaListRequest(
     val mediaListItems: List<MediaListItem> = listOf()
 )
 
+@Serializable
+data class UserScore(
+    val user: User,
+    val totalPoints: Long
+)
+
+@Serializable
+data class ScoreboardResponse(
+    @SerialName("content"          ) var content          : List<UserScore>    = listOf(),
+    @SerialName("pageable"         ) var pageable         : Pageable?          = Pageable(),
+    @SerialName("last"             ) var last             : Boolean?           = null,
+    @SerialName("totalPages"       ) var totalPages       : Int,
+    @SerialName("totalElements"    ) var totalElements    : Int?               = null,
+    @SerialName("first"            ) var first            : Boolean?           = null,
+    @SerialName("size"             ) var size             : Int?               = null,
+    @SerialName("number"           ) var number           : Int?               = null,
+    @SerialName("sort"             ) var sort             : Sort?              = Sort(),
+    @SerialName("numberOfElements" ) var numberOfElements : Int?               = null,
+    @SerialName("empty"            ) var empty            : Boolean?           = null
+)
+
 interface NetworkService {
     @GET("/")
     suspend fun getIndex(): Response<IndexApiResponse>
@@ -301,6 +322,12 @@ interface NetworkService {
         @Header("Authorization") token: String,
         @Path("id") id: Int
     ): Response<ResponseBody>
+
+    @GET("/users/scoreboard")
+    suspend fun getScoreboard(
+        @Header("Authorization") token: String,
+        @Query("page") page: Int = 1,
+    ): Response<ScoreboardResponse>
 }
 
 object ScreensageApi {
