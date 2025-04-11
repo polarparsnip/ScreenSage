@@ -34,11 +34,11 @@
             android:title="My watchlists" />
         <item
             android:id="@+id/nav_challenge"
-            android:icon="@drawable/ic_menu_watchlists"
+            android:icon="@drawable/ic_menu_challenge"
             android:title="Challenge" />
         <item
             android:id="@+id/nav_scoreboard"
-            android:icon="@drawable/ic_menu_watchlists"
+            android:icon="@drawable/ic_menu_scoreboard"
             android:title="Scoreboard" />
     </group>
 </menu>
