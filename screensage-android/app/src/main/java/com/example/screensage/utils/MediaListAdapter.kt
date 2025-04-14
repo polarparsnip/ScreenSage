@@ -10,9 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.screensage.R
-import com.example.screensage.entities.Media
 import com.example.screensage.entities.MediaListItem
-import com.example.screensage.service.User
 
 /**
  * Adapter for displaying a list of media items (movies, shows, etc.) in a RecyclerView.
@@ -96,6 +94,7 @@ class MediaListAdapter(
      * Updates the list of media items and notifies the adapter to refresh the UI.
      *
      * @param newMedia A new list of media items to replace the old list.
+     * @param author Whether the current user is the author of the list.
      */
     @SuppressLint("NotifyDataSetChanged")
     fun updateMedia(newMedia: List<MediaListItem>, author: Boolean? = null) {
